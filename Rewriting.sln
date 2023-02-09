@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Systems", "Systems", "{F867
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.API", "Systems\Rewriting.API\Rewriting.API.csproj", "{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.SettingsLoader", "Rewriting.SettingsLoader\Rewriting.SettingsLoader.csproj", "{57136DEA-52C7-4962-88B3-21304DCE0AD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57136DEA-52C7-4962-88B3-21304DCE0AD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57136DEA-52C7-4962-88B3-21304DCE0AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57136DEA-52C7-4962-88B3-21304DCE0AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57136DEA-52C7-4962-88B3-21304DCE0AD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D} = {F86712B0-1132-45E6-A324-61C1AE5D56D4}
+		{57136DEA-52C7-4962-88B3-21304DCE0AD3} = {396A76A8-EA0E-400B-A4D5-79415BF83F76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC02EB2-F850-4CA7-AD74-6A7572B0A70C}
