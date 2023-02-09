@@ -1,5 +1,5 @@
-﻿using Rewriting.API;
-using Rewriting.Common.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Rewriting.API;
 using Rewriting.SettingsLoader;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -8,7 +8,7 @@ namespace Rewriting.API.Configuration;
 public static class SwaggerConfiguration
 {
     /// <summary>
-    /// Add swagger with custom configuration
+    /// Add swagger services with custom configuration
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
@@ -37,12 +37,22 @@ public static class SwaggerConfiguration
     public static void UseAppSwagger(this WebApplication app)
     {
         SwaggerSettings settings = app.Services.GetService<SwaggerSettings>() ??
-            throw new ServiceNotFoundException(typeof(SwaggerSettings));
+            throw new InvalidOperationException("SwaggerSettings service was not found");
 
         if (!settings.Enabled)
             return;
 
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwagger(options =>
+        {
+            options.RouteTemplate = "api/{documentname}/api.yaml";
+        });
+        app.UseSwaggerUI(options =>
+        {
+            var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+            provider.ApiVersionDescriptions.ToList().ForEach(description =>
+            {
+                options.SwaggerEndpoint($"/api/{description.GroupName}/api.yaml", description.GroupName.ToUpperInvariant());
+            });
+        });
     }
 }

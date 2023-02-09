@@ -12,7 +12,7 @@
         </member>
         <member name="M:Rewriting.API.Configuration.SwaggerConfiguration.AddAppSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Add swagger with custom configuration
+            Add swagger services with custom configuration
             </summary>
             <param name="services"></param>
             <returns></returns>
@@ -22,7 +22,14 @@
             Register required swagger middlewares
             </summary>
             <param name="app"></param>
-            <exception cref="T:Rewriting.Common.Exceptions.ServiceNotFoundException">SwaggerSettings is not found</exception>
+            <exception cref="!:ServiceNotFoundException">SwaggerSettings was not found in DI container</exception>
+        </member>
+        <member name="M:Rewriting.API.Configuration.VersioningConfiguration.AddAppVersioning(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Setup versioning for API
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

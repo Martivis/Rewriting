@@ -9,6 +9,7 @@ var services = builder.Services;
 services.AddControllers();
 
 services.AddAppSwagger();
+services.AddAppVersioning();
 
 var app = builder.Build();
 
