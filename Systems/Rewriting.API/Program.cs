@@ -1,6 +1,8 @@
+using Rewriting.API.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.AddAppLogger();
 
 builder.Services.AddControllers();
 
