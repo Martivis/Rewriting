@@ -4,10 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddAppLogger();
 
-builder.Services.AddControllers();
+var services = builder.Services;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddControllers();
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var app = builder.Build();
 
