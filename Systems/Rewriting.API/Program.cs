@@ -8,15 +8,12 @@ var services = builder.Services;
 
 services.AddControllers();
 
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddAppSwagger();
 
 var app = builder.Build();
 
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
+app.UseAppSwagger();
 
 app.UseHttpsRedirection();
 
