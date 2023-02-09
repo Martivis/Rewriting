@@ -3,9 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A26C2D50-B551-4315-8F22-1185733516D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{75A81E56-F044-4768-B27F-399F60D73487}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{396A76A8-EA0E-400B-A4D5-79415BF83F76}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Systems", "Systems", "{F86712B0-1132-45E6-A324-61C1AE5D56D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.API", "Systems\Rewriting.API\Rewriting.API.csproj", "{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{16A2D659-99AF-4276-9B4B-39D9F6E2CC0D} = {F86712B0-1132-45E6-A324-61C1AE5D56D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC02EB2-F850-4CA7-AD74-6A7572B0A70C}
