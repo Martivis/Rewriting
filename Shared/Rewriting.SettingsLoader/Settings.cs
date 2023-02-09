@@ -4,7 +4,13 @@ namespace Rewriting.SettingsLoader
 {
     public abstract class Settings
     {
-        public static T Load<T>(string key)
+        /// <summary>
+        /// Loads configuration from appsettings.json and appsettings.Development.json on specified key
+        /// </summary>
+        /// <typeparam name="T">Settings container</typeparam>
+        /// <param name="key">Settings key</param>
+        /// <returns>Filled settings conteiner</returns>
+        public static T Load<T>(string key) where T : new()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -13,7 +19,7 @@ namespace Rewriting.SettingsLoader
                 .AddEnvironmentVariables()
                 .Build();
 
-            var settings = (T)Activator.CreateInstance(typeof(T))!;
+            var settings = new T();
             
             configuration.GetSection(key).Bind(settings);
             return settings;
