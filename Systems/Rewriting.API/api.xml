@@ -4,5 +4,25 @@
         <name>Rewriting.API</name>
     </assembly>
     <members>
+        <member name="M:Rewriting.API.Configuration.LoggerConfiguration.AddAppLogger(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Setup Serilog as logger
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="M:Rewriting.API.Configuration.SwaggerConfiguration.AddAppSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add swagger with custom configuration
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Configuration.SwaggerConfiguration.UseAppSwagger(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Register required swagger middlewares
+            </summary>
+            <param name="app"></param>
+            <exception cref="T:Rewriting.Common.Exceptions.ServiceNotFoundException">SwaggerSettings is not found</exception>
+        </member>
     </members>
 </doc>
