@@ -4,6 +4,19 @@
         <name>Rewriting.API</name>
     </assembly>
     <members>
+        <member name="M:Rewriting.API.Configuration.HealthCheckConfiguration.AddAppHealthChecks(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add HealthChecks service
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Configuration.HealthCheckConfiguration.UseAppHealthChecks(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Map health checks
+            </summary>
+            <param name="app"></param>
+        </member>
         <member name="M:Rewriting.API.Configuration.LoggerConfiguration.AddAppLogger(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Setup Serilog as logger
