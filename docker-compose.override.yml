@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  rewriting.api:
+    ports:
+      - "10000:80"
+    networks:
+      - shared_rewriting
+    env_file:
+      - env.api
+
+networks:
+  shared_rewriting:
+    name: rewriting
+    driver: bridge

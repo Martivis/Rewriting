@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  rewriting.api:
+    image: ${DOCKER_REGISTRY-}rewritingapi
+    build:
+      context: .
+      dockerfile: Systems/Rewriting.API/Dockerfile
