@@ -1,6 +1,16 @@
 version: '3.4'
 
 services:
+  rewriting.postgres:
+    ports:
+      - "5432:5432"
+    networks:
+      - shared_rewriting
+    volumes:
+      - ~/.docker-conf/mssql/data/:/var/lib/mssql/data
+    env_file:
+      - env.postgres
+
   rewriting.api:
     ports:
       - "10000:80"

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
+    <ProjectReference Include="..\Rewriting.Context\Rewriting.Context.csproj" />
+  </ItemGroup>
+
 </Project>

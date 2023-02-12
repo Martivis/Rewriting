@@ -1,6 +1,9 @@
 version: '3.4'
 
 services:
+  rewriting.postgres:
+    image: postgres:latest
+
   rewriting.api:
     image: ${DOCKER_REGISTRY-}rewritingapi
     build:
