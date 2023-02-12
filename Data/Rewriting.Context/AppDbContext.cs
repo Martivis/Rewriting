@@ -20,7 +20,7 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasDefaultSchema("rewritingdb");
+        modelBuilder.HasDefaultSchema(DbConstants.DATABASE_SCHEME);
 
         modelBuilder.Entity<UserData>()
             .ToTable("users_data")
