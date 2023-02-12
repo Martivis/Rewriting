@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Rewriting.SettingsLoader
+namespace Rewriting.Settings
 {
-    public abstract class Settings
+    public abstract class SettingsLoader
     {
         /// <summary>
         /// Loads configuration from appsettings.json and appsettings.Development.json on specified key

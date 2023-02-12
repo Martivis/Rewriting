@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Rewriting.API;
-using Rewriting.SettingsLoader;
+using Rewriting.Settings;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Rewriting.API.Configuration;
@@ -14,7 +14,7 @@ public static class SwaggerConfiguration
     /// <returns></returns>
     public static IServiceCollection AddAppSwagger(this IServiceCollection services)
     {
-        var swaggerSettings = Settings.Load<SwaggerSettings>("Swagger");
+        var swaggerSettings = Settings.SettingsLoader.Load<SwaggerSettings>("Swagger");
         services.AddSingleton(swaggerSettings);
 
         if (!swaggerSettings.Enabled)
