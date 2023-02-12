@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Rewriting.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ public static class AppDbBootstraper
 {
     public static IServiceCollection AddAppDbContextFactory(this IServiceCollection services)
     {
-        var settings = Settings.SettingsLoader.Load<AppDbSettings>("Database");
+        var settings = SettingsLoader.Load<AppDbSettings>("Database");
         services.AddSingleton(settings);
 
         services.AddDbContextFactory<AppDbContext>(AppDbOptionsFactory.Configure(settings.ConnectionString));
