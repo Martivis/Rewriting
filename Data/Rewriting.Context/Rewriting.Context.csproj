@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.SettingsLoader.csproj" />
     <ProjectReference Include="..\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
   </ItemGroup>
 
