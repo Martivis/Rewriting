@@ -9,3 +9,14 @@ services:
     build:
       context: .
       dockerfile: Systems/Rewriting.API/Dockerfile
+    depends_on:
+      - rewriting.postgres
+
+  rewriting.identity:
+    image: ${DOCKER_REGISTRY-}rewritingidentity
+    build:
+      context: .
+      dockerfile: Systems/Rewriting.Identity/Dockerfile
+    depends_on:
+      - rewriting.postgres
+      - rewriting.api

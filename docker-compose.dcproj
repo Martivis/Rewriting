@@ -15,6 +15,7 @@
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
     <None Include="env.api" />
+    <None Include="env.identity" />
     <None Include="env.postgres" />
   </ItemGroup>
 </Project>

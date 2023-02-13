@@ -19,6 +19,14 @@ services:
     env_file:
       - env.api
 
+  rewriting.identity:
+    ports:
+      - "10001:80"
+    networks:
+      - shared_rewriting
+    env_file:
+      - env.identity
+
 networks:
   shared_rewriting:
     name: rewriting
