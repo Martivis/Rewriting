@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Context;
 
-public static class AppDbExistenceChecker
+public static class AppDbStateChecker
 {
     public static void Check(IServiceProvider serviceProvider)
     {

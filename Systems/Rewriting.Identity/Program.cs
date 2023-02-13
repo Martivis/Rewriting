@@ -17,7 +17,7 @@ var app = builder.Build();
 app.UseIdentityServer();
 app.UseAppHealthChecks();
 
-AppDbExistenceChecker.Check(app.Services);
+AppDbStateChecker.Check(app.Services);
 
 app.Run();
 
