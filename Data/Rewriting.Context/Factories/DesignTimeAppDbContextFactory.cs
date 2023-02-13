@@ -22,7 +22,7 @@ namespace Rewriting.Context
                     configuration.GetConnectionString("Postgres"),
                     options =>
                     {
-                        options.MigrationsAssembly(DbConstants.MIGRATIONS_ASSEMBLY);
+                        options.MigrationsAssembly(DbConstants.MigrationsAssembly);
                     }).Options;
 
             return new AppDbContextFactory(options).Create();

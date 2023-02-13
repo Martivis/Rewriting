@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Rewriting.Context.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Context;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
 {
     public DbSet<UserData> UsersData { get; set; }
     public DbSet<Offer> Offers { get; set; }
@@ -20,7 +22,15 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasDefaultSchema(DbConstants.DATABASE_SCHEME);
+        modelBuilder.HasDefaultSchema(DbConstants.DatabaseScheme);
+
+        modelBuilder.Entity<IdentityUser<Guid>>().ToTable("users");
+        modelBuilder.Entity<IdentityRole<Guid>>().ToTable("user_roles");
+        modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("user_tokens");
+        modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("user_role_owners");
+        modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("user_role_claims");
+        modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("user_logins");
+        modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("user_claims");
 
         modelBuilder.Entity<UserData>()
             .ToTable("users_data")

@@ -8,6 +8,6 @@ namespace Rewriting.Context;
 
 internal static class DbConstants
 {
-    public const string MIGRATIONS_ASSEMBLY = "Rewriting.Context.Migrations";
-    public const string DATABASE_SCHEME = "rewritingdb";
+    public const string MigrationsAssembly = "Rewriting.Context.Migrations";
+    public const string DatabaseScheme = "rewritingdb";
 }

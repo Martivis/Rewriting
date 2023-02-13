@@ -23,8 +23,8 @@ public static class AppDbOptionsFactory
             optionsBuilder.UseNpgsql(connectionString, options =>
             {
                 options.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds)
-                    .MigrationsHistoryTable("_EFMigrationHistory", DbConstants.DATABASE_SCHEME)
-                    .MigrationsAssembly(DbConstants.MIGRATIONS_ASSEMBLY);
+                    .MigrationsHistoryTable("_EFMigrationHistory", DbConstants.DatabaseScheme)
+                    .MigrationsAssembly(DbConstants.MigrationsAssembly);
             })
                 .EnableSensitiveDataLogging()
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);

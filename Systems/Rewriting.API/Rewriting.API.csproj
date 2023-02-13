@@ -27,14 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Data\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
     <ProjectReference Include="..\..\Data\Rewriting.Context.Migrations\Rewriting.Context.Migrations.csproj" />
     <ProjectReference Include="..\..\Data\Rewriting.Context\Rewriting.Context.csproj" />
-    <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.SettingsLoader.csproj" />
+    <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.Settings.csproj" />
   </ItemGroup>
 
 </Project>
