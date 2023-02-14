@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Rewriting.Context;
+using Rewriting.Context.Entities;
 
 namespace Rewriting.Identity.Configuration;
 
@@ -7,7 +8,7 @@ public static class IdentityServerConfiguration
 {
     public static IServiceCollection AddAppIdentityServer(this IServiceCollection services)
     {
-        services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
+        services.AddIdentity<UserIdentity, IdentityRole<Guid>>(options =>
         {
             options.Password.RequiredLength = 8;
             options.Password.RequireDigit = true;
@@ -18,12 +19,12 @@ public static class IdentityServerConfiguration
             options.User.RequireUniqueEmail = true;
         })
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddUserManager<UserManager<IdentityUser<Guid>>>()
+            .AddUserManager<UserManager<UserIdentity>>()
             .AddDefaultTokenProviders()
             ;
 
         services.AddIdentityServer()
-            .AddAspNetIdentity<IdentityUser<Guid>>()
+            .AddAspNetIdentity<UserIdentity>()
             .AddInMemoryApiResources(AppResources.Resourses)
             .AddInMemoryApiScopes(AppApiScopes.ApiScopes)
             .AddInMemoryClients(AppClients.Clients)

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Context;
 
-public class AppDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+public class AppDbContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, Guid>
 {
     public DbSet<UserData> UsersData { get; set; }
     public DbSet<Offer> Offers { get; set; }
@@ -24,7 +24,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<G
 
         modelBuilder.HasDefaultSchema(DbConstants.DatabaseScheme);
 
-        modelBuilder.Entity<IdentityUser<Guid>>().ToTable("users");
+        modelBuilder.Entity<UserIdentity>().ToTable("users");
         modelBuilder.Entity<IdentityRole<Guid>>().ToTable("user_roles");
         modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("user_tokens");
         modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("user_role_owners");
@@ -32,29 +32,24 @@ public class AppDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<G
         modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("user_logins");
         modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("user_claims");
 
-        modelBuilder.Entity<UserData>()
-            .ToTable("users_data")
-            ;
+        modelBuilder.Entity<UserData>().ToTable("users_data")
+            .HasOne(t => t.UserIdentity).WithOne(s => s.UserData)
+            .HasForeignKey<UserIdentity>(x => x.Id);
 
-        modelBuilder.Entity<Offer>()
-            .ToTable("offers")
+        modelBuilder.Entity<Offer>().ToTable("offers")
             .HasOne(t => t.Order).WithMany(s => s.Offers)
-            .OnDelete(DeleteBehavior.Restrict)
-            ;
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Offer>()
             .HasOne(t => t.Contractor).WithMany(s => s.Offers)
-            .OnDelete(DeleteBehavior.Restrict)
-            ;
+            .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Order>()
-            .ToTable("order")
+        modelBuilder.Entity<Order>().ToTable("order")
             .HasOne(t => t.Client).WithMany(t => t.Orders)
-            .OnDelete(DeleteBehavior.Restrict)
-            ;
+            .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Order>()
             .HasOne(t => t.Contractor).WithMany(t => t.Contracts)
-            .OnDelete(DeleteBehavior.Restrict)
-            ;
+            .OnDelete(DeleteBehavior.Restrict);
 
 
     }
