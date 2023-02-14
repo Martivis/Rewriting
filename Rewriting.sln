@@ -25,9 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Context.Migrations", "Data\Rewriting.Context.Migrations\Rewriting.Context.Migrations.csproj", "{DFD82E08-3238-421B-9F4C-2FF9A6969ECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Identity", "Systems\Rewriting.Identity\Rewriting.Identity.csproj", "{AA441C24-61C2-46E4-AB92-34E30528778D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Identity", "Systems\Rewriting.Identity\Rewriting.Identity.csproj", "{AA441C24-61C2-46E4-AB92-34E30528778D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Common", "Shared\Rewriting.Common\Rewriting.Common.csproj", "{1831F267-A7B4-4CF0-A267-62CBCDAAB839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Common", "Shared\Rewriting.Common\Rewriting.Common.csproj", "{1831F267-A7B4-4CF0-A267-62CBCDAAB839}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Services.UserAccount", "Services\Rewriting.Services.UserAccount\Rewriting.Services.UserAccount.csproj", "{A061EA76-4EFF-444F-B058-87657E9B6D57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{1831F267-A7B4-4CF0-A267-62CBCDAAB839}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1831F267-A7B4-4CF0-A267-62CBCDAAB839}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1831F267-A7B4-4CF0-A267-62CBCDAAB839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A061EA76-4EFF-444F-B058-87657E9B6D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A061EA76-4EFF-444F-B058-87657E9B6D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A061EA76-4EFF-444F-B058-87657E9B6D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A061EA76-4EFF-444F-B058-87657E9B6D57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{DFD82E08-3238-421B-9F4C-2FF9A6969ECD} = {F2F87DCD-5B9F-4B7F-9E1C-EC08B1F98A0C}
 		{AA441C24-61C2-46E4-AB92-34E30528778D} = {F86712B0-1132-45E6-A324-61C1AE5D56D4}
 		{1831F267-A7B4-4CF0-A267-62CBCDAAB839} = {396A76A8-EA0E-400B-A4D5-79415BF83F76}
+		{A061EA76-4EFF-444F-B058-87657E9B6D57} = {75A81E56-F044-4768-B27F-399F60D73487}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC02EB2-F850-4CA7-AD74-6A7572B0A70C}

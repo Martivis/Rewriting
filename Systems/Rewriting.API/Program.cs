@@ -1,5 +1,6 @@
 using Rewriting.API.Configuration;
 using Rewriting.Context;
+using Rewriting.Services.UserAccount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ services.AddAppSwagger();
 services.AddAppVersioning();
 services.AddAppHealthChecks();
 services.AddAppAutomapper();
+services.AddAppUserAccountService();
 
 var app = builder.Build();
 
