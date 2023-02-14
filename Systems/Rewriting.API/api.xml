@@ -23,11 +23,12 @@
             </summary>
             <param name="builder"></param>
         </member>
-        <member name="M:Rewriting.API.Configuration.SwaggerConfiguration.AddAppSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Rewriting.API.Configuration.SwaggerConfiguration.AddAppSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection,Rewriting.API.IdentitySettings)">
             <summary>
             Add swagger services with custom configuration
             </summary>
             <param name="services"></param>
+            <param name="identitySettings">Identity server data</param>
             <returns></returns>
         </member>
         <member name="M:Rewriting.API.Configuration.SwaggerConfiguration.UseAppSwagger(Microsoft.AspNetCore.Builder.WebApplication)">
@@ -43,6 +44,20 @@
             </summary>
             <param name="services"></param>
             <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Accounts.UserAccountController.Register(Rewriting.API.Controllers.Accounts.RegisterUserRequest)">
+            <summary>
+            Register new user
+            </summary>
+            <param name="request">RegisterUserAccountRequest</param>
+            <response code="200">Registered user model</response>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Accounts.UserAccountController.ChangePassword(Rewriting.API.Controllers.Accounts.ChangePasswordRequest)">
+            <summary>
+            Change password
+            </summary>
+            <param name="request">ChangePasswordRequest</param>
+            <response code="200">Success report</response>
         </member>
     </members>
 </doc>

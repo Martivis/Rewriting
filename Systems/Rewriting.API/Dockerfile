@@ -8,6 +8,12 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Systems/Rewriting.API/Rewriting.API.csproj", "Systems/Rewriting.API/"]
+COPY ["Data/Rewriting.Context.Entities/Rewriting.Context.Entities.csproj", "Data/Rewriting.Context.Entities/"]
+COPY ["Data/Rewriting.Context.Migrations/Rewriting.Context.Migrations.csproj", "Data/Rewriting.Context.Migrations/"]
+COPY ["Data/Rewriting.Context/Rewriting.Context.csproj", "Data/Rewriting.Context/"]
+COPY ["Shared/Rewriting.SettingsLoader/Rewriting.Settings.csproj", "Shared/Rewriting.SettingsLoader/"]
+COPY ["Services/Rewriting.Services.UserAccount/Rewriting.Services.UserAccount.csproj", "Services/Rewriting.Services.UserAccount/"]
+COPY ["Shared/Rewriting.Common/Rewriting.Common.csproj", "Shared/Rewriting.Common/"]
 RUN dotnet restore "Systems/Rewriting.API/Rewriting.API.csproj"
 COPY . .
 WORKDIR "/src/Systems/Rewriting.API"
