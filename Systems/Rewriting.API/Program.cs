@@ -14,6 +14,7 @@ services.AddAppDbContextFactory();
 services.AddAppSwagger();
 services.AddAppVersioning();
 services.AddAppHealthChecks();
+services.AddAppAutomapper();
 
 var app = builder.Build();
 
