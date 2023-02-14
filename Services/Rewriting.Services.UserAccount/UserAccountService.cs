@@ -63,7 +63,6 @@ namespace Rewriting.Services.UserAccount
                 Uid = userIdentity.Id,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                BirthDate = model.BirthDate,
             };
             userIdentity.UserData = userData;
 

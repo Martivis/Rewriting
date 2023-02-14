@@ -12,7 +12,7 @@ public class UserData : BaseEntity
     public virtual UserIdentity UserIdentity { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public DateOnly BirthDate { get; set; }
+    public DateOnly? BirthDate { get; set; }
     public uint OrdersCount { get; set; }
     public uint CompletedContractsCount { get; set; }
     public virtual ICollection<Offer> Offers { get; set; }

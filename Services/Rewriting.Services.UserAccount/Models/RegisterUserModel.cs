@@ -11,7 +11,6 @@ public class RegisterUserModel
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public DateOnly BirthDate { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
 }
@@ -25,9 +24,6 @@ public class RegisterUserModelValidator : AbstractValidator<RegisterUserModel>
 
         RuleFor(s => s.LastName)
             .NotEmpty().WithMessage("Last name is required");
-
-        RuleFor(s => s.BirthDate)
-            .Must(s => s < DateOnly.FromDateTime(DateTime.Today)).WithMessage("Invalid birth date");
 
         RuleFor(s => s.Email)
             .NotEmpty().WithMessage("Email is required")
