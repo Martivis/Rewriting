@@ -17,10 +17,7 @@ services.AddSingleton(identitySettings);
 services.AddHttpContextAccessor();
 services.AddAppAuth(identitySettings);
 
-services.AddControllers().AddValidator().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
-});
+services.AddAppControllers();
 
 services.AddAppDbContextFactory();
 services.AddAppSwagger(identitySettings);
