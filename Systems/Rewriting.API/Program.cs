@@ -7,7 +7,7 @@ builder.AddAppLogger();
 
 var services = builder.Services;
 
-services.AddControllers();
+services.AddControllers().AddValidator();
 
 services.AddAppDbContextFactory();
 
