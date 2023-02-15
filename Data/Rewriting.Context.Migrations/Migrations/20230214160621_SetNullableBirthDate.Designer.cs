@@ -391,7 +391,7 @@ namespace Rewriting.Context.Migrations.Migrations
                         .IsRequired();
 
                     b.HasOne("Rewriting.Context.Entities.UserData", "Contractor")
-                        .WithMany("Contracts")
+                        .WithMany("Contract")
                         .HasForeignKey("ContractorUid")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -418,7 +418,7 @@ namespace Rewriting.Context.Migrations.Migrations
 
             modelBuilder.Entity("Rewriting.Context.Entities.UserData", b =>
                 {
-                    b.Navigation("Contracts");
+                    b.Navigation("Contract");
 
                     b.Navigation("Offers");
 

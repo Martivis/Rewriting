@@ -44,13 +44,16 @@ public class AppDbContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, 
             .HasOne(t => t.Contractor).WithMany(s => s.Offers)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Order>().ToTable("order")
+        modelBuilder.Entity<Order>().ToTable("orders")
             .HasOne(t => t.Client).WithMany(t => t.Orders)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Order>()
-            .HasOne(t => t.Contractor).WithMany(t => t.Contracts)
+            .HasOne(t => t.Contract).WithOne(t => t.Order)
+            .HasForeignKey<Contract>(t => t.Uid)
             .OnDelete(DeleteBehavior.Restrict);
 
-
+        modelBuilder.Entity<Contract>().ToTable("contracts")
+            .HasOne(t => t.Contractor).WithMany(t => t.Contracts)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

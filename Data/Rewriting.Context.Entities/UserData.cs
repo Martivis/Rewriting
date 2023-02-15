@@ -17,5 +17,5 @@ public class UserData : BaseEntity
     public uint CompletedContractsCount { get; set; }
     public virtual ICollection<Offer> Offers { get; set; }
     public virtual ICollection<Order> Orders { get; set; }
-    public virtual ICollection<Order> Contracts { get; set; }
+    public virtual ICollection<Contract> Contracts { get; set; }
 }

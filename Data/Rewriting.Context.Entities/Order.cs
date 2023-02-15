@@ -12,8 +12,9 @@ public class Order : BaseEntity
     public string Text { get; set; }
     public string Comment { get; set; }
     public DateTime DateTime { get; set; }
+    public OrderStatus Status { get; set; }
     public virtual UserData Client { get; set; }
-    public virtual UserData? Contractor { get; set; }
     public virtual ICollection<Offer> Offers { get; set; }
+    public virtual Contract Contract { get; set; }
 
 }
