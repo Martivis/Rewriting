@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Rewriting.Common.Validator;
 using Rewriting.Services.UserAccount;
 
 namespace Rewriting.API.Controllers.Accounts
@@ -12,10 +13,19 @@ namespace Rewriting.API.Controllers.Accounts
     {
         private readonly IMapper _mapper;
         private readonly IUserAccountService _userAccountService;
-        public UserAccountController(IMapper mapper, IUserAccountService userAccountService)
+        private readonly IModelValidator<RegisterUserRequest> _registerUserRequestValidator;
+        private readonly IModelValidator<ChangePasswordRequest> _changePasswordRequestValidator;
+
+        public UserAccountController(
+            IMapper mapper, 
+            IUserAccountService userAccountService, 
+            IModelValidator<RegisterUserRequest> registerUserRequestValidator,
+            IModelValidator<ChangePasswordRequest> changePasswordRequestValidator)
         {
             _mapper = mapper;
             _userAccountService = userAccountService;
+            _registerUserRequestValidator = registerUserRequestValidator;
+            _changePasswordRequestValidator = changePasswordRequestValidator;
         }
 
         /// <summary>
@@ -26,6 +36,7 @@ namespace Rewriting.API.Controllers.Accounts
         [HttpPost("")]
         public async Task<UserAccountResponse> Register([FromBody] RegisterUserRequest request)
         {
+            _registerUserRequestValidator.Check(request);
             var user = await _userAccountService.Create(_mapper.Map<RegisterUserModel>(request));
 
             return _mapper.Map<UserAccountResponse>(user);
@@ -40,6 +51,7 @@ namespace Rewriting.API.Controllers.Accounts
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
+            _changePasswordRequestValidator.Check(request);
             var model = _mapper.Map<ChangePasswordModel>(request);
             model.Issuer = User;
             await _userAccountService.ChangePassword(model);
