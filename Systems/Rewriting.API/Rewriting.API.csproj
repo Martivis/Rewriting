@@ -34,6 +34,7 @@
     <ProjectReference Include="..\..\Data\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
     <ProjectReference Include="..\..\Data\Rewriting.Context.Migrations\Rewriting.Context.Migrations.csproj" />
     <ProjectReference Include="..\..\Data\Rewriting.Context\Rewriting.Context.csproj" />
+    <ProjectReference Include="..\..\Services\Rewriting.Services.Orders\Rewriting.Services.Orders.csproj" />
     <ProjectReference Include="..\..\Services\Rewriting.Services.UserAccount\Rewriting.Services.UserAccount.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.Common\Rewriting.Common.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.Settings.csproj" />

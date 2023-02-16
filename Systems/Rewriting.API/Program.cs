@@ -2,6 +2,7 @@ using Rewriting.API;
 using Rewriting.API.Configuration;
 using Rewriting.Common.JsonConverters;
 using Rewriting.Context;
+using Rewriting.Services.Orders;
 using Rewriting.Services.UserAccount;
 using Rewriting.Settings;
 
@@ -24,7 +25,9 @@ services.AddAppSwagger(identitySettings);
 services.AddAppVersioning();
 services.AddAppHealthChecks();
 services.AddAppAutomapper();
+
 services.AddAppUserAccountService();
+services.AddOrderService();
 
 var app = builder.Build();
 
