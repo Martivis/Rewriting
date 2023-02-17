@@ -12,7 +12,7 @@ public class RegisterUserRequest
     public string Password { get; set; }
 }
 
-public class RegisterUserModelRequestValidator : AbstractValidator<RegisterUserModel>
+public class RegisterUserModelRequestValidator : AbstractValidator<RegisterUserRequest>
 {
     public RegisterUserModelRequestValidator()
     {

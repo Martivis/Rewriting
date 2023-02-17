@@ -10,7 +10,7 @@ public class ChangePasswordRequest
     public string NewPassword { get; set; }
 }
 
-public class ChangePasswordRequestValidator : AbstractValidator<ChangePasswordModel>
+public class ChangePasswordRequestValidator : AbstractValidator<ChangePasswordRequest>
 {
     public ChangePasswordRequestValidator()
     {
