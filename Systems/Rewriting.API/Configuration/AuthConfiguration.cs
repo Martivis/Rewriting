@@ -44,7 +44,7 @@ public static class AuthConfiguration
                 {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateAudience = false,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
