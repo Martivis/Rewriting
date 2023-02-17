@@ -27,7 +27,7 @@ public static class AppDbOptionsFactory
                     .MigrationsAssembly(DbConstants.MigrationsAssembly);
             })
                 .EnableSensitiveDataLogging()
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                .UseLazyLoadingProxies();
         };
     }
 }

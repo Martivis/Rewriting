@@ -15,6 +15,8 @@ public class AppDbContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, 
     public DbSet<UserData> UsersData { get; set; }
     public DbSet<Offer> Offers { get; set; }
     public DbSet<Order> Orders { get; set; }
+    public DbSet<Contract> Contracts { get; set; }
+    public DbSet<Result> Results { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 
@@ -42,7 +44,7 @@ public class AppDbContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, 
 
         modelBuilder.Entity<Offer>()
             .HasOne(t => t.Contractor).WithMany(s => s.Offers)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Order>().ToTable("orders")
             .HasOne(t => t.Client).WithMany(t => t.Orders)
@@ -50,10 +52,14 @@ public class AppDbContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, 
         modelBuilder.Entity<Order>()
             .HasOne(t => t.Contract).WithOne(t => t.Order)
             .HasForeignKey<Contract>(t => t.Uid)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Contract>().ToTable("contracts")
             .HasOne(t => t.Contractor).WithMany(t => t.Contracts)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Result>().ToTable("results")
+            .HasOne(t => t.Contract).WithMany(t => t.Result)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
