@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Context.Entities;
 
-public class Result
+public class Result : BaseEntity
 {
     public string Content { get; set; }
     public ResultStatus Status { get; set; }
