@@ -15,56 +15,85 @@ namespace Rewriting.Services.Orders;
 
 internal class OrderService : IOrderService
 {
-    private readonly IModelValidator<AddOrderModel> _addOrderValidator;
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
     private readonly IMapper _mapper;
 
     public OrderService(
-        IModelValidator<AddOrderModel> addOrderValidator, 
         IDbContextFactory<AppDbContext> dbContextFactory,
         IMapper mapper)
     {
-        _addOrderValidator = addOrderValidator;
         _contextFactory = dbContextFactory;
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<OrderModel>> GetNewOrders(int page = 0, int pageSize = 10)
+    /// <summary>
+    /// Get orders with status 'New'
+    /// </summary>
+    /// <param name="page">Page number (starting with 0)</param>
+    /// <param name="pageSize">Orders number per page</param>
+    /// <returns>A Task containing an List of OrderModel objects</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when page value < 0 or pageSize value < 1</exception>
+    public async Task<List<OrderModel>> GetNewOrders(int page = 0, int pageSize = 10)
     {
+        if (page < 0 || pageSize < 1)
+            throw new ArgumentOutOfRangeException("Invalid page or pageSize");
+       
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var entities = await context.Set<Order>()
+        var orders = context.Set<Order>()
             .Where(order => order.Status == OrderStatus.New)
-            .Skip(Math.Max(page * pageSize, 0))
-            .Take(Math.Min(pageSize, 1000))
-            .ToListAsync();
+            .Skip(page * pageSize)
+            .Take(pageSize);
 
-        var orders = entities.Select(_mapper.Map<OrderModel>);
+        var orderModels = orders.Select(_mapper.Map<OrderModel>).ToList();
 
-        return orders;
+        return orderModels;
     }
 
-    public async Task<IEnumerable<OrderModel>> GetOrders(Guid userUid)
+    /// <summary>
+    /// Get orders placed by specified user
+    /// </summary>
+    /// <param name="userUid">User's uid</param>
+    /// <param name="page">Page number (starting with 0)</param>
+    /// <param name="pageSize">Orders number per page</param>
+    /// <returns>A Task containing an List of OrderModel objects</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public async Task<List<OrderModel>> GetOrdersByUser(Guid userUid, int page = 0, int pageSize = 10)
     {
+        if (page < 0 || pageSize < 1)
+            throw new ArgumentOutOfRangeException("Invalid page or pageSize");
+
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var orders = await context.Set<Order>()
+        var orders = context.Set<Order>()
             .Where(order => order.ClientUid == userUid)
-            .Select(entity => _mapper.Map<OrderModel>(entity))
-            .ToListAsync();
+            .Skip(pageSize * page)
+            .Take(pageSize);
 
-        return orders;
+        var orderModels = orders.Select(_mapper.Map<OrderModel>).ToList();
+
+        return orderModels;
     }
 
+    /// <summary>
+    /// Get delailed information about specified order
+    /// </summary>
+    /// <param name="uid">Order's uid</param>
+    /// <returns>A Task containing an OrderDetailsModel object</returns>
     public async Task<OrderDetailsModel> GetOrderDetails(Guid uid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var order = context.Set<Order>().FindAsync(uid);
+        var order = await context.Set<Order>().FindAsync(uid);
 
         return _mapper.Map<OrderDetailsModel>(order);
     }
 
+    /// <summary>
+    /// Add new order
+    /// </summary>
+    /// <param name="model">A model of new order</param>
+    /// <returns>A Task containing an OrderDetailsModel object</returns>
     public async Task<OrderDetailsModel> AddOrder(AddOrderModel model)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
@@ -79,6 +108,12 @@ internal class OrderService : IOrderService
         return _mapper.Map<OrderDetailsModel>(order);
     }
 
+    /// <summary>
+    /// Delete specified order
+    /// </summary>
+    /// <param name="orderUid">Order's uid</param>
+    /// <returns></returns>
+    /// <exception cref="ProcessException"></exception>
     public async Task DeleteOrder(Guid orderUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
