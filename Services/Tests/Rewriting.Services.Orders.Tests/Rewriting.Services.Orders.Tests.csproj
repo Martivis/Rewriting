@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>Rewriting.Services.Orders.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
