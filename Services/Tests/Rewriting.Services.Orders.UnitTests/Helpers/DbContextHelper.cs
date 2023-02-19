@@ -19,9 +19,5 @@ internal class DbContextHelper
 		
 		var options = builder.Options;
 		Context = new AppDbContext(options);
-
-		Context.AddRange(TestDataProvider.Orders);
-
-		Context.SaveChanges();
 	}
 }
