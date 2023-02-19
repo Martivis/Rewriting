@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Rewriting.Context;
 using Rewriting.Common.Validator;
 using Rewriting.Context.Entities;
+using Rewriting.Services.Orders;
+using AutoMapper;
+using System.Reflection;
 
 namespace Rewriting.Services.Orders.UnitTests;
 
@@ -24,7 +27,7 @@ public class OrderServiceTests
             method.CreateDbContextAsync(It.IsAny<CancellationToken>()))
                   .Returns(Task.FromResult(_contextHelper.Context));
 
-        _orderService = new OrderService();
+        _orderService = new OrderService(_contextFactoryStub.Object, new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderModelProfile()))));
     }
 
     [TestMethod]
@@ -39,7 +42,7 @@ public class OrderServiceTests
                 Title = "TITLE",
                 Comment = "COMMENT",
                 Text = "TEXT",
-                Status = OrderStatus.InProgress,
+                Status = OrderStatus.New,
                 DateTime = DateTime.Parse("01.01.2020")
             },
             new Order
@@ -49,7 +52,7 @@ public class OrderServiceTests
                 Title = "TITLE",
                 Comment = "COMMENT",
                 Text = "TEXT",
-                Status = OrderStatus.Done,
+                Status = OrderStatus.New,
                 DateTime = DateTime.Parse("01.01.2020")
             },
             new Order
@@ -67,35 +70,14 @@ public class OrderServiceTests
         _contextHelper.Context.AddRange(data);
         _contextHelper.Context.SaveChanges();
 
-        var expected = new List<OrderModel>
+        var expected = new List<Guid>
         {
-            new OrderModel
-            {
-                Uid = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                ClientUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
-                Title = "TITLE",
-                Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
-            },
-            new OrderModel
-            {
-                Uid = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                ClientUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
-                Title = "TITLE",
-                Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
-            },
-            new OrderModel
-            {
-                Uid = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                ClientUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
-                Title = "TITLE",
-                Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
-            }
+            new Guid("11111111-1111-1111-1111-111111111111"),
+            new Guid("22222222-2222-2222-2222-222222222222"),
         };
 
-        var actual = await _orderService.GetNewOrders();
+        var result = await _orderService.GetNewOrders(0, 2);
+        var actual = result.Select(x => x.Uid).ToList();
 
         CollectionAssert.AreEqual(expected, actual);
     }
