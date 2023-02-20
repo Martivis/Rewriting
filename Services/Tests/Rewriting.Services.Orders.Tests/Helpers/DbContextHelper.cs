@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.Orders.UnitTests;
+namespace Rewriting.Services.Orders.Tests;
 
 internal class DbContextHelper
 {
@@ -19,5 +19,8 @@ internal class DbContextHelper
 		
 		var options = builder.Options;
 		Context = new AppDbContext(options);
+
+		Context.Database.EnsureDeleted();
+		Context.Database.EnsureCreated();
 	}
 }
