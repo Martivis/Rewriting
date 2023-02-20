@@ -13,7 +13,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Rewriting.Services.Orders;
 
-public class OrderService : IOrderService
+internal class OrderService : IOrderService
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
     private readonly IMapper _mapper;
