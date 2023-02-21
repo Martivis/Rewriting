@@ -10,7 +10,7 @@ using System.Reflection;
 namespace Rewriting.Services.Orders.Tests;
 
 [TestClass]
-public class OrderServiceTests
+public class GetNewOrdersTests
 {
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
@@ -31,10 +31,10 @@ public class OrderServiceTests
     }
 
     [TestMethod]
-    public async Task GetNewOrders_page0_pageSize_2_Returns2elems()
+    public async Task GetNewOrders_page0_pageSize2_Returns2elems()
     {
         // Arrange
-        var data = new List<Order>()
+        var orders = new List<Order>()
         {
             new Order
             {
@@ -68,13 +68,13 @@ public class OrderServiceTests
             },
         };
 
-        _contextHelper.Context.AddRange(data);
+        _contextHelper.Context.AddRange(orders);
         _contextHelper.Context.SaveChanges();
 
         var expected = new List<Guid>
         {
-            new Guid("11111111-1111-1111-1111-111111111111"),
-            new Guid("22222222-2222-2222-2222-222222222222"),
+            Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            Guid.Parse("22222222-2222-2222-2222-222222222222"),
         };
 
         // Act
@@ -86,7 +86,7 @@ public class OrderServiceTests
     }
 
     [TestMethod]
-    public async Task GetNewOrders_page1_pageSize_2_Returns1elem()
+    public async Task GetNewOrders_page1_pageSize2_Returns1elem()
     {
         // Arrange
         var data = new List<Order>()
@@ -282,4 +282,5 @@ public class OrderServiceTests
         // Assert
         CollectionAssert.AreEqual(expected, actual);
     }
+
 }

@@ -26,4 +26,8 @@
     <ProjectReference Include="..\..\..\Services\Rewriting.Services.Orders\Rewriting.Services.Orders.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extentions\" />
+  </ItemGroup>
+
 </Project>
