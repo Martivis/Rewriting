@@ -84,7 +84,8 @@ internal class OrderService : IOrderService
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var order = await context.Set<Order>().FindAsync(uid);
+        var order = await context.Set<Order>().FindAsync(uid)
+            ?? throw new ProcessException($"Order {uid} not found");
 
         return _mapper.Map<OrderDetailsModel>(order);
     }
