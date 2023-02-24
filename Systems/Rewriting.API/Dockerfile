@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
@@ -12,8 +12,9 @@ COPY ["Data/Rewriting.Context.Entities/Rewriting.Context.Entities.csproj", "Data
 COPY ["Data/Rewriting.Context.Migrations/Rewriting.Context.Migrations.csproj", "Data/Rewriting.Context.Migrations/"]
 COPY ["Data/Rewriting.Context/Rewriting.Context.csproj", "Data/Rewriting.Context/"]
 COPY ["Shared/Rewriting.SettingsLoader/Rewriting.Settings.csproj", "Shared/Rewriting.SettingsLoader/"]
-COPY ["Services/Rewriting.Services.UserAccount/Rewriting.Services.UserAccount.csproj", "Services/Rewriting.Services.UserAccount/"]
+COPY ["Services/Rewriting.Services.Orders/Rewriting.Services.Orders.csproj", "Services/Rewriting.Services.Orders/"]
 COPY ["Shared/Rewriting.Common/Rewriting.Common.csproj", "Shared/Rewriting.Common/"]
+COPY ["Services/Rewriting.Services.UserAccount/Rewriting.Services.UserAccount.csproj", "Services/Rewriting.Services.UserAccount/"]
 RUN dotnet restore "Systems/Rewriting.API/Rewriting.API.csproj"
 COPY . .
 WORKDIR "/src/Systems/Rewriting.API"

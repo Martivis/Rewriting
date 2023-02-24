@@ -59,5 +59,32 @@
             <param name="request">ChangePasswordRequest</param>
             <response code="200">Success report</response>
         </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetAllNew">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetDetails(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="orderGuid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.Add(Rewriting.API.Controllers.Orders.AddOrderRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.Delete(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="orderGuid"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
