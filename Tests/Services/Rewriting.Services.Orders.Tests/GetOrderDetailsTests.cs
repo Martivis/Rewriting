@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Rewriting.Common.Exceptions;
@@ -17,6 +18,8 @@ public class GetOrderDetailsTests
 {
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
+    private IMapper _mapper;
+    private Mock<IAuthorizationService> _authorizationServiceStub;
 
     private IOrderService _orderService;
 
@@ -30,7 +33,15 @@ public class GetOrderDetailsTests
             method.CreateDbContextAsync(It.IsAny<CancellationToken>()))
                   .Returns(Task.FromResult(_contextHelper.Context));
 
-        _orderService = new OrderService(_contextFactoryStub.Object, new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderDetailsModelProfile()))));
+        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderDetailsModelProfile())));
+
+        _authorizationServiceStub = new Mock<IAuthorizationService>();
+
+        _orderService = new OrderService(
+            _contextFactoryStub.Object,
+            _mapper,
+            _authorizationServiceStub.Object
+            );
     }
 
     [TestMethod]
