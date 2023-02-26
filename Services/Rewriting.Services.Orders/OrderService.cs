@@ -41,9 +41,11 @@ internal class OrderService : IOrderService
     /// <exception cref="ArgumentOutOfRangeException">Thrown when page value < 0 or pageSize value < 1</exception>
     public async Task<List<OrderModel>> GetNewOrders(int page = 0, int pageSize = 10)
     {
-        if (page < 0 || pageSize < 1)
-            throw new ArgumentOutOfRangeException("Invalid page or pageSize");
-       
+        if (page < 0)
+            throw new ArgumentOutOfRangeException(nameof(page), page, "Page should be greater than zero");
+        if (pageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size should be greater than zero");
+
         using var context = await _contextFactory.CreateDbContextAsync();
 
         var orders = await context.Set<Order>()
@@ -52,9 +54,7 @@ internal class OrderService : IOrderService
             .Take(pageSize)
             .ToListAsync();
 
-        var orderModels = orders.Select(_mapper.Map<OrderModel>).ToList();
-
-        return orderModels;
+        return _mapper.Map<List<OrderModel>>(orders);
     }
 
     /// <summary>
@@ -67,8 +67,10 @@ internal class OrderService : IOrderService
     /// <exception cref="ArgumentOutOfRangeException">Thrown when user is not found</exception>
     public async Task<List<OrderModel>> GetOrdersByUser(Guid userUid, int page = 0, int pageSize = 10)
     {
-        if (page < 0 || pageSize < 1)
-            throw new ArgumentOutOfRangeException("Invalid page or pageSize");
+        if (page < 0)
+            throw new ArgumentOutOfRangeException(nameof(page), page, "Page should be greater than zero");
+        if (pageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size should be greater than zero");
 
         using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -78,9 +80,7 @@ internal class OrderService : IOrderService
             .Take(pageSize)
             .ToListAsync();
 
-        var orderModels = orders.Select(_mapper.Map<OrderModel>).ToList();
-
-        return orderModels;
+        return _mapper.Map<List<OrderModel>>(orders);
     }
 
     /// <summary>
@@ -134,11 +134,7 @@ internal class OrderService : IOrderService
         if (!authResult.Succeeded)
             throw new ProcessException("Access denied");
 
-        if (order.Status != OrderStatus.InProgress &&
-            order.Status != OrderStatus.New &&
-            order.Contract is not null &&
-            order.Contract.Result?.LastOrDefault() is not null &&
-            order.Contract.Result.LastOrDefault()?.Status != ResultStatus.Declined)
+        if (!IsCancelable(order))
             throw new ProcessException($"Unable to cancel order {model.OrderUid}");
 
         order.Status = OrderStatus.Canceled;
@@ -161,5 +157,16 @@ internal class OrderService : IOrderService
 
         context.Remove(order);
         await context.SaveChangesAsync();
+    }
+
+    private static bool IsCancelable(Order order)
+    {
+        return
+            order.Status != OrderStatus.Canceled &&
+            order.Status != OrderStatus.Done &&
+            (
+                order.Contract is null ||
+                !order.Contract.Result.Any(e => e.Status == ResultStatus.Evaluation)
+            );
     }
 }
