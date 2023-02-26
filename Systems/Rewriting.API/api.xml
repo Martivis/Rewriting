@@ -59,31 +59,45 @@
             <param name="request">ChangePasswordRequest</param>
             <response code="200">Success report</response>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetAllNew">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetNewOrders">
             <summary>
-            
+            Get all the orders available for offers
             </summary>
+            <returns>The List of OrderResponse representing new orders</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetUserOrders">
+            <summary>
+            Get all the orders published by calling user
+            </summary>
+            <returns>The List of OrderResponse representing user's orders</returns>
+            <exception cref="T:Rewriting.Common.Exceptions.ProcessException"></exception>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetOrderDetails(System.Guid)">
+            <summary>
+            Get delailed information about an order with specified Uid including offers and results
+            </summary>
+            <param name="orderUid">Uid of the target offer</param>
+            <returns>OrderDetailsResponse</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.AddOrder(Rewriting.API.Controllers.Orders.AddOrderRequest)">
+            <summary>
+            Add new order
+            </summary>
+            <param name="request">Add order request model</param>
+            <returns>OrderDetailsResponse with information about created order</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.CancelOrder(System.Guid)">
+            <summary>
+            Cancel order
+            </summary>
+            <param name="orderUid">Uid of target order</param>
             <returns></returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetDetails(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.DeleteOrder(System.Guid)">
             <summary>
-            
+            Delete order
             </summary>
-            <param name="orderGuid"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.Add(Rewriting.API.Controllers.Orders.AddOrderRequest)">
-            <summary>
-            
-            </summary>
-            <param name="request"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.Delete(System.Guid)">
-            <summary>
-            
-            </summary>
-            <param name="orderGuid"></param>
+            <param name="orderUid">Uid of target order</param>
             <returns></returns>
         </member>
     </members>

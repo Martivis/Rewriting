@@ -1,9 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Rewriting.Common.Exceptions;
 using Rewriting.Common.Validator;
+using Rewriting.Context.Entities;
 using Rewriting.Services.Orders;
+using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 
 namespace Rewriting.API.Controllers.Orders
 {
@@ -14,12 +20,18 @@ namespace Rewriting.API.Controllers.Orders
         private IMapper _mapper;
         private IModelValidator<AddOrderRequest> _validator;
         private IOrderService _orderService;
+        private UserManager<UserIdentity> _userManager;
 
-        public OrdersController(IMapper mapper, IModelValidator<AddOrderRequest> validator, IOrderService orderService)
+        public OrdersController(
+            IMapper mapper, 
+            IModelValidator<AddOrderRequest> validator, 
+            IOrderService orderService, 
+            UserManager<UserIdentity> userManager)
         {
             _mapper = mapper;
             _validator = validator;
             _orderService = orderService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -34,14 +46,31 @@ namespace Rewriting.API.Controllers.Orders
         }
 
         /// <summary>
+        /// Get all the orders published by calling user
+        /// </summary>
+        /// <returns>The List of OrderResponse representing user's orders</returns>
+        /// <exception cref="ProcessException"></exception>
+        [HttpGet]
+        [Authorize]
+        public async Task<List<OrderResponse>> GetUserOrders()
+        {
+            var userUid = _userManager.GetUserId(User)
+                ?? throw new ProcessException("User not found");
+            
+            var orderModels = await _orderService.GetOrdersByUser(Guid.Parse(userUid));
+            return _mapper.Map<List<OrderResponse>>(orderModels);
+        }
+
+        /// <summary>
         /// Get delailed information about an order with specified Uid including offers and results
         /// </summary>
-        /// <param name="orderGuid">Uid of the target offer</param>
+        /// <param name="orderUid">Uid of the target offer</param>
         /// <returns>OrderDetailsResponse</returns>
         [HttpGet]
-        public async Task<OrderDetailsResponse> GetOrderDetails(Guid orderGuid)
+        [Authorize]
+        public async Task<OrderDetailsResponse> GetOrderDetails(Guid orderUid)
         {
-            var orderModel = await _orderService.GetOrderDetails(orderGuid);
+            var orderModel = await _orderService.GetOrderDetails(orderUid);
             return _mapper.Map<OrderDetailsResponse>(orderModel);
         }
 
@@ -51,23 +80,53 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="request">Add order request model</param>
         /// <returns>OrderDetailsResponse with information about created order</returns>
         [HttpPost]
+        [Authorize]
         public async Task<OrderDetailsResponse> AddOrder(AddOrderRequest request)
         {
             _validator.Check(request);
             var orderModel =  _mapper.Map<AddOrderModel>(request);
-            var result = _orderService.AddOrder(orderModel);
+
+            var userIdentity = await _userManager.GetUserAsync(User)
+                ?? throw new ProcessException("User not found");
+
+            orderModel.ClientUid = userIdentity.Id;
+
+            var result = await _orderService.AddOrder(orderModel);
+
             return _mapper.Map<OrderDetailsResponse>(result);
+        }
+
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="orderUid">Uid of target order</param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize]
+        public async Task<IActionResult> CancelOrder(Guid orderUid)
+        {
+            var cancelOrderModel = new CancelOrderModel
+            {
+                OrderUid = orderUid,
+                Issuer = User,
+            };
+
+            await _orderService.CancelOrder(cancelOrderModel);
+
+            return Ok();
         }
 
         /// <summary>
         /// Delete order
         /// </summary>
-        /// <param name="orderGuid">Uid of target order</param>
+        /// <param name="orderUid">Uid of target order</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task DeleteOrder(Guid orderGuid)
+        [Authorize]
+        public async Task<IActionResult> DeleteOrder(Guid orderUid)
         {
-            await _orderService.DeleteOrder(orderGuid);
+            await _orderService.DeleteOrder(orderUid);
+            return Ok();
         }
     }
 }

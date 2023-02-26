@@ -1,7 +1,9 @@
 ﻿using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Rewriting.API.Authorization;
 using Rewriting.Common.Security;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
@@ -56,9 +58,12 @@ public static class AuthConfiguration
         {
             options.AddPolicy(AppScopes.OrdersRead, policy => policy.RequireClaim("scope", AppScopes.OrdersRead));
             options.AddPolicy(AppScopes.OrdersWrite, policy => policy.RequireClaim("scope", AppScopes.OrdersWrite));
+            options.AddPolicy(AppScopes.OrdersEdit, policy => policy.Requirements.Add(new AuthorUidRequirement()));
             options.AddPolicy(AppScopes.OffersRead, policy => policy.RequireClaim("scope", AppScopes.OffersRead));
             options.AddPolicy(AppScopes.OffersWrite, policy => policy.RequireClaim("scope", AppScopes.OffersWrite));
         });
+
+        services.AddScoped<IAuthorizationHandler, OrdersAuthorizationHandler>();
 
         return services;
     }

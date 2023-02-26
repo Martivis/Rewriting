@@ -29,6 +29,6 @@ public class OrderDetailsResponseProfile : Profile
 {
     public OrderDetailsResponseProfile()
     {
-        CreateMap<OrderModel, OrderDetailsResponse>();
+        CreateMap<OrderDetailsModel, OrderDetailsResponse>();
     }
 }

@@ -11,7 +11,7 @@ public static class OrdersServiceBootstraper
 {
     public static IServiceCollection AddOrderService(this IServiceCollection services)
     {
-        services.AddSingleton<IOrderService, OrderService>();
+        services.AddScoped<IOrderService, OrderService>();
         return services;
     }
 }
