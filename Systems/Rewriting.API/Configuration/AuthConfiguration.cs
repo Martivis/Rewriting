@@ -59,11 +59,14 @@ public static class AuthConfiguration
             options.AddPolicy(AppScopes.OrdersRead, policy => policy.RequireClaim("scope", AppScopes.OrdersRead));
             options.AddPolicy(AppScopes.OrdersWrite, policy => policy.RequireClaim("scope", AppScopes.OrdersWrite));
             options.AddPolicy(AppScopes.OrdersEdit, policy => policy.Requirements.Add(new AuthorUidRequirement()));
+            options.AddPolicy(AppScopes.OrdersDelete, policy => policy.RequireRole("Admin")
+                                                                      .RequireClaim("scope", AppScopes.OrdersDelete));
+
             options.AddPolicy(AppScopes.OffersRead, policy => policy.RequireClaim("scope", AppScopes.OffersRead));
             options.AddPolicy(AppScopes.OffersWrite, policy => policy.RequireClaim("scope", AppScopes.OffersWrite));
         });
 
-        services.AddScoped<IAuthorizationHandler, OrdersAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, OrdersAuthorizationHandler>();
 
         return services;
     }

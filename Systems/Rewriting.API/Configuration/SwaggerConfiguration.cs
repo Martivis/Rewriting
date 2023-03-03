@@ -45,6 +45,7 @@ public static class SwaggerConfiguration
                             {
                                 { AppScopes.OrdersRead, "OrdersRead" },
                                 { AppScopes.OrdersWrite, "OrdersWrite" },
+                                { AppScopes.OrdersDelete, "OrdersDelete" },
                                 { AppScopes.OffersRead, "OffersRead" },
                                 { AppScopes.OffersWrite, "OffersWrite" },
                             }

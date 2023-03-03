@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Rewriting.Common.Exceptions;
+using Rewriting.Common.Helpers;
+using Rewriting.Common.Security;
 using Rewriting.Common.Validator;
 using Rewriting.Context.Entities;
 using Rewriting.Services.Orders;
@@ -20,7 +22,6 @@ namespace Rewriting.API.Controllers.Orders
         private IMapper _mapper;
         private IModelValidator<AddOrderRequest> _validator;
         private IOrderService _orderService;
-        private UserManager<UserIdentity> _userManager;
 
         public OrdersController(
             IMapper mapper, 
@@ -31,7 +32,6 @@ namespace Rewriting.API.Controllers.Orders
             _mapper = mapper;
             _validator = validator;
             _orderService = orderService;
-            _userManager = userManager;
         }
 
         /// <summary>
@@ -51,13 +51,12 @@ namespace Rewriting.API.Controllers.Orders
         /// <returns>The List of OrderResponse representing user's orders</returns>
         /// <exception cref="ProcessException"></exception>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = AppScopes.OrdersRead)]
         public async Task<List<OrderResponse>> GetUserOrders()
         {
-            var userUid = _userManager.GetUserId(User)
-                ?? throw new ProcessException("User not found");
+            var userUid = User.GetUid();
             
-            var orderModels = await _orderService.GetOrdersByUser(Guid.Parse(userUid));
+            var orderModels = await _orderService.GetOrdersByUser(userUid);
             return _mapper.Map<List<OrderResponse>>(orderModels);
         }
 
@@ -67,7 +66,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="orderUid">Uid of the target offer</param>
         /// <returns>OrderDetailsResponse</returns>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = AppScopes.OrdersEdit)]
         public async Task<OrderDetailsResponse> GetOrderDetails(Guid orderUid)
         {
             var orderModel = await _orderService.GetOrderDetails(orderUid);
@@ -80,16 +79,13 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="request">Add order request model</param>
         /// <returns>OrderDetailsResponse with information about created order</returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = AppScopes.OffersWrite)]
         public async Task<OrderDetailsResponse> AddOrder(AddOrderRequest request)
         {
             _validator.Check(request);
+
             var orderModel =  _mapper.Map<AddOrderModel>(request);
-
-            var userIdentity = await _userManager.GetUserAsync(User)
-                ?? throw new ProcessException("User not found");
-
-            orderModel.ClientUid = userIdentity.Id;
+            orderModel.ClientUid = User.GetUid();
 
             var result = await _orderService.AddOrder(orderModel);
 
@@ -102,7 +98,6 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="orderUid">Uid of target order</param>
         /// <returns></returns>
         [HttpPatch]
-        [Authorize]
         public async Task<IActionResult> CancelOrder(Guid orderUid)
         {
             var cancelOrderModel = new CancelOrderModel
@@ -122,7 +117,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="orderUid">Uid of target order</param>
         /// <returns></returns>
         [HttpDelete]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteOrder(Guid orderUid)
         {
             await _orderService.DeleteOrder(orderUid);

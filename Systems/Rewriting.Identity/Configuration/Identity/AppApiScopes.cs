@@ -11,7 +11,8 @@ public static class AppApiScopes
         {
             new ApiScope(AppScopes.OrdersRead, "Access to orders API - Read orders"),
             new ApiScope(AppScopes.OrdersWrite, "Access to orders API - Add orders"),
-            new ApiScope(AppScopes.OrdersEdit, "Access to orders API - Edit orders"),
+            new ApiScope(AppScopes.OrdersDelete, "Admin access to orders API - Delete orders", new[] { "Role" }),
+
             new ApiScope(AppScopes.OffersRead, "Access to offers API - Read offers"),
             new ApiScope(AppScopes.OffersWrite, "Access to offers API - Add offers")
         };

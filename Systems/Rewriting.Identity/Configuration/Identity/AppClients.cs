@@ -41,6 +41,8 @@ public static class AppClients
                 {
                     AppScopes.OrdersRead,
                     AppScopes.OrdersWrite,
+                    AppScopes.OrdersDelete,
+
                     AppScopes.OffersRead,
                     AppScopes.OffersWrite,
                 }
