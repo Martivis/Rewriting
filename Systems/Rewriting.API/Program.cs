@@ -39,6 +39,8 @@ app.UseAppHealthChecks();
 app.UseHttpsRedirection();
 app.MapControllers();
 
+app.UseAppMiddlewares();
+
 AppDbInitializer.Execute(app.Services);
 
 app.Run();
