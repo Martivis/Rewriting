@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Rewriting.Context.Entities;
+﻿using Rewriting.Context.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +15,4 @@ public class OrderModel
     public OrderStatus Status { get; set; }
     public Guid ClientUid { get; set; }
     public string ClientName { get; set; }
-}
-
-public class OrderModelProfile : Profile
-{
-    public OrderModelProfile()
-    {
-        CreateMap<Order, OrderModel>()
-            .ForMember(t => t.ClientName, o => o.MapFrom(s => $"{s.Client.FirstName} {s.Client.LastName}"))
-            .ReverseMap();
-    }
 }
