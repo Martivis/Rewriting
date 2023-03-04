@@ -68,7 +68,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="orderUid">Uid of the target offer</param>
         /// <returns>OrderDetailsResponse</returns>
         [HttpGet]
-        [Authorize(Policy = AppScopes.OrdersEdit)]
+        [Authorize]
         public async Task<OrderDetailsResponse> GetOrderDetails(Guid orderUid)
         {
             var orderModel = await _orderService.GetOrderDetails(orderUid);
@@ -100,6 +100,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="orderUid">Uid of target order</param>
         /// <returns></returns>
         [HttpPatch]
+        [Authorize]
         public async Task<IActionResult> CancelOrder(Guid orderUid)
         {
             var orderModel = await _orderService.GetOrder(orderUid);
