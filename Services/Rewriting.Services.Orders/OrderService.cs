@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Authorization;
 using Rewriting.Common.Security;
+using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 
 namespace Rewriting.Services.Orders;
 
@@ -19,17 +21,29 @@ internal class OrderService : IOrderService
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
     private readonly IMapper _mapper;
-    private readonly IAuthorizationService _authorizationService;
 
     public OrderService(
         IDbContextFactory<AppDbContext> dbContextFactory,
-        IMapper mapper,
-        IAuthorizationService authorizationService
+        IMapper mapper
         )
     {
         _contextFactory = dbContextFactory;
         _mapper = mapper;
-        _authorizationService = authorizationService;
+    }
+
+    /// <summary>
+    /// Get order with specified Uid
+    /// </summary>
+    /// <param name="orderUid">Order's Uid</param>
+    /// <returns></returns>
+    /// <exception cref="ProcessException">Thrown when order with specified Uid doesn't exist in database</exception>
+    public async Task<OrderModel> GetOrder(Guid orderUid)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+        var order = await context.Set<Order>().FindAsync(orderUid)
+            ?? throw new ProcessException($"Order {orderUid} not found");
+
+        return _mapper.Map<OrderModel>(order);
     }
 
     /// <summary>
@@ -64,7 +78,7 @@ internal class OrderService : IOrderService
     /// <param name="page">Page number (starting with 0)</param>
     /// <param name="pageSize">Orders number per page</param>
     /// <returns>A Task containing an List of OrderModel objects</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when user is not found</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when page value < 0 or pageSize value < 1</exception>
     public async Task<List<OrderModel>> GetOrdersByUser(Guid userUid, int page = 0, int pageSize = 10)
     {
         if (page < 0)
@@ -122,20 +136,17 @@ internal class OrderService : IOrderService
     /// </summary>
     /// <param name="orderUid">Order's Uid</param>
     /// <returns></returns>
-    /// <exception cref="ProcessException">Thrown when order is not found</exception>
+    /// <exception cref="ProcessException">Thrown when order is not cancalable</exception>
     public async Task CancelOrder(CancelOrderModel model)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var order = await context.Set<Order>().FindAsync(model.OrderUid)
-            ?? throw new ProcessException($"Order {model.OrderUid} not found");
+        var order = _mapper.Map<Order>(model.OrderModel);
 
-        var authResult = await _authorizationService.AuthorizeAsync(model.Issuer, order, AppScopes.OrdersEdit);
-        if (!authResult.Succeeded)
-            throw new ProcessException("Access denied");
+        context.Attach(order);
 
         if (!IsCancelable(order))
-            throw new ProcessException($"Unable to cancel order {model.OrderUid}");
+            throw new ProcessException($"Unable to cancel order {order.Uid}");
 
         order.Status = OrderStatus.Canceled;
 
@@ -147,7 +158,7 @@ internal class OrderService : IOrderService
     /// </summary>
     /// <param name="orderUid">Order's uid</param>
     /// <returns></returns>
-    /// <exception cref="ProcessException">Thrown when order is not found</exception>
+    /// <exception cref="ProcessException">Thrown when order with specified Uid doesn't exist in database</exception>
     public async Task DeleteOrder(Guid orderUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();

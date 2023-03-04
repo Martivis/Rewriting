@@ -23,6 +23,7 @@ public class OrderModelProfile : Profile
     public OrderModelProfile()
     {
         CreateMap<Order, OrderModel>()
-            .ForMember(t => t.ClientName, o => o.MapFrom(s => $"{s.Client.FirstName} {s.Client.LastName}"));
+            .ForMember(t => t.ClientName, o => o.MapFrom(s => $"{s.Client.FirstName} {s.Client.LastName}"))
+            .ReverseMap();
     }
 }

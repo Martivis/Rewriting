@@ -19,19 +19,21 @@ namespace Rewriting.API.Controllers.Orders
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private IMapper _mapper;
-        private IModelValidator<AddOrderRequest> _validator;
-        private IOrderService _orderService;
+        private readonly IMapper _mapper;
+        private readonly IModelValidator<AddOrderRequest> _validator;
+        private readonly IOrderService _orderService;
+        private readonly IAuthorizationService _authorizationService;
 
         public OrdersController(
             IMapper mapper, 
             IModelValidator<AddOrderRequest> validator, 
-            IOrderService orderService, 
-            UserManager<UserIdentity> userManager)
+            IOrderService orderService,
+            IAuthorizationService authorizationService)
         {
             _mapper = mapper;
             _validator = validator;
             _orderService = orderService;
+            _authorizationService = authorizationService;
         }
 
         /// <summary>
@@ -100,9 +102,15 @@ namespace Rewriting.API.Controllers.Orders
         [HttpPatch]
         public async Task<IActionResult> CancelOrder(Guid orderUid)
         {
+            var orderModel = await _orderService.GetOrder(orderUid);
+
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderModel, AppScopes.OrdersEdit);
+            if (!authorizationResult.Succeeded)
+                return Forbid();
+
             var cancelOrderModel = new CancelOrderModel
             {
-                OrderUid = orderUid,
+                OrderModel = orderModel,
                 Issuer = User,
             };
 
