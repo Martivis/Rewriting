@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\Rewriting.Services.UserAccount\Rewriting.Services.UserAccount.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.Settings.csproj" />
     <ProjectReference Include="..\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
   </ItemGroup>

@@ -126,7 +126,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="orderUid">Uid of target order</param>
         /// <returns></returns>
         [HttpDelete]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteOrder(Guid orderUid)
         {
             await _orderService.DeleteOrder(orderUid);

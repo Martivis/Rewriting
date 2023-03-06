@@ -8,6 +8,7 @@ using Rewriting.Common.Security;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 namespace Rewriting.API.Configuration;
 
@@ -29,6 +30,7 @@ public static class AuthConfiguration
         })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddUserManager<UserManager<UserIdentity>>()
+            .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
             .AddDefaultTokenProviders()
             ;
 
@@ -59,7 +61,7 @@ public static class AuthConfiguration
             options.AddPolicy(AppScopes.OrdersRead, policy => policy.RequireClaim("scope", AppScopes.OrdersRead));
             options.AddPolicy(AppScopes.OrdersWrite, policy => policy.RequireClaim("scope", AppScopes.OrdersWrite));
             options.AddPolicy(AppScopes.OrdersEdit, policy => policy.Requirements.Add(new AuthorUidRequirement()));
-            options.AddPolicy(AppScopes.OrdersDelete, policy => policy.RequireRole("Admin")
+            options.AddPolicy(AppScopes.OrdersDelete, policy => policy.RequireClaim(ClaimTypes.Role, AppRoles.Admin)
                                                                       .RequireClaim("scope", AppScopes.OrdersDelete));
 
             options.AddPolicy(AppScopes.OffersRead, policy => policy.RequireClaim("scope", AppScopes.OffersRead));
