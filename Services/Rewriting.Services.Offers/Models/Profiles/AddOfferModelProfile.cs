@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Rewriting.Context.Entities;
 
-namespace Rewriting.Services.Orders;
+namespace Rewriting.Services.Offers;
 
 public class AddOfferModelProfile : Profile
 {
