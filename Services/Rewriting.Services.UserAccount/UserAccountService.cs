@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rewriting.Services.UserAccount
-{
+{ // TODO: organize exceptions
     internal class UserAccountService : IUserAccountService
     {
         private readonly UserManager<UserIdentity> _userManager;

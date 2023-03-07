@@ -10,5 +10,5 @@ public class AddOrderModelProfile : Profile
         CreateMap<AddOrderModel, Order>()
             .ForMember(t => t.DateTime, o => o.Ignore())
             .ForMember(t => t.Status, o => o.Ignore());
-    }
+    } // TODO: Add tests
 }
