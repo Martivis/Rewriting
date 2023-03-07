@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Rewriting.Common.Exceptions;
 using Rewriting.Common.Security;
 using Rewriting.Common.Validator;
 using Rewriting.Context.Entities;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rewriting.Services.UserAccount
-{ // TODO: organize exceptions
+{
     internal class UserAccountService : IUserAccountService
     {
         private readonly UserManager<UserIdentity> _userManager;
@@ -41,13 +42,13 @@ namespace Rewriting.Services.UserAccount
             _changePasswordModelValidator.Check(model);
 
             var user = await _userManager.GetUserAsync(model.Issuer)
-                ?? throw new Exception($"User not found");
+                ?? throw new ProcessException($"User not found");
 
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (!result.Succeeded)
             {
                 var text = result.Errors.ToList().Select(a => a.Description).Aggregate((a, b) => a + "\n" + b);
-                throw new Exception($"{text}");
+                throw new ProcessException($"{text}");
             }
         }
 
@@ -57,7 +58,7 @@ namespace Rewriting.Services.UserAccount
 
             var userIdentity = await _userManager.FindByEmailAsync(model.Email);
             if (userIdentity != null)
-                throw new Exception($"User account with email {model.Email} already exists");
+                throw new ProcessException($"User account with email {model.Email} already exists");
 
             userIdentity = new UserIdentity
             {
@@ -74,7 +75,7 @@ namespace Rewriting.Services.UserAccount
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
             if (!result.Succeeded)
-                throw new Exception("Operation failed");
+                throw new ProcessException("Unable to create user");
             
             return _mapper.Map<UserModel>(userIdentity);
         }
@@ -82,7 +83,7 @@ namespace Rewriting.Services.UserAccount
         public async Task AddToRole(AddToRoleModel model)
         {
             var userIdentity = await _userManager.FindByIdAsync(model.UserUid.ToString())
-                ?? throw new Exception($"User {model.UserUid} not found");
+                ?? throw new ProcessException($"User {model.UserUid} not found");
 
             var claim = new Claim(ClaimTypes.Role, model.RoleName);
 
