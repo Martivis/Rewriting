@@ -111,7 +111,7 @@ namespace Rewriting.API.Controllers.Orders
 
             var cancelOrderModel = new CancelOrderModel
             {
-                OrderModel = orderModel,
+                OrderUid = orderUid,
                 Issuer = User,
             };
 

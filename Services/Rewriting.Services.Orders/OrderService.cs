@@ -141,9 +141,8 @@ internal class OrderService : IOrderService
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var order = _mapper.Map<Order>(model.OrderModel);
-
-        context.Attach(order);
+        var order = context.Set<Order>().Find(model.OrderUid)
+            ?? throw new ProcessException($"Order {model.OrderUid} not found");
 
         if (!IsCancelable(order))
             throw new ProcessException($"Unable to cancel order {order.Uid}");
@@ -175,9 +174,6 @@ internal class OrderService : IOrderService
         return
             order.Status != OrderStatus.Canceled &&
             order.Status != OrderStatus.Done &&
-            (
-                order.Contract is null ||
-                !order.Contract.Result.Any(e => e.Status == ResultStatus.Evaluation)
-            );
+            order.Status != OrderStatus.Evaluation;
     }
 }

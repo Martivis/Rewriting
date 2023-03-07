@@ -16,7 +16,6 @@ public class GetNewOrdersTests
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
     private IMapper _mapper;
-    private Mock<IAuthorizationService> _authorizationServiceStub;
     
     private IOrderService _orderService;
 
@@ -32,12 +31,9 @@ public class GetNewOrdersTests
 
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderModelProfile())));
 
-        _authorizationServiceStub = new Mock<IAuthorizationService>();
-
         _orderService = new OrderService(
             _contextFactoryStub.Object,
-            _mapper,
-            _authorizationServiceStub.Object
+            _mapper
             );
     }
 

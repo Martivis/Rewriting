@@ -16,7 +16,8 @@ internal class DbContextHelper
 	{
 		var builder = new DbContextOptionsBuilder<AppDbContext>();
 		builder.UseInMemoryDatabase("RewritingDb");
-		
+		builder.UseLazyLoadingProxies();
+
 		var options = builder.Options;
 		Context = new AppDbContext(options);
 

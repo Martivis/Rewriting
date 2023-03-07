@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.Orders.Models;
+namespace Rewriting.Services.Orders;
 
 public class OrderDetailsModelProfile : Profile
 {

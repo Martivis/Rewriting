@@ -20,8 +20,7 @@ public class CancelOrderTests
 {
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
-    private Mock<IMapper> _mapperStub;
-    private Mock<IAuthorizationService> _authorizationServiceStub;
+    private IMapper _mapper;
 
     private IOrderService _orderService;
 
@@ -35,146 +34,12 @@ public class CancelOrderTests
             method.CreateDbContextAsync(It.IsAny<CancellationToken>()))
                   .Returns(Task.FromResult(_contextHelper.Context));
 
-        _mapperStub = new Mock<IMapper>();
-
-        _authorizationServiceStub = new Mock<IAuthorizationService>();
-        
+        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderModelProfile())));
 
         _orderService = new OrderService(
             _contextFactoryStub.Object,
-            _mapperStub.Object,
-            _authorizationServiceStub.Object
+            _mapper
             );
-    }
-
-    [TestMethod]
-    public async Task CancelOrder_CallsAuthorizeAsync()
-    {
-        // Arrange
-        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
-        var orderUid = Guid.Parse("11111111-1111-1111-1111-111111111111");
-        var order = new Order
-        { 
-            Uid = orderUid,
-            ClientUid = userUid,
-            Title = "TITLE",
-            Comment = "COMMENT",
-            Text = "TEXT",
-            Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
-        };
-
-        _contextHelper.Context.Add(order);
-        _contextHelper.Context.SaveChanges();
-
-        _authorizationServiceStub.Setup(obj =>
-            obj.AuthorizeAsync(
-                It.IsAny<ClaimsPrincipal>(),
-                It.IsAny<Order>(),
-                It.Is<string>(s => s == AppScopes.OrdersEdit)
-                )
-            ).ReturnsAsync(AuthorizationResult.Success());
-
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
-        var cancelOrderModel = new CancelOrderModel()
-        {
-            OrderUid = orderUid,
-            Issuer = claimsPrincipalStub.Object
-        };
-
-        // Act
-        await _orderService.CancelOrder(cancelOrderModel);
-
-        // Assert
-        _authorizationServiceStub.Verify(obj => 
-            obj.AuthorizeAsync(
-                claimsPrincipalStub.Object, 
-                It.Is<Order>(o => o.Uid == orderUid), 
-                AppScopes.OrdersEdit), Times.Once());
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ProcessException))]
-    public async Task CancelOrder_AuthorizationFailed_ThrowsProcessException()
-    {
-        // Arrange
-        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
-        var orderUid = Guid.Parse("11111111-1111-1111-1111-111111111111");
-        var order = new Order
-        {
-            Uid = orderUid,
-            ClientUid = userUid,
-            Title = "TITLE",
-            Comment = "COMMENT",
-            Text = "TEXT",
-            Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
-        };
-
-        _contextHelper.Context.Add(order);
-        _contextHelper.Context.SaveChanges();
-
-        _authorizationServiceStub.Setup(obj =>
-            obj.AuthorizeAsync(
-                It.IsAny<ClaimsPrincipal>(),
-                It.IsAny<Order>(),
-                It.Is<string>(s => s == AppScopes.OrdersEdit)
-                )
-            ).ReturnsAsync(AuthorizationResult.Failed());
-
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
-        var cancelOrderModel = new CancelOrderModel()
-        {
-            OrderUid = orderUid,
-            Issuer = claimsPrincipalStub.Object
-        };
-
-        // Act
-        await _orderService.CancelOrder(cancelOrderModel);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ProcessException))]
-    public async Task CancelOrder_OrderNotFound_ThrowsProcessException()
-    {
-        // Arrange
-        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
-        var orderUid = Guid.Parse("11111111-1111-1111-1111-111111111111");
-        var unexittingOrderUid = Guid.Parse("22222222-1111-1111-1111-111111111111");
-        var order = new Order
-        {
-            Uid = orderUid,
-            ClientUid = userUid,
-            Title = "TITLE",
-            Comment = "COMMENT",
-            Text = "TEXT",
-            Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
-        };
-
-        _contextHelper.Context.Add(order);
-        _contextHelper.Context.SaveChanges();
-
-        _authorizationServiceStub.Setup(obj =>
-            obj.AuthorizeAsync(
-                It.IsAny<ClaimsPrincipal>(),
-                It.IsAny<Order>(),
-                It.Is<string>(s => s == AppScopes.OrdersEdit)
-                )
-            ).ReturnsAsync(AuthorizationResult.Success());
-
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
-        var cancelOrderModel = new CancelOrderModel()
-        {
-            OrderUid = unexittingOrderUid,
-            Issuer = claimsPrincipalStub.Object
-        };
-
-        // Act
-        await _orderService.CancelOrder(cancelOrderModel);
     }
 
     [TestMethod]
@@ -197,14 +62,6 @@ public class CancelOrderTests
 
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
-
-        _authorizationServiceStub.Setup(obj =>
-            obj.AuthorizeAsync(
-                It.IsAny<ClaimsPrincipal>(),
-                It.IsAny<Order>(),
-                It.Is<string>(s => s == AppScopes.OrdersEdit)
-                )
-            ).ReturnsAsync(AuthorizationResult.Success());
 
         var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
 
@@ -239,14 +96,6 @@ public class CancelOrderTests
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
 
-        _authorizationServiceStub.Setup(obj =>
-            obj.AuthorizeAsync(
-                It.IsAny<ClaimsPrincipal>(),
-                It.IsAny<Order>(),
-                It.Is<string>(s => s == AppScopes.OrdersEdit)
-                )
-            ).ReturnsAsync(AuthorizationResult.Success());
-
         var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
 
         var cancelOrderModel = new CancelOrderModel()
@@ -266,7 +115,7 @@ public class CancelOrderTests
         // Arrange
         var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
         var orderUid = Guid.Parse("11111111-1111-1111-1111-111111111111");
-        var contractorUid = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff");
+
         var order = new Order
         {
             Uid = orderUid,
@@ -274,39 +123,52 @@ public class CancelOrderTests
             Title = "TITLE",
             Comment = "COMMENT",
             Text = "TEXT",
-            Status = OrderStatus.Canceled,
+            Status = OrderStatus.Evaluation,
             DateTime = DateTime.Parse("01.01.2020"),
-            Contract = new Contract
-            {
-                ContractorUid = contractorUid,
-                Price = 100,
-                Result = new List<Result>
-                {
-                    new Result
-                    {
-                        Content = "Result",
-                        Status = ResultStatus.Evaluation
-                    }
-                }
-            }
         };
 
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
-
-        _authorizationServiceStub.Setup(obj =>
-            obj.AuthorizeAsync(
-                It.IsAny<ClaimsPrincipal>(),
-                It.IsAny<Order>(),
-                It.Is<string>(s => s == AppScopes.OrdersEdit)
-                )
-            ).ReturnsAsync(AuthorizationResult.Success());
 
         var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
 
         var cancelOrderModel = new CancelOrderModel()
         {
             OrderUid = orderUid,
+            Issuer = claimsPrincipalStub.Object
+        };
+
+        // Act
+        await _orderService.CancelOrder(cancelOrderModel);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ProcessException))]
+    public async Task CancelOrder_OrderNotFound_ThrowsProcessException()
+    {
+        // Arrange
+        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
+        var orderUid = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        var unexistingOrderUid = Guid.Parse("22222222-2222-2222-2222-222222222222");
+        var order = new Order
+        {
+            Uid = orderUid,
+            ClientUid = userUid,
+            Title = "TITLE",
+            Comment = "COMMENT",
+            Text = "TEXT",
+            Status = OrderStatus.New,
+            DateTime = DateTime.Parse("01.01.2020"),
+        };
+
+        _contextHelper.Context.Add(order);
+        _contextHelper.Context.SaveChanges();
+
+        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
+
+        var cancelOrderModel = new CancelOrderModel()
+        {
+            OrderUid = unexistingOrderUid,
             Issuer = claimsPrincipalStub.Object
         };
 

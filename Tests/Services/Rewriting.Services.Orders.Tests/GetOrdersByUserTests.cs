@@ -34,12 +34,9 @@ public class GetOrdersByUserTests
 
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderModelProfile())));
 
-        _authorizationServiceStub = new Mock<IAuthorizationService>();
-
         _orderService = new OrderService(
             _contextFactoryStub.Object,
-            _mapper,
-            _authorizationServiceStub.Object
+            _mapper
             );
     }
 
