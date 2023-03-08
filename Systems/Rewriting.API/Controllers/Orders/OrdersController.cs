@@ -81,7 +81,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <param name="request">Add order request model</param>
         /// <returns>OrderDetailsResponse with information about created order</returns>
         [HttpPost]
-        [Authorize(Policy = AppScopes.OffersWrite)]
+        [Authorize(Policy = AppScopes.OrdersWrite)]
         public async Task<OrderDetailsResponse> AddOrder(AddOrderRequest request)
         {
             _validator.Check(request);
