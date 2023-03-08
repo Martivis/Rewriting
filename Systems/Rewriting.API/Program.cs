@@ -2,6 +2,7 @@ using Rewriting.API;
 using Rewriting.API.Configuration;
 using Rewriting.Common.JsonConverters;
 using Rewriting.Context;
+using Rewriting.Services.Offers;
 using Rewriting.Services.Orders;
 using Rewriting.Services.UserAccount;
 using Rewriting.Settings;
@@ -28,6 +29,7 @@ services.AddAppAutomapper();
 
 services.AddAppUserAccountService();
 services.AddOrderService();
+services.AddOfferService();
 
 var app = builder.Build();
 
