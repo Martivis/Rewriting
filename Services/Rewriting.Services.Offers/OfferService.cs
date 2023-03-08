@@ -33,7 +33,8 @@ namespace Rewriting.Services.Offers
             using var context = await _contextFactory.CreateDbContextAsync();
 
             var offers = context.Set<Offer>()
-                .Where(offer => offer.OrderUid == orderUid);
+                .Where(offer => offer.OrderUid == orderUid)
+                .ToList();
 
             return _mapper.Map<IEnumerable<OfferModel>>(offers);
         }
@@ -43,7 +44,8 @@ namespace Rewriting.Services.Offers
             using var context = await _contextFactory.CreateDbContextAsync();
 
             var offers = context.Set<Offer>()
-                .Where(offer => offer.ContractorUid == userUid);
+                .Where(offer => offer.ContractorUid == userUid)
+                .ToList();
 
             return _mapper.Map<IEnumerable<OfferModel>>(offers);
         }
