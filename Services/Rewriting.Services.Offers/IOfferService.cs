@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Offers;
 
-public interface IOffersService
+public interface IOfferService
 {
     Task<IEnumerable<OfferModel>> GetOffersByOrder(Guid orderUid);
     Task<IEnumerable<OfferModel>> GetOffersByUser(Guid userUid);
     Task<OfferModel> AddOffer(AddOfferModel model);
-    Task AcceptOffer(Guid offerUid);
-
 }

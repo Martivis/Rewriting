@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Rewriting.Common.Exceptions;
+using Rewriting.Common.Validator;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
 using System;
@@ -11,16 +12,19 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Offers
 {
-    internal class OffersService : IOffersService
+    internal class OfferService : IOfferService
     {
         private readonly IDbContextFactory<AppDbContext> _contextFactory;
         private readonly IMapper _mapper;
+        private readonly IModelValidator<AddOfferModel> _validator;
 
-        public OffersService(
+        public OfferService(
             IDbContextFactory<AppDbContext> contextFactory,
+            IModelValidator<AddOfferModel> validator,
             IMapper mapper)
         {
             _contextFactory = contextFactory;
+            _validator = validator;
             _mapper = mapper;
         }
 
@@ -48,9 +52,13 @@ namespace Rewriting.Services.Offers
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
+            _validator.Check(model);
+
             var order = await context.Set<Order>().FindAsync(model.OrderUid)
                 ?? throw new ProcessException($"Order {model.OrderUid} not found");
 
+            if (order.ClientUid == model.ContractorUid)
+                throw new ProcessException("Unable to add offer to your own order");
             if (order.Status != OrderStatus.New)
                 throw new ProcessException("Unable to add offer");
 
@@ -60,24 +68,6 @@ namespace Rewriting.Services.Offers
             context.SaveChanges();
 
             return _mapper.Map<OfferModel>(offer);
-        }
-
-        public async Task AcceptOffer(Guid offerUid)
-        {
-            using var context = await _contextFactory.CreateDbContextAsync();
-
-            var offer = await context.Set<Offer>().FindAsync(offerUid)
-                ?? throw new ProcessException($"Offer {offerUid} not found");
-
-            if (offer.Order.Status != OrderStatus.New)
-                throw new ProcessException($"Unable to add contract to order {offer.OrderUid}");
-
-            offer.Order.Status = OrderStatus.InProgress;
-
-            var contract = _mapper.Map<Contract>(offer);
-
-            await context.AddAsync(contract);
-            await context.SaveChangesAsync();
         }
     }
 }
