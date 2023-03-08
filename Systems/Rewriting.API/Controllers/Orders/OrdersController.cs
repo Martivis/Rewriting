@@ -20,18 +20,15 @@ namespace Rewriting.API.Controllers.Orders
     public class OrdersController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IModelValidator<AddOrderRequest> _validator;
         private readonly IOrderService _orderService;
         private readonly IAuthorizationService _authorizationService;
 
         public OrdersController(
             IMapper mapper, 
-            IModelValidator<AddOrderRequest> validator, 
             IOrderService orderService,
             IAuthorizationService authorizationService)
         {
             _mapper = mapper;
-            _validator = validator;
             _orderService = orderService;
             _authorizationService = authorizationService;
         }
@@ -84,8 +81,6 @@ namespace Rewriting.API.Controllers.Orders
         [Authorize(Policy = AppScopes.OffersWrite)]
         public async Task<OrderDetailsResponse> AddOrder(AddOrderRequest request)
         {
-            _validator.Check(request);
-
             var orderModel =  _mapper.Map<AddOrderModel>(request);
             orderModel.ClientUid = User.GetUid();
 

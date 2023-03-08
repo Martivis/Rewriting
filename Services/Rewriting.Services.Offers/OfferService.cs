@@ -16,15 +16,12 @@ namespace Rewriting.Services.Offers
     {
         private readonly IDbContextFactory<AppDbContext> _contextFactory;
         private readonly IMapper _mapper;
-        private readonly IModelValidator<AddOfferModel> _validator;
 
         public OfferService(
             IDbContextFactory<AppDbContext> contextFactory,
-            IModelValidator<AddOfferModel> validator,
             IMapper mapper)
         {
             _contextFactory = contextFactory;
-            _validator = validator;
             _mapper = mapper;
         }
 
@@ -53,8 +50,6 @@ namespace Rewriting.Services.Offers
         public async Task<OfferModel> AddOffer(AddOfferModel model)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
-
-            _validator.Check(model);
 
             var order = await context.Set<Order>().FindAsync(model.OrderUid)
                 ?? throw new ProcessException($"Order {model.OrderUid} not found");
