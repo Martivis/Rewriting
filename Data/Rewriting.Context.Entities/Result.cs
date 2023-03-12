@@ -10,5 +10,6 @@ public class Result : BaseEntity
 {
     public string Content { get; set; }
     public ResultStatus Status { get; set; }
+    public Guid ContractUid { get; set; }
     public virtual Contract Contract { get; set; }
 }

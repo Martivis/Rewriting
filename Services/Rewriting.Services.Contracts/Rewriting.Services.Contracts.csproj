@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
+    <ProjectReference Include="..\..\Data\Rewriting.Context\Rewriting.Context.csproj" />
+    <ProjectReference Include="..\..\Shared\Rewriting.Common\Rewriting.Common.csproj" />
+  </ItemGroup>
+
+</Project>

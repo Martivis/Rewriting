@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Services.Orders.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Services.Offers", "Services\Rewriting.Services.Offers\Rewriting.Services.Offers.csproj", "{24C43AD3-07D9-43F4-A3B1-CFCFA4C7FCCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Services.Contracts", "Services\Rewriting.Services.Contracts\Rewriting.Services.Contracts.csproj", "{2ABCB212-3A31-4095-A228-CAAE64D50094}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{24C43AD3-07D9-43F4-A3B1-CFCFA4C7FCCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24C43AD3-07D9-43F4-A3B1-CFCFA4C7FCCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24C43AD3-07D9-43F4-A3B1-CFCFA4C7FCCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ABCB212-3A31-4095-A228-CAAE64D50094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ABCB212-3A31-4095-A228-CAAE64D50094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ABCB212-3A31-4095-A228-CAAE64D50094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ABCB212-3A31-4095-A228-CAAE64D50094}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{CD37103D-787D-458C-BC43-B2F453044FFD} = {0BE39028-8ACE-4C2A-BB5F-94761E1385AE}
 		{C9ADB2A9-3A9A-4DBF-BA44-D839B7879564} = {CD37103D-787D-458C-BC43-B2F453044FFD}
 		{24C43AD3-07D9-43F4-A3B1-CFCFA4C7FCCF} = {75A81E56-F044-4768-B27F-399F60D73487}
+		{2ABCB212-3A31-4095-A228-CAAE64D50094} = {75A81E56-F044-4768-B27F-399F60D73487}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC02EB2-F850-4CA7-AD74-6A7572B0A70C}
