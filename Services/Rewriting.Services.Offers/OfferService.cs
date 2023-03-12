@@ -25,6 +25,14 @@ namespace Rewriting.Services.Offers
             _mapper = mapper;
         }
 
+        public async Task<OfferModel> GetOffer(Guid offerUid)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var offer = context.Set<Offer>().Find(offerUid);
+            return _mapper.Map<OfferModel>(offer);
+        }
+
         public async Task<IEnumerable<OfferModel>> GetOffersByOrder(Guid orderUid)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
@@ -65,6 +73,24 @@ namespace Rewriting.Services.Offers
             context.SaveChanges();
 
             return _mapper.Map<OfferModel>(offer);
+        }
+
+        public async Task AcceptOffer(Guid offerUid)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var offer = await context.Set<Offer>().FindAsync(offerUid)
+                ?? throw new ProcessException($"Offer {offerUid} not found");
+
+            if (offer.Order.Status != OrderStatus.New)
+                throw new ProcessException($"Unable to add contract to order {offer.OrderUid}");
+
+            offer.Order.Status = OrderStatus.InProgress;
+
+            var contract = _mapper.Map<Contract>(offer);
+
+            await context.AddAsync(contract);
+            await context.SaveChangesAsync();
         }
     }
 }
