@@ -66,6 +66,9 @@ public static class AuthConfiguration
 
             options.AddPolicy(AppScopes.OffersRead, policy => policy.RequireClaim("scope", AppScopes.OffersRead));
             options.AddPolicy(AppScopes.OffersWrite, policy => policy.RequireClaim("scope", AppScopes.OffersWrite));
+            options.AddPolicy(AppScopes.OffersEdit, policy => policy.Requirements.Add(new OfferClientRequirement()));
+            options.AddPolicy(AppScopes.OffersDelete, policy => policy.RequireClaim(ClaimTypes.Role, AppRoles.Admin)
+                                                                      .RequireClaim("scope", AppScopes.OffersDelete));
         });
 
         services.AddSingleton<IAuthorizationHandler, OrdersAuthorizationHandler>();

@@ -25,12 +25,12 @@ namespace Rewriting.Services.Offers
             _mapper = mapper;
         }
 
-        public async Task<OfferModel> GetOffer(Guid offerUid)
+        public async Task<OfferAuthorizationModel> GetOfferAuth(Guid offerUid)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
             var offer = context.Set<Offer>().Find(offerUid);
-            return _mapper.Map<OfferModel>(offer);
+            return _mapper.Map<OfferAuthorizationModel>(offer);
         }
 
         public async Task<IEnumerable<OfferModel>> GetOffersByOrder(Guid orderUid)

@@ -16,6 +16,7 @@ namespace Rewriting.API.Controllers.Offers
     {
         private readonly IMapper _mapper;
         private readonly IOfferService _offerService;
+        private readonly IAuthorizationService _authorizationService;
 
         public OffersController(
             IMapper mapper,
@@ -51,6 +52,20 @@ namespace Rewriting.API.Controllers.Offers
             
             var result = await _offerService.AddOffer(addOfferModel);
             return _mapper.Map<OfferResponse>(result);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AcceptOffer(Guid offerUid)
+        {
+            var offer = _offerService.GetOfferAuth(offerUid);
+
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, offer, AppScopes.OffersEdit);
+            if (!authorizationResult.Succeeded)
+                return Forbid();
+
+            await _offerService.AcceptOffer(offerUid);
+            return Ok();
         }
     }
 }

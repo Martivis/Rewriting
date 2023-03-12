@@ -9,5 +9,7 @@
 
         public const string OffersRead = "offers_read";
         public const string OffersWrite = "offers_write";
+        public const string OffersEdit = "offers_edit";
+        public const string OffersDelete = "offers_delete";
     }
 }
