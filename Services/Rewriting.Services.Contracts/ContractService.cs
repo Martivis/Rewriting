@@ -25,62 +25,6 @@ internal class ContractService : IContractService
         _mapper = mapper;
     }
 
-    public async Task AcceptResult(Guid contractUid)
-    {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
-
-        if (contract.Result is null)
-            throw new ProcessException($"Results for order {contractUid} not found");
-        if (contract.Order.Status != OrderStatus.InProgress)
-            throw new ProcessException($"Unable to accept result for order {contractUid}");
-
-        contract.Order.Status = OrderStatus.Done;
-        context.SaveChanges();
-    }
-
-    public async Task AddResult(AddResultModel model)
-    {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var result = _mapper.Map<Result>(model);
-
-        context.Add(result);
-        context.SaveChanges();
-    }
-
-    public async Task DeclineContractor(Guid contractUid)
-    {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
-
-        if (contract.Order.Status != OrderStatus.InProgress)
-            throw new ProcessException($"Unable to decline contractor for order in status {contract.Order.Status}");
-
-        context.Remove(contract);
-        context.SaveChanges();
-    }
-
-    public async Task DeclineResult(Guid contractUid)
-    {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
-        var order = contract.Order;
-       
-        if (order.Status != OrderStatus.InProgress)
-            throw new ProcessException($"You can't decline result for order in status {order.Status}");
-
-        order.Status = OrderStatus.InProgress;
-        
-        context.SaveChanges();
-    }
-
     public async Task<ClientAuthModel> GetClientAuth(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
@@ -122,5 +66,69 @@ internal class ContractService : IContractService
             .ToList();
 
         return _mapper.Map<IEnumerable<ContractModel>>(contracts);
+    }
+
+    public async Task AddResult(AddResultModel model)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        var contract = context.Set<Contract>().Find()
+            ?? throw new ProcessException($"Contract {model.ContractUid} not found");
+
+        var status = contract.Order.Status;
+        if (status != OrderStatus.Evaluation &&
+            status != OrderStatus.InProgress)
+            throw new ProcessException($"Unable to add result to order in status {status}");
+
+        var result = _mapper.Map<Result>(model);
+
+        context.Add(result);
+        context.SaveChanges();
+    }
+
+    public async Task AcceptResult(Guid contractUid)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        var contract = await context.Set<Contract>().FindAsync(contractUid)
+            ?? throw new ProcessException($"Contract {contractUid} not found");
+
+        if (contract.Result is null)
+            throw new ProcessException($"Results for order {contractUid} not found");
+        if (contract.Order.Status != OrderStatus.InProgress)
+            throw new ProcessException($"Unable to accept result for order {contractUid}");
+
+        contract.Order.Status = OrderStatus.Done;
+        context.SaveChanges();
+    }
+
+    public async Task DeclineResult(Guid contractUid)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        var contract = await context.Set<Contract>().FindAsync(contractUid)
+            ?? throw new ProcessException($"Contract {contractUid} not found");
+        var order = contract.Order;
+       
+        if (order.Status != OrderStatus.Evaluation)
+            throw new ProcessException($"You can't decline result for order in status {order.Status}");
+
+        order.Status = OrderStatus.InProgress;
+        
+        context.SaveChanges();
+    }
+
+    public async Task DeclineContractor(Guid contractUid)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        var contract = await context.Set<Contract>().FindAsync(contractUid)
+            ?? throw new ProcessException($"Contract {contractUid} not found");
+
+        if (contract.Order.Status != OrderStatus.InProgress)
+            throw new ProcessException($"Unable to decline contractor for order in status {contract.Order.Status}");
+
+        context.Remove(contract);
+        context.SaveChanges();
     }
 }
