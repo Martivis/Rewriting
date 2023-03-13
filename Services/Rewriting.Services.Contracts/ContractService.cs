@@ -72,7 +72,7 @@ internal class ContractService : IContractService
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = context.Set<Contract>().Find()
+        var contract = context.Set<Contract>().Find(model.ContractUid)
             ?? throw new ProcessException($"Contract {model.ContractUid} not found");
 
         var status = contract.Order.Status;
