@@ -2,7 +2,7 @@
 
 namespace Rewriting.API.Authorization;
 
-public class AuthorUidRequirement : IAuthorizationRequirement
+public class OwnerUidRequirement : IAuthorizationRequirement
 {
     public Guid UserUid { get; } 
 }

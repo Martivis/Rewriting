@@ -4,7 +4,8 @@ namespace Rewriting.Services.Contracts;
 
 public interface IContractService
 {
-    Task<ContractModel> GetContract(Guid contractUid);
+    Task<ClientAuthModel> GetClientAuth(Guid contractUid);
+    Task<ContractorAuthModel> GetContractorAuth(Guid contractUid);
     Task<ContractDetailsModel> GetContractDetails(Guid contractUid);
     Task<IEnumerable<ContractModel>> GetContractsByUser(Guid userUid);
     Task AddResult(AddResultModel model);

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.Offers;
+namespace Rewriting.Services.Contracts;
 
-public class OfferAuthorizationModel
+public class ContractorAuthModel
 {
     public Guid Uid { get; set; }
-    public Guid ClientUid { get; set; }
+    public Guid ContractorUid { get; set; }
 }

@@ -8,6 +8,7 @@ using Rewriting.Context.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -80,14 +81,24 @@ internal class ContractService : IContractService
         context.SaveChanges();
     }
 
-    public async Task<ContractModel> GetContract(Guid contractUid)
+    public async Task<ClientAuthModel> GetClientAuth(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
         var contract = await context.Set<Contract>().FindAsync(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
-        return _mapper.Map<ContractModel>(contract.Order);
+        return _mapper.Map<ClientAuthModel>(contract);
+    }
+
+    public async Task<ContractorAuthModel> GetContractorAuth(Guid contractUid)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        var contract = await context.Set<Contract>().FindAsync(contractUid)
+            ?? throw new ProcessException($"Contract {contractUid} not found");
+
+        return _mapper.Map<ContractorAuthModel>(contract);
     }
 
     public async Task<ContractDetailsModel> GetContractDetails(Guid contractUid)
@@ -97,7 +108,9 @@ internal class ContractService : IContractService
         var contract = await context.Set<Contract>().FindAsync(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
-        return _mapper.Map<ContractDetailsModel>(contract.Order);
+        var order = contract.Order;
+
+        return _mapper.Map<ContractDetailsModel>(order);
     }
 
     public async Task<IEnumerable<ContractModel>> GetContractsByUser(Guid userUid)

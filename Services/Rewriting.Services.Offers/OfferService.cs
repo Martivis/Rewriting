@@ -29,7 +29,9 @@ namespace Rewriting.Services.Offers
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
-            var offer = context.Set<Offer>().Find(offerUid);
+            var offer = context.Set<Offer>().Find(offerUid)
+                ?? throw new ProcessException($"Offer {offerUid} not found");
+
             return _mapper.Map<OfferAuthorizationModel>(offer);
         }
 

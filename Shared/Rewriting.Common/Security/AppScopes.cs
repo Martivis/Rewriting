@@ -11,5 +11,10 @@
         public const string OffersWrite = "offers_write";
         public const string OffersEdit = "offers_edit";
         public const string OffersDelete = "offers_delete";
+
+        public const string ContractsRead = "contracts_read";
+        public const string ContractsWrite = "contracts_write";
+        public const string ContractsEdit = "contracts_edit";
+        public const string ContractsDelete = "contracts_delete";
     }
 }

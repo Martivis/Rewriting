@@ -7,11 +7,11 @@ using System.Security.Claims;
 
 namespace Rewriting.API.Authorization;
 
-public class OrdersAuthorizationHandler : AuthorizationHandler<AuthorUidRequirement, OrderModel>
+public class OrdersAuthorizationHandler : AuthorizationHandler<OwnerUidRequirement, OrderModel>
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 
-        AuthorUidRequirement requirement, 
+        OwnerUidRequirement requirement, 
         OrderModel resource)
     {
         var userUid = context.User.GetUid();

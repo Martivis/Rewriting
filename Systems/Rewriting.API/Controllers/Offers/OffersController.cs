@@ -20,10 +20,12 @@ namespace Rewriting.API.Controllers.Offers
 
         public OffersController(
             IMapper mapper,
-            IOfferService offerService)
+            IOfferService offerService,
+            IAuthorizationService authorizationService)
         {
             _mapper = mapper;
             _offerService = offerService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -58,7 +60,7 @@ namespace Rewriting.API.Controllers.Offers
         [Authorize]
         public async Task<IActionResult> AcceptOffer(Guid offerUid)
         {
-            var offer = _offerService.GetOfferAuth(offerUid);
+            var offer = await _offerService.GetOfferAuth(offerUid);
 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, offer, AppScopes.OffersEdit);
             if (!authorizationResult.Succeeded)

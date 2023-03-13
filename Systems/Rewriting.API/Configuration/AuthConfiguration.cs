@@ -60,18 +60,26 @@ public static class AuthConfiguration
         {
             options.AddPolicy(AppScopes.OrdersRead, policy => policy.RequireClaim("scope", AppScopes.OrdersRead));
             options.AddPolicy(AppScopes.OrdersWrite, policy => policy.RequireClaim("scope", AppScopes.OrdersWrite));
-            options.AddPolicy(AppScopes.OrdersEdit, policy => policy.Requirements.Add(new AuthorUidRequirement()));
+            options.AddPolicy(AppScopes.OrdersEdit, policy => policy.Requirements.Add(new OwnerUidRequirement()));
             options.AddPolicy(AppScopes.OrdersDelete, policy => policy.RequireClaim(ClaimTypes.Role, AppRoles.Admin)
                                                                       .RequireClaim("scope", AppScopes.OrdersDelete));
 
             options.AddPolicy(AppScopes.OffersRead, policy => policy.RequireClaim("scope", AppScopes.OffersRead));
             options.AddPolicy(AppScopes.OffersWrite, policy => policy.RequireClaim("scope", AppScopes.OffersWrite));
-            options.AddPolicy(AppScopes.OffersEdit, policy => policy.Requirements.Add(new OfferClientRequirement()));
+            options.AddPolicy(AppScopes.OffersEdit, policy => policy.Requirements.Add(new OwnerUidRequirement()));
             options.AddPolicy(AppScopes.OffersDelete, policy => policy.RequireClaim(ClaimTypes.Role, AppRoles.Admin)
                                                                       .RequireClaim("scope", AppScopes.OffersDelete));
+
+            options.AddPolicy(AppScopes.ContractsRead, policy => policy.RequireClaim("scope", AppScopes.ContractsRead));
+            options.AddPolicy(AppScopes.ContractsWrite, policy => policy.RequireClaim("scope", AppScopes.ContractsWrite));
+            options.AddPolicy(AppScopes.ContractsEdit, policy => policy.Requirements.Add(new OwnerUidRequirement()));
+            options.AddPolicy(AppScopes.ContractsDelete, policy => policy.RequireClaim(ClaimTypes.Role, AppRoles.Admin)
+                                                                         .RequireClaim("scope", AppScopes.ContractsDelete));
         });
 
         services.AddSingleton<IAuthorizationHandler, OrdersAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, OffersAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, ContractorAuthorizationHandler>();
 
         return services;
     }
