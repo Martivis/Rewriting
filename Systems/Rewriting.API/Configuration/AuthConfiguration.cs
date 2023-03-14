@@ -80,6 +80,7 @@ public static class AuthConfiguration
         services.AddSingleton<IAuthorizationHandler, OrdersAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, OffersAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, ContractorAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, ClientAuthorizationHandler>();
 
         return services;
     }

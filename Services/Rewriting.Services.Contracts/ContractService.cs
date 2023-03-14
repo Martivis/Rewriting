@@ -80,6 +80,8 @@ internal class ContractService : IContractService
             status != OrderStatus.InProgress)
             throw new ProcessException($"Unable to add result to order in status {status}");
 
+        contract.Order.Status = OrderStatus.Evaluation;
+
         var result = _mapper.Map<Result>(model);
 
         context.Add(result);
@@ -95,8 +97,8 @@ internal class ContractService : IContractService
 
         if (contract.Result is null)
             throw new ProcessException($"Results for order {contractUid} not found");
-        if (contract.Order.Status != OrderStatus.InProgress)
-            throw new ProcessException($"Unable to accept result for order {contractUid}");
+        if (contract.Order.Status != OrderStatus.Evaluation)
+            throw new ProcessException($"Unable to accept result for order in status {contract.Order.Status}");
 
         contract.Order.Status = OrderStatus.Done;
         context.SaveChanges();
@@ -125,8 +127,12 @@ internal class ContractService : IContractService
         var contract = await context.Set<Contract>().FindAsync(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
-        if (contract.Order.Status != OrderStatus.InProgress)
-            throw new ProcessException($"Unable to decline contractor for order in status {contract.Order.Status}");
+        var order = contract.Order;
+
+        if (order.Status != OrderStatus.InProgress)
+            throw new ProcessException($"Unable to decline contractor for order in status {order.Status}");
+
+        order.Status = OrderStatus.New;
 
         context.Remove(contract);
         context.SaveChanges();
