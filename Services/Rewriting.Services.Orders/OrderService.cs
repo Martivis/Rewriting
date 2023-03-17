@@ -1,19 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Rewriting.Common.Validator;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Authorization;
-using Rewriting.Common.Security;
-using System.Net.NetworkInformation;
-using System.Security.Cryptography;
 
 namespace Rewriting.Services.Orders;
 
@@ -37,7 +26,7 @@ internal class OrderService : IOrderService
     /// <param name="orderUid">Order's Uid</param>
     /// <returns></returns>
     /// <exception cref="ProcessException">Thrown when order with specified Uid doesn't exist in database</exception>
-    public async Task<OrderModel> GetOrder(Guid orderUid)
+    public async Task<OrderModel> GetOrderAsync(Guid orderUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
         var order = await context.Set<Order>().FindAsync(orderUid)
@@ -51,9 +40,9 @@ internal class OrderService : IOrderService
     /// </summary>
     /// <param name="page">Page number (starting with 0)</param>
     /// <param name="pageSize">Orders number per page</param>
-    /// <returns>A Task containing an List of OrderModel objects</returns>
+    /// <returns>A Task containing an IEnumerable of OrderModel objects</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when page value < 0 or pageSize value < 1</exception>
-    public async Task<List<OrderModel>> GetNewOrders(int page = 0, int pageSize = 10)
+    public async Task<IEnumerable<OrderModel>> GetNewOrdersAsync(int page = 0, int pageSize = 10)
     {
         if (page < 0)
             throw new ArgumentOutOfRangeException(nameof(page), page, "Page should be greater than zero");
@@ -62,13 +51,13 @@ internal class OrderService : IOrderService
 
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var orders = await context.Set<Order>()
+        var orders = context.Set<Order>()
             .Where(order => order.Status == OrderStatus.New)
             .Skip(page * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToList();
 
-        return _mapper.Map<List<OrderModel>>(orders);
+        return _mapper.Map<IEnumerable<OrderModel>>(orders);
     }
 
     /// <summary>
@@ -77,9 +66,9 @@ internal class OrderService : IOrderService
     /// <param name="userUid">User's uid</param>
     /// <param name="page">Page number (starting with 0)</param>
     /// <param name="pageSize">Orders number per page</param>
-    /// <returns>A Task containing an List of OrderModel objects</returns>
+    /// <returns>A Task containing an IEnumerable of OrderModel objects</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when page value < 0 or pageSize value < 1</exception>
-    public async Task<List<OrderModel>> GetOrdersByUser(Guid userUid, int page = 0, int pageSize = 10)
+    public async Task<IEnumerable<OrderModel>> GetOrdersByUserAsync(Guid userUid, int page = 0, int pageSize = 10)
     {
         if (page < 0)
             throw new ArgumentOutOfRangeException(nameof(page), page, "Page should be greater than zero");
@@ -88,13 +77,13 @@ internal class OrderService : IOrderService
 
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var orders = await context.Set<Order>()
+        var orders = context.Set<Order>()
             .Where(order => order.ClientUid == userUid)
             .Skip(pageSize * page)
             .Take(pageSize)
-            .ToListAsync();
+            .ToList();
 
-        return _mapper.Map<List<OrderModel>>(orders);
+        return _mapper.Map<IEnumerable<OrderModel>>(orders);
     }
 
     /// <summary>
@@ -102,11 +91,11 @@ internal class OrderService : IOrderService
     /// </summary>
     /// <param name="uid">Order's uid</param>
     /// <returns>A Task containing an OrderDetailsModel object</returns>
-    public async Task<OrderDetailsModel> GetOrderDetails(Guid uid)
+    public async Task<OrderDetailsModel> GetOrderDetailsAsync(Guid uid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var order = await context.Set<Order>().FindAsync(uid)
+        var order = context.Set<Order>().Find(uid)
             ?? throw new ProcessException($"Order {uid} not found");
 
         return _mapper.Map<OrderDetailsModel>(order);
@@ -117,7 +106,7 @@ internal class OrderService : IOrderService
     /// </summary>
     /// <param name="model">A model of new order</param>
     /// <returns>A Task containing an OrderDetailsModel object</returns>
-    public async Task<OrderDetailsModel> AddOrder(AddOrderModel model)
+    public async Task<OrderDetailsModel> AddOrderAsync(AddOrderModel model)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -137,7 +126,7 @@ internal class OrderService : IOrderService
     /// <param name="orderUid">Order's Uid</param>
     /// <returns></returns>
     /// <exception cref="ProcessException">Thrown when order is not cancalable</exception>
-    public async Task CancelOrder(CancelOrderModel model)
+    public async Task CancelOrderAsync(CancelOrderModel model)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -149,7 +138,7 @@ internal class OrderService : IOrderService
 
         order.Status = OrderStatus.Canceled;
 
-        await context.SaveChangesAsync();
+        context.SaveChanges();
     }
 
     /// <summary>
@@ -158,15 +147,15 @@ internal class OrderService : IOrderService
     /// <param name="orderUid">Order's uid</param>
     /// <returns></returns>
     /// <exception cref="ProcessException">Thrown when order with specified Uid doesn't exist in database</exception>
-    public async Task DeleteOrder(Guid orderUid)
+    public async Task DeleteOrderAsync(Guid orderUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var order = await context.Set<Order>().FindAsync(orderUid)
+        var order = context.Set<Order>().Find(orderUid)
             ?? throw new ProcessException($"Order {orderUid} not found");
 
         context.Remove(order);
-        await context.SaveChangesAsync();
+        context.SaveChanges();
     }
 
     private static bool IsCancelable(Order order)

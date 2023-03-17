@@ -85,7 +85,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrders(0, 2);
+        var result = await _orderService.GetNewOrdersAsync(0, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -139,7 +139,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrders(1, 2);
+        var result = await _orderService.GetNewOrdersAsync(1, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -151,7 +151,7 @@ public class GetNewOrdersTests
     public async Task GetNewOrders_NegativePage_ThrowsException()
     {
         // Act
-        await _orderService.GetNewOrders(-1, 2);
+        await _orderService.GetNewOrdersAsync(-1, 2);
     }
 
     [TestMethod]
@@ -159,7 +159,7 @@ public class GetNewOrdersTests
     public async Task GetNewOrders_ZeroPageSize_ThrowsException()
     {
         // Act
-        await _orderService.GetNewOrders(0, 0);
+        await _orderService.GetNewOrdersAsync(0, 0);
     }
 
     [TestMethod]
@@ -167,7 +167,7 @@ public class GetNewOrdersTests
     public async Task GetNewOrders_NegativePageSize_ThrowsException()
     {
         // Act
-        await _orderService.GetNewOrders(0, -1);
+        await _orderService.GetNewOrdersAsync(0, -1);
     }
 
     [TestMethod]
@@ -238,7 +238,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrders();
+        var result = await _orderService.GetNewOrdersAsync();
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -283,7 +283,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrders(0, 2);
+        var result = await _orderService.GetNewOrdersAsync(0, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert

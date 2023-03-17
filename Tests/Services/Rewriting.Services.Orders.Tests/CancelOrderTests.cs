@@ -72,7 +72,7 @@ public class CancelOrderTests
         };
 
         // Act
-        await _orderService.CancelOrder(cancelOrderModel);
+        await _orderService.CancelOrderAsync(cancelOrderModel);
     }
 
     [TestMethod]
@@ -105,7 +105,7 @@ public class CancelOrderTests
         };
 
         // Act
-        await _orderService.CancelOrder(cancelOrderModel);
+        await _orderService.CancelOrderAsync(cancelOrderModel);
     }
 
     [TestMethod]
@@ -139,7 +139,7 @@ public class CancelOrderTests
         };
 
         // Act
-        await _orderService.CancelOrder(cancelOrderModel);
+        await _orderService.CancelOrderAsync(cancelOrderModel);
     }
 
     [TestMethod]
@@ -173,6 +173,6 @@ public class CancelOrderTests
         };
 
         // Act
-        await _orderService.CancelOrder(cancelOrderModel);
+        await _orderService.CancelOrderAsync(cancelOrderModel);
     }
 } // TODO: Increase tests coverage

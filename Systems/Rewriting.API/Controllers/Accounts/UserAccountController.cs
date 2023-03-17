@@ -37,7 +37,7 @@ namespace Rewriting.API.Controllers.Accounts
         public async Task<UserAccountResponse> Register([FromBody] RegisterUserRequest request)
         {
             _registerUserRequestValidator.Check(request);
-            var user = await _userAccountService.Create(_mapper.Map<RegisterUserModel>(request));
+            var user = await _userAccountService.CreateAsync(_mapper.Map<RegisterUserModel>(request));
 
             return _mapper.Map<UserAccountResponse>(user);
         }
@@ -54,7 +54,7 @@ namespace Rewriting.API.Controllers.Accounts
             _changePasswordRequestValidator.Check(request);
             var model = _mapper.Map<ChangePasswordModel>(request);
             model.Issuer = User;
-            await _userAccountService.ChangePassword(model);
+            await _userAccountService.ChangePasswordAsync(model);
             return Ok();
         }
     }

@@ -1,16 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rewriting.Services.Contracts;
 
@@ -25,31 +17,31 @@ internal class ContractService : IContractService
         _mapper = mapper;
     }
 
-    public async Task<ClientAuthModel> GetClientAuth(Guid contractUid)
+    public async Task<ClientAuthModel> GetClientAuthAsync(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
+        var contract = context.Set<Contract>().Find(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
         return _mapper.Map<ClientAuthModel>(contract);
     }
 
-    public async Task<ContractorAuthModel> GetContractorAuth(Guid contractUid)
+    public async Task<ContractorAuthModel> GetContractorAuthAsync(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
+        var contract = context.Set<Contract>().Find(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
         return _mapper.Map<ContractorAuthModel>(contract);
     }
 
-    public async Task<ContractDetailsModel> GetContractDetails(Guid contractUid)
+    public async Task<ContractDetailsModel> GetContractDetailsAsync(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
+        var contract = context.Set<Contract>().Find(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
         var order = contract.Order;
@@ -57,7 +49,7 @@ internal class ContractService : IContractService
         return _mapper.Map<ContractDetailsModel>(order);
     }
 
-    public async Task<IEnumerable<ContractModel>> GetContractsByUser(Guid userUid)
+    public async Task<IEnumerable<ContractModel>> GetContractsByUserAsync(Guid userUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -68,7 +60,7 @@ internal class ContractService : IContractService
         return _mapper.Map<IEnumerable<ContractModel>>(contracts);
     }
 
-    public async Task AddResult(AddResultModel model)
+    public async Task AddResultAsync(AddResultModel model)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -88,11 +80,11 @@ internal class ContractService : IContractService
         context.SaveChanges();
     }
 
-    public async Task AcceptResult(Guid contractUid)
+    public async Task AcceptResultAsync(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
+        var contract = context.Set<Contract>().Find(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
         if (contract.Result is null)
@@ -104,11 +96,11 @@ internal class ContractService : IContractService
         context.SaveChanges();
     }
 
-    public async Task DeclineResult(Guid contractUid)
+    public async Task DeclineResultAsync(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
+        var contract = context.Set<Contract>().Find(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
         var order = contract.Order;
        
@@ -120,11 +112,11 @@ internal class ContractService : IContractService
         context.SaveChanges();
     }
 
-    public async Task DeclineContractor(Guid contractUid)
+    public async Task DeclineContractorAsync(Guid contractUid)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
-        var contract = await context.Set<Contract>().FindAsync(contractUid)
+        var contract = context.Set<Contract>().Find(contractUid)
             ?? throw new ProcessException($"Contract {contractUid} not found");
 
         var order = contract.Order;

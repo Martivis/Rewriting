@@ -55,7 +55,7 @@ public static class AppDbSeeder
             FirstName = "Admin",
             LastName = "Palych"
         };
-        var registered = await userAccountService.Create(admin);
+        var registered = await userAccountService.CreateAsync(admin);
 
         var addToRoleModel = new AddToRoleModel
         {
@@ -63,6 +63,6 @@ public static class AppDbSeeder
             RoleName = AppRoles.Admin,
         };
 
-        await userAccountService.AddToRole(addToRoleModel);
+        await userAccountService.AddToRoleAsync(addToRoleModel);
     }
 }

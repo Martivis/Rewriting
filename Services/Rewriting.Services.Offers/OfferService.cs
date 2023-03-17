@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Rewriting.Common.Exceptions;
-using Rewriting.Common.Validator;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rewriting.Services.Offers
 {
@@ -25,7 +19,7 @@ namespace Rewriting.Services.Offers
             _mapper = mapper;
         }
 
-        public async Task<OfferAuthorizationModel> GetOfferAuth(Guid offerUid)
+        public async Task<OfferAuthorizationModel> GetOfferAuthAsync(Guid offerUid)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -35,7 +29,7 @@ namespace Rewriting.Services.Offers
             return _mapper.Map<OfferAuthorizationModel>(offer);
         }
 
-        public async Task<IEnumerable<OfferModel>> GetOffersByOrder(Guid orderUid)
+        public async Task<IEnumerable<OfferModel>> GetOffersByOrderAsync(Guid orderUid)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -46,7 +40,7 @@ namespace Rewriting.Services.Offers
             return _mapper.Map<IEnumerable<OfferModel>>(offers);
         }
 
-        public async Task<IEnumerable<OfferModel>> GetOffersByUser(Guid userUid)
+        public async Task<IEnumerable<OfferModel>> GetOffersByUserAsync(Guid userUid)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -57,11 +51,11 @@ namespace Rewriting.Services.Offers
             return _mapper.Map<IEnumerable<OfferModel>>(offers);
         }
 
-        public async Task<OfferModel> AddOffer(AddOfferModel model)
+        public async Task<OfferModel> AddOfferAsync(AddOfferModel model)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
-            var order = await context.Set<Order>().FindAsync(model.OrderUid)
+            var order = context.Set<Order>().Find(model.OrderUid)
                 ?? throw new ProcessException($"Order {model.OrderUid} not found");
 
             if (order.ClientUid == model.ContractorUid)
@@ -77,11 +71,11 @@ namespace Rewriting.Services.Offers
             return _mapper.Map<OfferModel>(offer);
         }
 
-        public async Task AcceptOffer(Guid offerUid)
+        public async Task AcceptOfferAsync(Guid offerUid)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
-            var offer = await context.Set<Offer>().FindAsync(offerUid)
+            var offer = context.Set<Offer>().Find(offerUid)
                 ?? throw new ProcessException($"Offer {offerUid} not found");
 
             if (offer.Order.Status != OrderStatus.New)
@@ -91,8 +85,8 @@ namespace Rewriting.Services.Offers
 
             var contract = _mapper.Map<Contract>(offer);
 
-            await context.AddAsync(contract);
-            await context.SaveChangesAsync();
+            context.Add(contract);
+            context.SaveChanges();
         }
     }
 }

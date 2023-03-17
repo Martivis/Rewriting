@@ -59,17 +59,85 @@
             <param name="request">ChangePasswordRequest</param>
             <response code="200">Success report</response>
         </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetContractsByUser">
+            <summary>
+            Get contracts relating to calling user
+            </summary>
+            <returns>IEnumerable of ContractResponse</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetContractDetails(System.Guid)">
+            <summary>
+            Get detailed information about specified contract
+            </summary>
+            <param name="contractUid">Uid of target contract</param>
+            <returns>ContractDetailsResponse</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.AddResult(Rewriting.API.Controllers.Contracts.AddResultRequest)">
+            <summary>
+            Add new result
+            </summary>
+            <param name="request">AddResultRequest</param>
+            <returns>IActionResult</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.AcceptResult(System.Guid)">
+            <summary>
+            Accept result in specified contract
+            </summary>
+            <param name="contractUid">Uid of the target contract</param>
+            <returns>IActionResult</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.DeclineResult(System.Guid)">
+            <summary>
+            Decline result in specified contract
+            </summary>
+            <param name="contractUid">Uid of the target contract</param>
+            <returns>IActionResult</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.DeclineContractor(System.Guid)">
+            <summary>
+            Decline contractor in specified contract.
+            </summary>
+            <param name="contractUid">Uid of the target contract</param>
+            <returns>IActionResult</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByOrder(System.Guid)">
+            <summary>
+            Get offers relating to the order with specified Uid
+            </summary>
+            <param name="orderUid">Uid of the target order</param>
+            <returns>IEnumerable of OfferResponse</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByUser">
+            <summary>
+            Get offers placed by calling user
+            </summary>
+            <returns>IEnumerable of OfferResponse</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.AddOffer(Rewriting.API.Controllers.Offers.AddOfferRequest)">
+            <summary>
+            Add new offer
+            </summary>
+            <param name="request">AddOfferRequest</param>
+            <returns>OfferResponse with information about created offer</returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.AcceptOffer(System.Guid)">
+            <summary>
+            Accept specified offer
+            </summary>
+            <param name="offerUid">Uid of the target offer</param>
+            <returns>IActionResult</returns>
+        </member>
         <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetNewOrders">
             <summary>
             Get all the orders available for offers
             </summary>
-            <returns>The List of OrderResponse representing new orders</returns>
+            <returns>The IEnumerable of OrderResponse representing new orders</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetUserOrders">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetOrdersByUser">
             <summary>
             Get all the orders published by calling user
             </summary>
-            <returns>The List of OrderResponse representing user's orders</returns>
+            <returns>The IEnumerable of OrderResponse representing user's orders</returns>
             <exception cref="T:Rewriting.Common.Exceptions.ProcessException"></exception>
         </member>
         <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetOrderDetails(System.Guid)">

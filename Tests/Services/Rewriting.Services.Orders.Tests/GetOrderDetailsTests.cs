@@ -47,7 +47,7 @@ public class GetOrderDetailsTests
     public async Task GetOrderDetails_NoExisting_ThrowsException()
     {
         // Act
-        await _orderService.GetOrderDetails(Guid.Parse("11111111-1111-1111-1111-111111111111"));
+        await _orderService.GetOrderDetailsAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
     }
 
     [TestMethod]
@@ -85,7 +85,7 @@ public class GetOrderDetailsTests
         var expected = new Guid("22222222-2222-2222-2222-222222222222");
 
         // Act
-        var result = await _orderService.GetOrderDetails(orderUid);
+        var result = await _orderService.GetOrderDetailsAsync(orderUid);
         var actual = result.Uid;
 
         // Assert

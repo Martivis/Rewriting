@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Rewriting.Common.Exceptions;
-using Rewriting.Common.Security;
 using Rewriting.Common.Validator;
 using Rewriting.Context.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rewriting.Services.UserAccount
 {
@@ -37,7 +31,7 @@ namespace Rewriting.Services.UserAccount
             return _userManager.Users.Any();
         }
 
-        public async Task ChangePassword(ChangePasswordModel model)
+        public async Task ChangePasswordAsync(ChangePasswordModel model)
         {
             _changePasswordModelValidator.Check(model);
 
@@ -47,12 +41,12 @@ namespace Rewriting.Services.UserAccount
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (!result.Succeeded)
             {
-                var text = result.Errors.ToList().Select(a => a.Description).Aggregate((a, b) => a + "\n" + b);
+                string text = AggregateErrors(result);
                 throw new ProcessException($"{text}");
             }
         }
 
-        public async Task<UserModel> Create(RegisterUserModel model)
+        public async Task<UserModel> CreateAsync(RegisterUserModel model)
         {
             _registerUserAccountModelValidator.Check(model);
 
@@ -75,12 +69,15 @@ namespace Rewriting.Services.UserAccount
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
             if (!result.Succeeded)
-                throw new ProcessException("Unable to create user");
-            
+            {
+                string text = AggregateErrors(result);
+                throw new ProcessException($"{text}");
+            }
+
             return _mapper.Map<UserModel>(userIdentity);
         }
 
-        public async Task AddToRole(AddToRoleModel model)
+        public async Task AddToRoleAsync(AddToRoleModel model)
         {
             var userIdentity = await _userManager.FindByIdAsync(model.UserUid.ToString())
                 ?? throw new ProcessException($"User {model.UserUid} not found");
@@ -88,6 +85,11 @@ namespace Rewriting.Services.UserAccount
             var claim = new Claim(ClaimTypes.Role, model.RoleName);
 
             await _userManager.AddClaimAsync(userIdentity, claim);
+        }
+
+        private static string AggregateErrors(IdentityResult result)
+        {
+            return result.Errors.ToList().Select(a => a.Description).Aggregate((a, b) => a + "\n" + b);
         }
     }
 }

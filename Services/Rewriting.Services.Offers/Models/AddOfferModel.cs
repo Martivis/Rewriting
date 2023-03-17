@@ -1,11 +1,4 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Rewriting.Services.Offers;
+﻿namespace Rewriting.Services.Offers;
 
 public class AddOfferModel
 {
@@ -15,13 +8,3 @@ public class AddOfferModel
     public string Comment { get; set; }
 }
 
-public class AddOfferModelValidator : AbstractValidator<AddOfferModel>
-{
-    public AddOfferModelValidator()
-    {
-        RuleFor(t => t.OrderUid).NotEmpty().WithMessage("OrderUid is required");
-        RuleFor(t => t.ContractorUid).NotEmpty().WithMessage("ContractorUid is required");
-        RuleFor(t => t.Price).GreaterThan(0).WithMessage("Price should be positive");
-        RuleFor(t => t.Comment).NotEmpty().WithMessage("Comment is required");
-    }
-}

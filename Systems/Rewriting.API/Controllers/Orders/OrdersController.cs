@@ -36,27 +36,27 @@ namespace Rewriting.API.Controllers.Orders
         /// <summary>
         /// Get all the orders available for offers
         /// </summary>
-        /// <returns>The List of OrderResponse representing new orders</returns>
+        /// <returns>The IEnumerable of OrderResponse representing new orders</returns>
         [HttpGet]
-        public async Task<List<OrderResponse>> GetNewOrders()
+        public async Task<IEnumerable<OrderResponse>> GetNewOrders()
         {
-            var orderModels = await _orderService.GetNewOrders();
-            return _mapper.Map<List<OrderResponse>>(orderModels);
+            var orderModels = await _orderService.GetNewOrdersAsync();
+            return _mapper.Map<IEnumerable<OrderResponse>>(orderModels);
         }
 
         /// <summary>
         /// Get all the orders published by calling user
         /// </summary>
-        /// <returns>The List of OrderResponse representing user's orders</returns>
+        /// <returns>The IEnumerable of OrderResponse representing user's orders</returns>
         /// <exception cref="ProcessException"></exception>
         [HttpGet]
         [Authorize(Policy = AppScopes.OrdersRead)]
-        public async Task<List<OrderResponse>> GetUserOrders()
+        public async Task<IEnumerable<OrderResponse>> GetOrdersByUser()
         {
             var userUid = User.GetUid();
             
-            var orderModels = await _orderService.GetOrdersByUser(userUid);
-            return _mapper.Map<List<OrderResponse>>(orderModels);
+            var orderModels = await _orderService.GetOrdersByUserAsync(userUid);
+            return _mapper.Map<IEnumerable<OrderResponse>>(orderModels);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Rewriting.API.Controllers.Orders
         [Authorize]
         public async Task<OrderDetailsResponse> GetOrderDetails(Guid orderUid)
         {
-            var orderModel = await _orderService.GetOrderDetails(orderUid);
+            var orderModel = await _orderService.GetOrderDetailsAsync(orderUid);
             return _mapper.Map<OrderDetailsResponse>(orderModel);
         }
 
@@ -84,7 +84,7 @@ namespace Rewriting.API.Controllers.Orders
             var orderModel =  _mapper.Map<AddOrderModel>(request);
             orderModel.ClientUid = User.GetUid();
 
-            var result = await _orderService.AddOrder(orderModel);
+            var result = await _orderService.AddOrderAsync(orderModel);
 
             return _mapper.Map<OrderDetailsResponse>(result);
         }
@@ -98,7 +98,7 @@ namespace Rewriting.API.Controllers.Orders
         [Authorize]
         public async Task<IActionResult> CancelOrder(Guid orderUid)
         {
-            var orderModel = await _orderService.GetOrder(orderUid);
+            var orderModel = await _orderService.GetOrderAsync(orderUid);
 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderModel, AppScopes.OrdersEdit);
             if (!authorizationResult.Succeeded)
@@ -110,7 +110,7 @@ namespace Rewriting.API.Controllers.Orders
                 Issuer = User,
             };
 
-            await _orderService.CancelOrder(cancelOrderModel);
+            await _orderService.CancelOrderAsync(cancelOrderModel);
 
             return Ok();
         }
@@ -124,7 +124,7 @@ namespace Rewriting.API.Controllers.Orders
         [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteOrder(Guid orderUid)
         {
-            await _orderService.DeleteOrder(orderUid);
+            await _orderService.DeleteOrderAsync(orderUid);
             return Ok();
         }
     }

@@ -10,7 +10,7 @@ namespace Rewriting.Services.UserAccount;
 public interface IUserAccountService
 {
     bool IsAnyUsers();
-    Task<UserModel> Create(RegisterUserModel model);
-    Task ChangePassword(ChangePasswordModel model);
-    Task AddToRole(AddToRoleModel model);
+    Task<UserModel> CreateAsync(RegisterUserModel model);
+    Task ChangePasswordAsync(ChangePasswordModel model);
+    Task AddToRoleAsync(AddToRoleModel model);
 }

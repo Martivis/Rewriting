@@ -11,10 +11,12 @@ COPY ["Systems/Rewriting.API/Rewriting.API.csproj", "Systems/Rewriting.API/"]
 COPY ["Data/Rewriting.Context.Entities/Rewriting.Context.Entities.csproj", "Data/Rewriting.Context.Entities/"]
 COPY ["Data/Rewriting.Context.Migrations/Rewriting.Context.Migrations.csproj", "Data/Rewriting.Context.Migrations/"]
 COPY ["Data/Rewriting.Context/Rewriting.Context.csproj", "Data/Rewriting.Context/"]
-COPY ["Shared/Rewriting.SettingsLoader/Rewriting.Settings.csproj", "Shared/Rewriting.SettingsLoader/"]
-COPY ["Services/Rewriting.Services.Orders/Rewriting.Services.Orders.csproj", "Services/Rewriting.Services.Orders/"]
-COPY ["Shared/Rewriting.Common/Rewriting.Common.csproj", "Shared/Rewriting.Common/"]
 COPY ["Services/Rewriting.Services.UserAccount/Rewriting.Services.UserAccount.csproj", "Services/Rewriting.Services.UserAccount/"]
+COPY ["Shared/Rewriting.Common/Rewriting.Common.csproj", "Shared/Rewriting.Common/"]
+COPY ["Shared/Rewriting.SettingsLoader/Rewriting.Settings.csproj", "Shared/Rewriting.SettingsLoader/"]
+COPY ["Services/Rewriting.Services.Contracts/Rewriting.Services.Contracts.csproj", "Services/Rewriting.Services.Contracts/"]
+COPY ["Services/Rewriting.Services.Offers/Rewriting.Services.Offers.csproj", "Services/Rewriting.Services.Offers/"]
+COPY ["Services/Rewriting.Services.Orders/Rewriting.Services.Orders.csproj", "Services/Rewriting.Services.Orders/"]
 RUN dotnet restore "Systems/Rewriting.API/Rewriting.API.csproj"
 COPY . .
 WORKDIR "/src/Systems/Rewriting.API"

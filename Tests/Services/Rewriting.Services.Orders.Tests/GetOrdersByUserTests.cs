@@ -89,7 +89,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUser(userUid, 0, 2);
+        var result = await _orderService.GetOrdersByUserAsync(userUid, 0, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -144,7 +144,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUser(userUid, 1, 2);
+        var result = await _orderService.GetOrdersByUserAsync(userUid, 1, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -159,7 +159,7 @@ public class GetOrdersByUserTests
         var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
 
         // Act
-        await _orderService.GetOrdersByUser(userUid, -1, 2);
+        await _orderService.GetOrdersByUserAsync(userUid, -1, 2);
     }
 
     [TestMethod]
@@ -170,7 +170,7 @@ public class GetOrdersByUserTests
         var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
 
         // Act
-        await _orderService.GetOrdersByUser(userUid, 0, 0);
+        await _orderService.GetOrdersByUserAsync(userUid, 0, 0);
     }
 
     [TestMethod]
@@ -181,7 +181,7 @@ public class GetOrdersByUserTests
         var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
 
         // Act
-        await _orderService.GetOrdersByUser(userUid, 0, -1);
+        await _orderService.GetOrdersByUserAsync(userUid, 0, -1);
     }
 
     [TestMethod]
@@ -245,7 +245,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUser(userUid);
+        var result = await _orderService.GetOrdersByUserAsync(userUid);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -313,7 +313,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUser(user1Uid);
+        var result = await _orderService.GetOrdersByUserAsync(user1Uid);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
