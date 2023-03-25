@@ -6,10 +6,14 @@ using Rewriting.Context.Entities;
 
 namespace Rewriting.Services.Orders;
 
-internal class OrderService : IOrderService
+internal class OrderService : IOrderService, IOrderObservable
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
     private readonly IMapper _mapper;
+
+    public event Action<OrderDetailsModel> OnOrderAdd;
+    public event Action<Guid> OnOrderCancel;
+    public event Action<Guid> OnorderDelete;
 
     public OrderService(
         IDbContextFactory<AppDbContext> dbContextFactory,
@@ -115,9 +119,12 @@ internal class OrderService : IOrderService
         order.DateTime = DateTime.UtcNow;
 
         await context.AddAsync(order);
-        context.SaveChanges();
-        
-        return _mapper.Map<OrderDetailsModel>(order);
+        _ = context.SaveChangesAsync();
+
+        var orderDetailsModel = _mapper.Map<OrderDetailsModel>(order);
+        OnOrderAdd?.Invoke(orderDetailsModel);
+
+        return orderDetailsModel;
     }
 
     /// <summary>
@@ -138,7 +145,17 @@ internal class OrderService : IOrderService
 
         order.Status = OrderStatus.Canceled;
 
-        context.SaveChanges();
+        _ = context.SaveChangesAsync();
+
+        OnOrderCancel?.Invoke(order.Uid);
+    }
+
+    private static bool IsCancelable(Order order)
+    {
+        return
+            order.Status != OrderStatus.Canceled &&
+            order.Status != OrderStatus.Done &&
+            order.Status != OrderStatus.Evaluation;
     }
 
     /// <summary>
@@ -155,14 +172,8 @@ internal class OrderService : IOrderService
             ?? throw new ProcessException($"Order {orderUid} not found");
 
         context.Remove(order);
-        context.SaveChanges();
-    }
+        _ = context.SaveChangesAsync();
 
-    private static bool IsCancelable(Order order)
-    {
-        return
-            order.Status != OrderStatus.Canceled &&
-            order.Status != OrderStatus.Done &&
-            order.Status != OrderStatus.Evaluation;
+        OnorderDelete?.Invoke(order.Uid);
     }
 }
