@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Rewriting.Common\Rewriting.Common.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.Contracts\Rewriting.Services.Contracts.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.Email\Rewriting.Services.Email.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.Offers\Rewriting.Services.Offers.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.Orders\Rewriting.Services.Orders.csproj" />
+  </ItemGroup>
+
 </Project>

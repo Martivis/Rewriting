@@ -35,8 +35,11 @@
     <ProjectReference Include="..\..\Data\Rewriting.Context.Migrations\Rewriting.Context.Migrations.csproj" />
     <ProjectReference Include="..\..\Data\Rewriting.Context\Rewriting.Context.csproj" />
     <ProjectReference Include="..\..\Services\Rewriting.Services.Contracts\Rewriting.Services.Contracts.csproj" />
+    <ProjectReference Include="..\..\Services\Rewriting.Services.Email\Rewriting.Services.Email.csproj" />
+    <ProjectReference Include="..\..\Services\Rewriting.Services.Notifications\Rewriting.Services.Notifications.csproj" />
     <ProjectReference Include="..\..\Services\Rewriting.Services.Offers\Rewriting.Services.Offers.csproj" />
     <ProjectReference Include="..\..\Services\Rewriting.Services.Orders\Rewriting.Services.Orders.csproj" />
+    <ProjectReference Include="..\..\Services\Rewriting.Services.RabbitMQ\Rewriting.Services.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\Services\Rewriting.Services.UserAccount\Rewriting.Services.UserAccount.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.Common\Rewriting.Common.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.Settings.csproj" />

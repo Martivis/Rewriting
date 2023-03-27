@@ -17,6 +17,10 @@ COPY ["Shared/Rewriting.SettingsLoader/Rewriting.Settings.csproj", "Shared/Rewri
 COPY ["Services/Rewriting.Services.Contracts/Rewriting.Services.Contracts.csproj", "Services/Rewriting.Services.Contracts/"]
 COPY ["Services/Rewriting.Services.Offers/Rewriting.Services.Offers.csproj", "Services/Rewriting.Services.Offers/"]
 COPY ["Services/Rewriting.Services.Orders/Rewriting.Services.Orders.csproj", "Services/Rewriting.Services.Orders/"]
+COPY ["Services/Rewriting.Services.Email/Rewriting.Services.Email.csproj", "Services/Rewriting.Services.Email/"]
+COPY ["Services/Rewriting.Services.Notifications/Rewriting.Services.Notifications.csproj", "Services/Rewriting.Services.Notifications/"]
+COPY ["Services/Rewriting.Services.RabbitMQ/Rewriting.Services.RabbitMQ.csproj", "Services/Rewriting.Services.RabbitMQ/"]
+
 RUN dotnet restore "Systems/Rewriting.API/Rewriting.API.csproj"
 COPY . .
 WORKDIR "/src/Systems/Rewriting.API"

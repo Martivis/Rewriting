@@ -6,7 +6,8 @@ public static class OrdersServiceBootstraper
 {
     public static IServiceCollection AddOrderService(this IServiceCollection services)
     {
-        services.AddSingleton<IOrderService, OrderService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IOrderObservable>(provider => provider.GetService<IOrderService>() as OrderService);
         return services;
     }
 }

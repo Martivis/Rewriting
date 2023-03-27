@@ -3,8 +3,11 @@ using Rewriting.API.Configuration;
 using Rewriting.Common.JsonConverters;
 using Rewriting.Context;
 using Rewriting.Services.Contracts;
+using Rewriting.Services.EMailService;
+using Rewriting.Services.Notifications;
 using Rewriting.Services.Offers;
 using Rewriting.Services.Orders;
+using Rewriting.Services.RabbitMQ;
 using Rewriting.Services.UserAccount;
 using Rewriting.Settings;
 
@@ -32,6 +35,10 @@ services.AddAppUserAccountService();
 services.AddOrderService();
 services.AddOfferService();
 services.AddContractService();
+
+services.AddNotificationService();
+services.AddEmailService();
+services.AddRabbitMQ();
 
 var app = builder.Build();
 

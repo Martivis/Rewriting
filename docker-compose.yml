@@ -4,6 +4,9 @@ services:
   rewriting.postgres:
     image: postgres:latest
 
+  rewriting.rabbitmq:
+    image: rabbitmq:management
+
   rewriting.api:
     image: ${DOCKER_REGISTRY-}rewritingapi
     build:
