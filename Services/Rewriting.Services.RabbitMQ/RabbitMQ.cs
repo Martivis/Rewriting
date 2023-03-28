@@ -10,9 +10,9 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
 {
     private readonly RabbitMQSettings _settings;
 
+    private readonly object _lock = new();
     private IConnection _connection;
     private IModel _channel;
-    private object _lock = new object();
 
     public RabbitMQ(RabbitMQSettings settings)
     {
@@ -28,15 +28,9 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
     public async Task PushAsync<T>(string queueName, T data)
     {
         Connect();
-
-        _channel.QueueDeclare(queueName,
-                             durable: false,
-                             exclusive: false,
-                             autoDelete: false,
-                             arguments: null);
+        DeclareQueue(queueName);
 
         var json = JsonSerializer.Serialize<object>(data);
-
         var message = Encoding.UTF8.GetBytes(json);
 
         _channel.BasicPublish(exchange: string.Empty,
@@ -48,12 +42,7 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
     public async Task Subscribe<T>(string queueName, OnDataRecieveAction<T> onRecieve)
     {
         Connect();
-
-        _channel.QueueDeclare(queueName,
-                             durable: false,
-                             exclusive: false,
-                             autoDelete: false,
-                             arguments: null);
+        DeclareQueue(queueName);
 
         var consumer = new EventingBasicConsumer(_channel);
 
@@ -74,6 +63,15 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
         };
 
         _channel.BasicConsume(queueName, autoAck: false, consumer);
+    }
+
+    private void DeclareQueue(string queueName)
+    {
+        _channel.QueueDeclare(queueName,
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
     }
 
     private void Connect()
