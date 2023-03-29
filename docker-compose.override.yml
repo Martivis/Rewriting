@@ -21,6 +21,12 @@ services:
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
 
+  rewriting.smtp:
+    ports:
+      - "25:25"
+    networks:
+      - shared_rewriting
+  
   rewriting.api:
     ports:
       - "10000:80"
