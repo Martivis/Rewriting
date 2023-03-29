@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context.Entities;
-using Rewriting.Services.EMailService;
+using Rewriting.Services.EmailService;
 using Rewriting.Services.Orders;
 using System.Data;
 

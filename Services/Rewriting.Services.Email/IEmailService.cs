@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.EMailService;
+namespace Rewriting.Services.EmailService;
 
 public interface IEmailService
 {

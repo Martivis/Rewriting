@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.EMailService;
+namespace Rewriting.Services.EmailService;
 
-public static class EMailServiceBootstraper
+public static class EmailServiceBootstraper
 {
     public static IServiceCollection AddEmailService(this IServiceCollection services)
     {

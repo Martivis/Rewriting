@@ -1,6 +1,6 @@
 ﻿using Rewriting.Services.RabbitMQ;
 
-namespace Rewriting.Services.EMailService;
+namespace Rewriting.Services.EmailService;
 
 internal class EmailService : IEmailService
 {

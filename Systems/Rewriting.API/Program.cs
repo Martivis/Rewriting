@@ -1,9 +1,8 @@
 using Rewriting.API;
 using Rewriting.API.Configuration;
-using Rewriting.Common.JsonConverters;
 using Rewriting.Context;
 using Rewriting.Services.Contracts;
-using Rewriting.Services.EMailService;
+using Rewriting.Services.EmailService;
 using Rewriting.Services.Notifications;
 using Rewriting.Services.Offers;
 using Rewriting.Services.Orders;
