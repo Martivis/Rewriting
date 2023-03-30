@@ -4,11 +4,16 @@ namespace Rewriting.Services.SmtpSender;
 
 public class SmtpStub : ISmtpSender
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<SmtpStub> _logger;
 
-    public void SendEmail(MailModel mailModel)
+    public SmtpStub(ILogger<SmtpStub> logger)
     {
-        _logger.LogDebug("Stub::: Mail sent:\n" +
+        _logger = logger;
+    }
+
+    public async Task SendEmail(MailModel mailModel)
+    {
+        _logger.LogInformation("Stub::: Mail sent:\n" +
             $"From: {mailModel.SourceName} {mailModel.SourceEmail}\n" +
             $"To: {mailModel.DestinationEmail}\n" +
             $"Subject: {mailModel.Subject}\n" +

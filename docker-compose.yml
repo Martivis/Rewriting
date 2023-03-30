@@ -26,3 +26,14 @@ services:
     depends_on:
       - rewriting.postgres
       - rewriting.api
+
+  rewriting.worker:
+    image: ${DOCKER_REGISTRY-}rewritingworker
+    build:
+      context: .
+      dockerfile: Systems/Rewriting.Worker/Dockerfile
+    depends_on:
+      - rewriting.api
+      - rewriting.rabbitmq
+      - rewriting.smtp
+

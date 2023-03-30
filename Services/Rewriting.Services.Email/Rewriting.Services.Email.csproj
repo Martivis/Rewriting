@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rewriting.Services.RabbitMQ\Rewriting.Services.RabbitMQ.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.SmtpSender\Rewriting.Services.SmtpSender.csproj" />
   </ItemGroup>
 
 </Project>

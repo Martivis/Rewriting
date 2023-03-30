@@ -10,5 +10,5 @@ namespace Rewriting.Services.SmtpSender;
 
 public interface ISmtpSender
 {
-    public void SendEmail(MailModel mailModel);
+    public Task SendEmail(MailModel mailModel);
 }

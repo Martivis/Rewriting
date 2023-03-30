@@ -26,7 +26,7 @@ public static class SmtpBootstraper
 
     private static IServiceCollection AddSettings(this IServiceCollection services)
     {
-        var settings = SettingsLoader.Load<SmtpSettings>("SMTP");
+        var settings = SettingsLoader.Load<SmtpSettings>("Smtp");
         services.AddSingleton(settings);
 
         return services;

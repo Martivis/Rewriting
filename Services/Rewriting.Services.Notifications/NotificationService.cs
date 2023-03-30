@@ -4,6 +4,7 @@ using Rewriting.Common.Exceptions;
 using Rewriting.Context.Entities;
 using Rewriting.Services.EmailService;
 using Rewriting.Services.Orders;
+using Rewriting.Services.SmtpSender;
 using System.Data;
 
 namespace Rewriting.Services.Notifications;
@@ -13,19 +14,16 @@ public class NotificationService : INotificationService
     private readonly IOrderObservable _orderObservable;
 
     private readonly IEmailService _emailService;
-    //private readonly UserManager<UserIdentity> _userManager;
     private readonly IServiceProvider _provider;
 
     public NotificationService(
         IOrderObservable orderObservable,
         IEmailService emailService,
-        //UserManager<UserIdentity> userManager
         IServiceProvider serviceProvider
         )
     {
         _orderObservable = orderObservable;
         _emailService = emailService;
-        //_userManager = userManager;
         _provider = serviceProvider;
     }
 
@@ -38,15 +36,11 @@ public class NotificationService : INotificationService
 
     private async void AddOrderNotify(OrderDetailsModel model)
     {
-        using var scope = _provider.CreateScope();
-        var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
-
-        var orderOwner = await _userManager.FindByIdAsync(model.ClientUid.ToString())
-            ?? throw new ProcessException($"User {model.ClientUid} not found");
-
+        var ownerEmail = await GetUserEmailByUid(model.ClientUid);
+        
         MailModel mailModel = new()
         {
-            DestinationEmail = orderOwner.Email!,
+            DestinationEmail = ownerEmail,
             Subject = "New order created",
             Text = $"Order {model.Uid} was succesfully created"
         };
@@ -62,5 +56,16 @@ public class NotificationService : INotificationService
     private void DeleteOrderNotify(Guid orderUid)
     {
 
+    }
+
+    private async Task<string> GetUserEmailByUid(Guid userUid)
+    {
+        using var scope = _provider.CreateScope();
+        var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
+
+        var orderOwner = await _userManager.FindByIdAsync(userUid.ToString())
+            ?? throw new ProcessException($"User {userUid} not found");
+
+        return orderOwner.Email!;
     }
 }

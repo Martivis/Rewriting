@@ -14,7 +14,7 @@ public static class RabbitMQBootstraper
     {
         var settings = SettingsLoader.Load<RabbitMQSettings>("RabbitMQ");
         services.AddSingleton(settings);
-        services.AddScoped<IRabbitMQ, RabbitMQ>();
+        services.AddSingleton<IRabbitMQ, RabbitMQ>();
         return services;
     }
 }

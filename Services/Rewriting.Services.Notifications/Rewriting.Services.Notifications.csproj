@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Rewriting.Services.Email\Rewriting.Services.Email.csproj" />
     <ProjectReference Include="..\Rewriting.Services.Offers\Rewriting.Services.Offers.csproj" />
     <ProjectReference Include="..\Rewriting.Services.Orders\Rewriting.Services.Orders.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.SmtpSender\Rewriting.Services.SmtpSender.csproj" />
   </ItemGroup>
 
 </Project>

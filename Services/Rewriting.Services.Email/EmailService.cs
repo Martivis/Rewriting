@@ -1,4 +1,5 @@
 ﻿using Rewriting.Services.RabbitMQ;
+using Rewriting.Services.SmtpSender;
 
 namespace Rewriting.Services.EmailService;
 

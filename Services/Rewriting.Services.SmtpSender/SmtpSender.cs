@@ -12,14 +12,14 @@ internal class SmtpSender : ISmtpSender
         _settings = mailSettings;
     }
 
-    public void SendEmail(MailModel mailModel)
+    public async Task SendEmail(MailModel mailModel)
     {
         var message = CreateMessage(mailModel);
 
         using var client = new SmtpClient();
 
         client.Connect(_settings.Uri);
-        client.Authenticate(_settings.UserName, _settings.Password);
+        //client.Authenticate(_settings.UserName, _settings.Password);
         client.Send(message);
     }
 
