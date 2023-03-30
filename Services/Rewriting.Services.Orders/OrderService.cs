@@ -12,8 +12,8 @@ internal class OrderService : IOrderService, IOrderObservable
     private readonly IMapper _mapper;
 
     public event Action<OrderDetailsModel> OnOrderAdd;
-    public event Action<Guid> OnOrderCancel;
-    public event Action<Guid> OnorderDelete;
+    public event Action<OrderDetailsModel> OnOrderCancel;
+    public event Action<OrderDetailsModel> OnorderDelete;
 
     public OrderService(
         IDbContextFactory<AppDbContext> dbContextFactory,
@@ -119,7 +119,7 @@ internal class OrderService : IOrderService, IOrderObservable
         order.DateTime = DateTime.UtcNow;
 
         await context.AddAsync(order);
-        _ = context.SaveChangesAsync();
+        context.SaveChanges();
 
         var orderDetailsModel = _mapper.Map<OrderDetailsModel>(order);
         OnOrderAdd?.Invoke(orderDetailsModel);
@@ -144,10 +144,10 @@ internal class OrderService : IOrderService, IOrderObservable
             throw new ProcessException($"Unable to cancel order {order.Uid}");
 
         order.Status = OrderStatus.Canceled;
+        context.SaveChanges();
 
-        _ = context.SaveChangesAsync();
-
-        OnOrderCancel?.Invoke(order.Uid);
+        var orderDetails = _mapper.Map<OrderDetailsModel>(order);
+        OnOrderCancel?.Invoke(orderDetails);
     }
 
     private static bool IsCancelable(Order order)
@@ -172,8 +172,9 @@ internal class OrderService : IOrderService, IOrderObservable
             ?? throw new ProcessException($"Order {orderUid} not found");
 
         context.Remove(order);
-        _ = context.SaveChangesAsync();
+        context.SaveChanges();
 
-        OnorderDelete?.Invoke(order.Uid);
+        var orderDetails = _mapper.Map<OrderDetailsModel>(order);
+        OnorderDelete?.Invoke(orderDetails);
     }
 }

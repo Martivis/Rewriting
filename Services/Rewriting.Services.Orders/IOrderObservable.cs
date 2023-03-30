@@ -9,6 +9,6 @@ namespace Rewriting.Services.Orders;
 public interface IOrderObservable
 {
     event Action<OrderDetailsModel> OnOrderAdd;
-    event Action<Guid> OnOrderCancel;
-    event Action<Guid> OnorderDelete;
+    event Action<OrderDetailsModel> OnOrderCancel;
+    event Action<OrderDetailsModel> OnorderDelete;
 }
