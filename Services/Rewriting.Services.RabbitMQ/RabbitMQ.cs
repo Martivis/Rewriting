@@ -21,8 +21,8 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
 
     public void Dispose()
     {
-        _connection?.Dispose();
-        _channel?.Dispose();
+        _connection?.Close();
+        _channel?.Close();
     }
 
     public async Task PushAsync<T>(string queueName, T data)
@@ -32,6 +32,9 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
 
         var json = JsonSerializer.Serialize<object>(data);
         var message = Encoding.UTF8.GetBytes(json);
+
+        var properties = _channel.CreateBasicProperties();
+        properties.Persistent = true;
 
         _channel.BasicPublish(exchange: string.Empty,
                              queueName,
@@ -58,7 +61,7 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
             }
             catch (Exception)
             {
-                _channel.BasicNack(eventArgs.DeliveryTag, multiple: false, requeue: false);
+                _channel.BasicNack(eventArgs.DeliveryTag, multiple: false, requeue: true);
             }
         };
 
@@ -68,10 +71,11 @@ internal class RabbitMQ : IRabbitMQ, IDisposable
     private void DeclareQueue(string queueName)
     {
         _channel.QueueDeclare(queueName,
-                                     durable: false,
+                                     durable: true,
                                      exclusive: false,
                                      autoDelete: false,
                                      arguments: null);
+        _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
     }
 
     private void Connect()

@@ -10,7 +10,7 @@ namespace Rewriting.Services.SmtpSender;
 
 public static class SmtpBootstraper
 {
-    public static IServiceCollection AddSMTPSender(this IServiceCollection services)
+    public static IServiceCollection AddSmtpSender(this IServiceCollection services)
     {
         services.AddSettings();
         services.AddSingleton<ISmtpSender, SmtpSender>();

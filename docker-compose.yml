@@ -7,9 +7,6 @@ services:
   rewriting.rabbitmq:
     image: rabbitmq:management
 
-  rewriting.smtp:
-    image: bytemark/smtp
-
   rewriting.api:
     image: ${DOCKER_REGISTRY-}rewritingapi
     build:
@@ -35,5 +32,4 @@ services:
     depends_on:
       - rewriting.api
       - rewriting.rabbitmq
-      - rewriting.smtp
 

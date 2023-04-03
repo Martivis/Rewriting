@@ -8,8 +8,9 @@ namespace Rewriting.Services.SmtpSender;
 
 public class SmtpSettings
 {
-    public bool Enabled { get; set; } = false;
-    public string Uri { get; set; }
+    public string Host { get; set; }
+    public int Port { get; set; }
+    public bool UseSSL { get; set; }
     public string UserName { get; set; }
     public string Password { get; set; }
 }

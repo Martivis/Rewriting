@@ -6,12 +6,14 @@ namespace Rewriting.Worker;
 public class TaskExecutor : ITaskExecutor
 {
     private readonly ILogger<TaskExecutor> _logger;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly ISmtpSender _smtpSender;
     private readonly IRabbitMQ _rabbitMQ;
-    public TaskExecutor(ILogger<TaskExecutor> logger, IServiceProvider serviceProvider, IRabbitMQ rabbitMQ)
+    public TaskExecutor(ILogger<TaskExecutor> logger,  
+        ISmtpSender smtpSender,
+        IRabbitMQ rabbitMQ)
     {
         _logger = logger;
-        _serviceProvider = serviceProvider;
+        _smtpSender = smtpSender;
         _rabbitMQ = rabbitMQ;
     }
 
@@ -19,21 +21,12 @@ public class TaskExecutor : ITaskExecutor
     {
         try
         {
-            using var scope = _serviceProvider.CreateScope();
-            var smtpSender = scope.ServiceProvider.GetService<ISmtpSender>();
-
-            if (smtpSender == null)
-            {
-                _logger.LogCritical($"Unable to resolve ISmtpSender");
-            }
-            else
-            {
-                await smtpSender.SendEmail(mailModel);
-            }
+            await _smtpSender.SendEmail(mailModel);
         }
         catch (Exception ex) 
         {
             _logger.LogError($"An error has occered while sending mail.\n{ex}");
+            throw new Exception("Unable to send mail");
         }
     }
 

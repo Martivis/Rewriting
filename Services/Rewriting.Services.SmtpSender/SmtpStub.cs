@@ -14,7 +14,6 @@ public class SmtpStub : ISmtpSender
     public async Task SendEmail(MailModel mailModel)
     {
         _logger.LogInformation("Stub::: Mail sent:\n" +
-            $"From: {mailModel.SourceName} {mailModel.SourceEmail}\n" +
             $"To: {mailModel.DestinationEmail}\n" +
             $"Subject: {mailModel.Subject}\n" +
             $"Body: {mailModel.Text}");

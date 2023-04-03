@@ -18,15 +18,14 @@ internal class SmtpSender : ISmtpSender
 
         using var client = new SmtpClient();
 
-        client.Connect(_settings.Uri);
-        //client.Authenticate(_settings.UserName, _settings.Password);
+        client.Connect(_settings.Host, _settings.Port, _settings.UseSSL);
+        client.Authenticate(_settings.UserName, _settings.Password);
         client.Send(message);
     }
 
-    private static MimeMessage CreateMessage(MailModel mailModel)
+    private MimeMessage CreateMessage(MailModel mailModel)
     {
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(mailModel.SourceName, mailModel.SourceEmail));
         message.To.Add(new MailboxAddress("", mailModel.DestinationEmail));
         message.Subject = mailModel.Subject;
         message.Body = new TextPart(MimeKit.Text.TextFormat.Plain)
