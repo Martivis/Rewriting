@@ -49,12 +49,14 @@ internal class ContractService : IContractService
         return _mapper.Map<ContractDetailsModel>(order);
     }
 
-    public async Task<IEnumerable<ContractModel>> GetContractsByUserAsync(Guid userUid)
+    public async Task<IEnumerable<ContractModel>> GetContractsByUserAsync(Guid userUid, int page = 0, int pageSize = 10)
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
         var contracts = context.Set<Order>()
             .Where(order => order.Contract != null && order.Contract.ContractorUid == userUid)
+            .Skip(pageSize * page)
+            .Take(pageSize)
             .ToList();
 
         return _mapper.Map<IEnumerable<ContractModel>>(contracts);

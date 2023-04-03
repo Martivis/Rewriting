@@ -30,13 +30,16 @@ public class ContractsController : ControllerBase
     /// <summary>
     /// Get contracts relating to calling user
     /// </summary>
+    /// <param name="page">Page number (starting with 0)</param>
+    /// <param name="pageSize">Contracts number per page</param>
     /// <returns>IEnumerable of ContractResponse</returns>
     [HttpGet]
     [Authorize]
-    public async Task<IEnumerable<ContractResponse>> GetContractsByUser()
+    public async Task<IEnumerable<ContractResponse>> GetContractsByUser([FromQuery] int page = 0,
+                                                                        [FromQuery] int pageSize = 10)
     {
         var userUid = User.GetUid();
-        var contracts = await _contractService.GetContractsByUserAsync(userUid);
+        var contracts = await _contractService.GetContractsByUserAsync(userUid, page, pageSize);
         return _mapper.Map<IEnumerable<ContractResponse>>(contracts);
     }
 
