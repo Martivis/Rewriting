@@ -38,9 +38,9 @@ namespace Rewriting.API.Controllers.Orders
         /// </summary>
         /// <returns>The IEnumerable of OrderResponse representing new orders</returns>
         [HttpGet]
-        public async Task<IEnumerable<OrderResponse>> GetNewOrders()
+        public async Task<IEnumerable<OrderResponse>> GetNewOrders([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
         {
-            var orderModels = await _orderService.GetNewOrdersAsync();
+            var orderModels = await _orderService.GetNewOrdersAsync(page, pageSize);
             return _mapper.Map<IEnumerable<OrderResponse>>(orderModels);
         }
 
@@ -51,11 +51,11 @@ namespace Rewriting.API.Controllers.Orders
         /// <exception cref="ProcessException"></exception>
         [HttpGet]
         [Authorize(Policy = AppScopes.OrdersRead)]
-        public async Task<IEnumerable<OrderResponse>> GetOrdersByUser()
+        public async Task<IEnumerable<OrderResponse>> GetOrdersByUser([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
         {
             var userUid = User.GetUid();
             
-            var orderModels = await _orderService.GetOrdersByUserAsync(userUid);
+            var orderModels = await _orderService.GetOrdersByUserAsync(userUid, page, pageSize);
             return _mapper.Map<IEnumerable<OrderResponse>>(orderModels);
         }
 
