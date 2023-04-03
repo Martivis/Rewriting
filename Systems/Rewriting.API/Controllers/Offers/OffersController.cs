@@ -29,25 +29,32 @@ namespace Rewriting.API.Controllers.Offers
         /// Get offers relating to the order with specified Uid
         /// </summary>
         /// <param name="orderUid">Uid of the target order</param>
+        /// <param name="page">Page number (starting with 0)</param>
+        /// <param name="pageSize">Offers number per page</param>
         /// <returns>IEnumerable of OfferResponse</returns>
         [HttpGet]
         [Authorize(Policy = AppScopes.OffersRead)]
-        public async Task<IEnumerable<OfferResponse>> GetOffersByOrder(Guid orderUid)
+        public async Task<IEnumerable<OfferResponse>> GetOffersByOrder([FromQuery] Guid orderUid, 
+                                                                       [FromQuery] int page = 0, 
+                                                                       [FromQuery] int pageSize = 10)
         {
-            var offers = await _offerService.GetOffersByOrderAsync(orderUid);
+            var offers = await _offerService.GetOffersByOrderAsync(orderUid, page, pageSize);
             return _mapper.Map<IEnumerable<OfferResponse>>(offers);
         }
 
         /// <summary>
         /// Get offers placed by calling user
         /// </summary>
+        /// <param name="page">Page number (starting with 0)</param>
+        /// <param name="pageSize">Offers number per page</param>
         /// <returns>IEnumerable of OfferResponse</returns>
         [HttpGet]
         [Authorize(Policy = AppScopes.OffersRead)]
-        public async Task<IEnumerable<OfferResponse>> GetOffersByUser()
+        public async Task<IEnumerable<OfferResponse>> GetOffersByUser([FromQuery] int page = 0,
+                                                                      [FromQuery] int pageSize = 10)
         {
             var userUid = User.GetUid();
-            var offers = await _offerService.GetOffersByUserAsync(userUid);
+            var offers = await _offerService.GetOffersByUserAsync(userUid, page, pageSize);
             return _mapper.Map<IEnumerable<OfferResponse>>(offers);
         }
 

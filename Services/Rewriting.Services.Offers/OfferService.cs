@@ -29,23 +29,41 @@ namespace Rewriting.Services.Offers
             return _mapper.Map<OfferAuthorizationModel>(offer);
         }
 
-        public async Task<IEnumerable<OfferModel>> GetOffersByOrderAsync(Guid orderUid)
+        public async Task<IEnumerable<OfferModel>> GetOffersByOrderAsync(Guid orderUid, int page = 0, int pageSize = 10)
         {
+            if (page < 0)
+                throw new ArgumentOutOfRangeException(nameof(page), page, "Page should be greater than zero");
+            if (pageSize < 1)
+                throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size should be greater than zero");
+            if (pageSize > 1000)
+                throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size is too big");
+
             using var context = await _contextFactory.CreateDbContextAsync();
 
             var offers = context.Set<Offer>()
                 .Where(offer => offer.OrderUid == orderUid)
+                .Skip(pageSize * page)
+                .Take(pageSize)
                 .ToList();
 
             return _mapper.Map<IEnumerable<OfferModel>>(offers);
         }
 
-        public async Task<IEnumerable<OfferModel>> GetOffersByUserAsync(Guid userUid)
+        public async Task<IEnumerable<OfferModel>> GetOffersByUserAsync(Guid userUid, int page = 0, int pageSize = 10)
         {
+            if (page < 0)
+                throw new ArgumentOutOfRangeException(nameof(page), page, "Page should be greater than zero");
+            if (pageSize < 1)
+                throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size should be greater than zero");
+            if (pageSize > 1000)
+                throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size is too big");
+
             using var context = await _contextFactory.CreateDbContextAsync();
 
             var offers = context.Set<Offer>()
                 .Where(offer => offer.ContractorUid == userUid)
+                .Skip(pageSize * page)
+                .Take(pageSize)
                 .ToList();
 
             return _mapper.Map<IEnumerable<OfferModel>>(offers);
