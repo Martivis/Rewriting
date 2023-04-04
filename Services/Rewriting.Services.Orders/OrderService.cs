@@ -57,6 +57,7 @@ internal class OrderService : IOrderService, IOrderObservable
 
         var orders = context.Set<Order>()
             .Where(order => order.Status == OrderStatus.New)
+            .OrderBy(order => order.PublishDate)
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToList();
@@ -83,6 +84,7 @@ internal class OrderService : IOrderService, IOrderObservable
 
         var orders = context.Set<Order>()
             .Where(order => order.ClientUid == userUid)
+            .OrderBy(order => order.PublishDate)
             .Skip(pageSize * page)
             .Take(pageSize)
             .ToList();
@@ -116,7 +118,7 @@ internal class OrderService : IOrderService, IOrderObservable
 
         var order = _mapper.Map<Order>(model);
         order.Status = OrderStatus.New;
-        order.DateTime = DateTime.UtcNow;
+        order.PublishDate = DateTime.UtcNow;
 
         await context.AddAsync(order);
         context.SaveChanges();

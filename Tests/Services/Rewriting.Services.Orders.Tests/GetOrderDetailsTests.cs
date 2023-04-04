@@ -65,7 +65,7 @@ public class GetOrderDetailsTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -75,7 +75,7 @@ public class GetOrderDetailsTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
         };
         

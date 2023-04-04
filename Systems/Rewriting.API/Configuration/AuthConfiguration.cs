@@ -18,7 +18,7 @@ public static class AuthConfiguration
     {
         IdentityModelEventSource.ShowPII = true;
 
-        services.AddIdentity<UserIdentity, IdentityRole<Guid>>(options =>
+        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
         {
             options.Password.RequiredLength = 8;
             options.Password.RequireDigit = true;
@@ -29,7 +29,7 @@ public static class AuthConfiguration
             options.User.RequireUniqueEmail = true;
         })
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddUserManager<UserManager<UserIdentity>>()
+            .AddUserManager<UserManager<ApplicationUser>>()
             .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
             .AddDefaultTokenProviders()
             ;

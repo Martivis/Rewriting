@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Context.Entities;
 
-public class UserIdentity : IdentityUser<Guid>
+public class ApplicationUser : IdentityUser<Guid>
 {
     public virtual UserData? UserData { get; set; }
 }

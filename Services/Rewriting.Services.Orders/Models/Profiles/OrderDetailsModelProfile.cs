@@ -11,7 +11,8 @@ public class OrderDetailsModelProfile : Profile
             .ForMember(t => t.ClientName, o => o.MapFrom(s => $"{s.Client.FirstName} {s.Client.LastName}"))
             .ForMember(t => t.Result, o => o.MapFrom(s => MapResult(s)))
             .ForMember(t => t.ContractorUid, o => o.MapFrom(s => MapContractorGuid(s)))
-            .ForMember(t => t.ContractorName, o => o.MapFrom(s => MapContractorName(s)));
+            .ForMember(t => t.ContractorName, o => o.MapFrom(s => MapContractorName(s)))
+            .ForMember(t => t.ContractPublishDate, o => o.MapFrom(s => MapContractPublishDate(s)));
     }
 
     private IEnumerable<string> MapResult(Order source) => source.Contract?.Result.Select(result => result.Content)
@@ -26,4 +27,6 @@ public class OrderDetailsModelProfile : Profile
             return null;
         return $"{contractor.FirstName} {contractor.LastName}";
     }
+
+    private DateTime? MapContractPublishDate(Order source) => source.Contract?.PublishDate;
 }

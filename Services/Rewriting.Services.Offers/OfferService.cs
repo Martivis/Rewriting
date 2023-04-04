@@ -82,6 +82,8 @@ namespace Rewriting.Services.Offers
                 throw new ProcessException("Unable to add offer");
 
             var offer = _mapper.Map<Offer>(model);
+            offer.PublishDate = DateTime.UtcNow;
+
             await context.AddAsync(offer);
 
             context.SaveChanges();
@@ -102,6 +104,7 @@ namespace Rewriting.Services.Offers
             offer.Order.Status = OrderStatus.InProgress;
 
             var contract = _mapper.Map<Contract>(offer);
+            contract.PublishDate = DateTime.UtcNow;
 
             context.Add(contract);
             context.SaveChanges();

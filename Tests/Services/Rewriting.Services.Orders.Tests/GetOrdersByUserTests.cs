@@ -55,7 +55,7 @@ public class GetOrdersByUserTests
             Comment = "COMMENT",
             Text = "TEXT",
             Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
+            PublishDate = DateTime.Parse("01.01.2020")
         },
         new Order
         {
@@ -65,7 +65,7 @@ public class GetOrdersByUserTests
             Comment = "COMMENT",
             Text = "TEXT",
             Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
+            PublishDate = DateTime.Parse("01.01.2020")
         },
         new Order
         {
@@ -75,7 +75,7 @@ public class GetOrdersByUserTests
             Comment = "COMMENT",
             Text = "TEXT",
             Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
+            PublishDate = DateTime.Parse("01.01.2020")
         },
     };
 
@@ -111,7 +111,7 @@ public class GetOrdersByUserTests
             Comment = "COMMENT",
             Text = "TEXT",
             Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
+            PublishDate = DateTime.Parse("01.01.2020")
         },
         new Order
         {
@@ -121,7 +121,7 @@ public class GetOrdersByUserTests
             Comment = "COMMENT",
             Text = "TEXT",
             Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
+            PublishDate = DateTime.Parse("01.01.2020")
         },
         new Order
         {
@@ -131,7 +131,7 @@ public class GetOrdersByUserTests
             Comment = "COMMENT",
             Text = "TEXT",
             Status = OrderStatus.New,
-            DateTime = DateTime.Parse("01.01.2020")
+            PublishDate = DateTime.Parse("01.01.2020")
         },
     };
 
@@ -199,7 +199,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -209,7 +209,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.InProgress,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -219,7 +219,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.Done,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -229,7 +229,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.Canceled,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
         };
 
@@ -269,7 +269,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.New,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -279,7 +279,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.InProgress,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -289,7 +289,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.Done,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
             new Order
             {
@@ -299,7 +299,7 @@ public class GetOrdersByUserTests
                 Comment = "COMMENT",
                 Text = "TEXT",
                 Status = OrderStatus.Canceled,
-                DateTime = DateTime.Parse("01.01.2020")
+                PublishDate = DateTime.Parse("01.01.2020")
             },
         };
 

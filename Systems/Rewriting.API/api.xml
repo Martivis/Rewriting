@@ -59,10 +59,12 @@
             <param name="request">ChangePasswordRequest</param>
             <response code="200">Success report</response>
         </member>
-        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetContractsByUser">
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetContractsByUser(System.Int32,System.Int32)">
             <summary>
             Get contracts relating to calling user
             </summary>
+            <param name="page">Page number (starting with 0)</param>
+            <param name="pageSize">Contracts number per page</param>
             <returns>IEnumerable of ContractResponse</returns>
         </member>
         <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetContractDetails(System.Guid)">
@@ -100,17 +102,21 @@
             <param name="contractUid">Uid of the target contract</param>
             <returns>IActionResult</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByOrder(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByOrder(System.Guid,System.Int32,System.Int32)">
             <summary>
             Get offers relating to the order with specified Uid
             </summary>
             <param name="orderUid">Uid of the target order</param>
+            <param name="page">Page number (starting with 0)</param>
+            <param name="pageSize">Offers number per page</param>
             <returns>IEnumerable of OfferResponse</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByUser">
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByUser(System.Int32,System.Int32)">
             <summary>
             Get offers placed by calling user
             </summary>
+            <param name="page">Page number (starting with 0)</param>
+            <param name="pageSize">Offers number per page</param>
             <returns>IEnumerable of OfferResponse</returns>
         </member>
         <member name="M:Rewriting.API.Controllers.Offers.OffersController.AddOffer(Rewriting.API.Controllers.Offers.AddOfferRequest)">
@@ -127,13 +133,13 @@
             <param name="offerUid">Uid of the target offer</param>
             <returns>IActionResult</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetNewOrders">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetNewOrders(System.Int32,System.Int32)">
             <summary>
             Get all the orders available for offers
             </summary>
             <returns>The IEnumerable of OrderResponse representing new orders</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetOrdersByUser">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetOrdersByUser(System.Int32,System.Int32)">
             <summary>
             Get all the orders published by calling user
             </summary>

@@ -7,4 +7,5 @@ public class OfferResponse
     public string ContractorName { get; set; }
     public decimal Price { get; set; }
     public string Comment { get; set; }
+    public DateTime PublishDate { get; set; }
 }

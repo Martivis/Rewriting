@@ -9,6 +9,7 @@ public class ContractProfile : Profile
 	{
 		CreateMap<Offer, Contract>()
 			.ForMember(d => d.Uid, o => o.MapFrom(s => s.OrderUid))
-			.ForMember(d => d.Result, o => o.Ignore());
+			.ForMember(d => d.Result, o => o.Ignore())
+			.ForMember(d => d.PublishDate, o => o.Ignore());
 	}
 }

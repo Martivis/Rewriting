@@ -9,7 +9,8 @@ public class ContractDetailsModel
     public string Text { get; set; }
     public IEnumerable<string> Results { get; set; }
     public string Comment { get; set; }
-    public DateTime DateTime { get; set; }
+    public DateTime PublishDate { get; set; }
+    public DateTime OrderPublishDate { get; set; }
     public OrderStatus Status { get; set; }
     public Guid ClientUid { get; set; }
     public string ClientName { get; set; }

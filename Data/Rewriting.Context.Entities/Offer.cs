@@ -14,4 +14,5 @@ public class Offer : BaseEntity
     public virtual Order Order { get; set; }
     public decimal Price { get; set; }
     public string Comment { get; set; }
+    public DateTime PublishDate { get; set; }
 }

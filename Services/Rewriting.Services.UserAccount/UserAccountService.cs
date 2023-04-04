@@ -9,13 +9,13 @@ namespace Rewriting.Services.UserAccount
 {
     internal class UserAccountService : IUserAccountService
     {
-        private readonly UserManager<UserIdentity> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IModelValidator<RegisterUserModel> _registerUserAccountModelValidator;
         private readonly IModelValidator<ChangePasswordModel> _changePasswordModelValidator;
 
         public UserAccountService(
-            UserManager<UserIdentity> userManager,
+            UserManager<ApplicationUser> userManager,
             IMapper mapper,
             IModelValidator<RegisterUserModel> validator,
             IModelValidator<ChangePasswordModel> changePasswordModelValidator)
@@ -54,7 +54,7 @@ namespace Rewriting.Services.UserAccount
             if (userIdentity != null)
                 throw new ProcessException($"User account with email {model.Email} already exists");
 
-            userIdentity = new UserIdentity
+            userIdentity = new ApplicationUser
             {
                 UserName = model.Email,
                 Email = model.Email,
@@ -64,6 +64,7 @@ namespace Rewriting.Services.UserAccount
                 Uid = userIdentity.Id,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                RegistrationDate = DateOnly.FromDateTime(DateTime.UtcNow)
             };
             userIdentity.UserData = userData;
 

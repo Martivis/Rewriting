@@ -13,4 +13,5 @@ public class Contract : BaseEntity
     public Guid ContractorUid { get; set; }
     public virtual UserData Contractor { get; set; }
     public virtual Order Order { get; set; }
+    public DateTime PublishDate { get; set; }
 }

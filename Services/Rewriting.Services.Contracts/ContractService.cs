@@ -77,6 +77,7 @@ internal class ContractService : IContractService
         contract.Order.Status = OrderStatus.Evaluation;
 
         var result = _mapper.Map<Result>(model);
+        result.PublishDate = DateTime.UtcNow;
 
         context.Add(result);
         context.SaveChanges();

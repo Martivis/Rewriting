@@ -11,7 +11,7 @@ public class Order : BaseEntity
     public string Title { get; set; }
     public string Text { get; set; }
     public string Comment { get; set; }
-    public DateTime DateTime { get; set; }
+    public DateTime PublishDate { get; set; }
     public OrderStatus Status { get; set; }
     public Guid ClientUid { get; set; }
     public virtual UserData Client { get; set; }

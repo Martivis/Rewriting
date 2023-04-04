@@ -12,4 +12,5 @@ public class Result : BaseEntity
     public ResultStatus Status { get; set; }
     public Guid ContractUid { get; set; }
     public virtual Contract Contract { get; set; }
+    public DateTime PublishDate { get; set; }
 }

@@ -79,7 +79,7 @@ public class NotificationService : INotificationService
     private async Task<string> GetUserEmailAsync(Guid userUid)
     {
         using var scope = _provider.CreateScope();
-        var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
+        var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
         var orderOwner = await _userManager.FindByIdAsync(userUid.ToString())
             ?? throw new ProcessException($"User {userUid} not found");
