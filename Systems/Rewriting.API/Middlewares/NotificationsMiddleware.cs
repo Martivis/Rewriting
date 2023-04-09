@@ -18,7 +18,7 @@ public class NotificationsMiddleware
 
     public async Task InvokeAsync(HttpContext context, INotificationService notificationService)
     {
-        notificationService.SubscribeToOrderEvents();
+        notificationService.Subscribe();
         await _next.Invoke(context);
     }
 }

@@ -8,6 +8,7 @@ public class OfferModelProfile : Profile
     public OfferModelProfile()
     {
         CreateMap<Offer, OfferModel>()
-            .ForMember(t => t.ContractorName, o => o.MapFrom(s => s.Contractor.FirstName + s.Contractor.LastName));
+            .ForMember(t => t.ContractorName, o => o.MapFrom(s => s.Contractor.FirstName + s.Contractor.LastName))
+            .ForMember(t => t.ClientUid, o => o.MapFrom(s => s.Order.ClientUid));
     }
 }

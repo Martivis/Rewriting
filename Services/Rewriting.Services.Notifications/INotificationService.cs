@@ -8,5 +8,5 @@ namespace Rewriting.Services.Notifications;
 
 public interface INotificationService
 {
-    public void SubscribeToOrderEvents();
+    public void Subscribe();
 }

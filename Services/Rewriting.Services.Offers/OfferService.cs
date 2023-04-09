@@ -6,10 +6,13 @@ using Rewriting.Context.Entities;
 
 namespace Rewriting.Services.Offers
 {
-    internal class OfferService : IOfferService
+    internal class OfferService : IOfferService, IOffersObservable
     {
         private readonly IDbContextFactory<AppDbContext> _contextFactory;
         private readonly IMapper _mapper;
+
+        public event Action<OfferModel> OnOfferAdd;
+        public event Action<OfferModel> OnOfferAccept;
 
         public OfferService(
             IDbContextFactory<AppDbContext> contextFactory,
@@ -84,11 +87,14 @@ namespace Rewriting.Services.Offers
             var offer = _mapper.Map<Offer>(model);
             offer.PublishDate = DateTime.UtcNow;
 
-            await context.AddAsync(offer);
+            context.Add(offer);
 
             context.SaveChanges();
 
-            return _mapper.Map<OfferModel>(offer);
+            var offerModel = _mapper.Map<OfferModel>(offer);
+            OnOfferAdd.Invoke(offerModel);
+
+            return offerModel;
         }
 
         public async Task AcceptOfferAsync(Guid offerUid)
@@ -108,6 +114,9 @@ namespace Rewriting.Services.Offers
 
             context.Add(contract);
             context.SaveChanges();
+
+            var offerMovel = _mapper.Map<OfferModel>(offer);
+            OnOfferAccept.Invoke(offerMovel);
         }
     }
 }
