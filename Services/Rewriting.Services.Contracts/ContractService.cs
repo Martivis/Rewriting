@@ -60,6 +60,7 @@ internal class ContractService : IContractService, IContractObservable
 
         var contracts = context.Set<Order>()
             .Where(order => order.Contract != null && order.Contract.ContractorUid == userUid)
+            .OrderByDescending(order => order.Contract!.PublishDate)
             .Skip(pageSize * page)
             .Take(pageSize)
             .ToList();

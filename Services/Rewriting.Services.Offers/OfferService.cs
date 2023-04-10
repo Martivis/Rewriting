@@ -45,6 +45,7 @@ namespace Rewriting.Services.Offers
 
             var offers = context.Set<Offer>()
                 .Where(offer => offer.OrderUid == orderUid)
+                .OrderByDescending(offer => offer.PublishDate)
                 .Skip(pageSize * page)
                 .Take(pageSize)
                 .ToList();
@@ -65,6 +66,7 @@ namespace Rewriting.Services.Offers
 
             var offers = context.Set<Offer>()
                 .Where(offer => offer.ContractorUid == userUid)
+                .OrderByDescending(offer => offer.PublishDate)
                 .Skip(pageSize * page)
                 .Take(pageSize)
                 .ToList();

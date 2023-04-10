@@ -57,7 +57,7 @@ internal class OrderService : IOrderService, IOrderObservable
 
         var orders = context.Set<Order>()
             .Where(order => order.Status == OrderStatus.New)
-            .OrderBy(order => order.PublishDate)
+            .OrderByDescending(order => order.PublishDate)
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToList();
@@ -84,7 +84,7 @@ internal class OrderService : IOrderService, IOrderObservable
 
         var orders = context.Set<Order>()
             .Where(order => order.ClientUid == userUid)
-            .OrderBy(order => order.PublishDate)
+            .OrderByDescending(order => order.PublishDate)
             .Skip(pageSize * page)
             .Take(pageSize)
             .ToList();
