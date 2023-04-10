@@ -1,4 +1,6 @@
-﻿using Rewriting.Services.Contracts;
+﻿
+using Microsoft.Extensions.Logging;
+using Rewriting.Services.Contracts;
 using Rewriting.Services.EmailService;
 using Rewriting.Services.Offers;
 using Rewriting.Services.Orders;
@@ -50,7 +52,7 @@ public class NotificationService : INotificationService
         _contractService.OnContractorDecline += NotificationHandler(new DeclineContractorContractorMailFactory(_provider));
     }
 
-    private Action<TModel> NotificationHandler<TModel>(IMailFactory<TModel> mailProvider)
+    private Action<TModel> NotificationHandler<TModel>(MailFactoryBase<TModel> mailProvider)
     {
         return async (TModel model) =>
         {

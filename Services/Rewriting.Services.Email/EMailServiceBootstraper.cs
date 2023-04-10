@@ -11,7 +11,7 @@ public static class EmailServiceBootstraper
 {
     public static IServiceCollection AddEmailService(this IServiceCollection services)
     {
-        services.AddScoped<IEmailService, EmailService>();
+        services.AddSingleton<IEmailService, EmailService>();
         return services;
     }
 }

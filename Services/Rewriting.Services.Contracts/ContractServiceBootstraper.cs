@@ -6,7 +6,8 @@ public static class ContractServiceBootstraper
 {
     public static IServiceCollection AddContractService(this IServiceCollection services)
     {
-        services.AddSingleton<IContractService, ContractService>();
+        services.AddScoped<IContractService, ContractService>();
+        services.AddScoped<IContractObservable>(provider => provider.GetService<IContractService>() as ContractService);
         return services;
     }
 }

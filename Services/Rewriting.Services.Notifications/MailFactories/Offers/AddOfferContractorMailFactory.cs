@@ -10,21 +10,15 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Notifications;
 
-internal class AddOfferContractorMailFactory : IMailFactory<OfferModel>
+internal class AddOfferContractorMailFactory : MailFactoryBase<OfferModel>
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public AddOfferContractorMailFactory(IServiceProvider serviceProvider)
+    public AddOfferContractorMailFactory(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _serviceProvider = serviceProvider;
     }
 
-    public async Task<MailModel> GetMailModelAsync(OfferModel model)
+    public async override Task<MailModel> GetMailModelAsync(OfferModel model)
     {
-        using var scope = _serviceProvider.CreateScope();
-        var userDataService = scope.ServiceProvider.GetService<IUserDataService>();
-
-        var destinationEmail = await userDataService.GetUserEmailAsync(model.ContractorUid);
+        var destinationEmail = await GetUserEmailAsync(model.ContractorUid);
         return new()
         {
             DestinationEmail = destinationEmail,

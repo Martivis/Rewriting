@@ -10,21 +10,15 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Notifications;
 
-internal class CancelOrderMailFactory : IMailFactory<OrderDetailsModel>
+internal class CancelOrderMailFactory : MailFactoryBase<OrderDetailsModel>
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public CancelOrderMailFactory(IServiceProvider serviceProvider)
+    public CancelOrderMailFactory(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _serviceProvider = serviceProvider;
     }
 
-    public async Task<MailModel> GetMailModelAsync(OrderDetailsModel model)
+    public async override Task<MailModel> GetMailModelAsync(OrderDetailsModel model)
     {
-        using var scope = _serviceProvider.CreateScope();
-        var userDataService = scope.ServiceProvider.GetService<IUserDataService>();
-
-        var destinationEmail = await userDataService.GetUserEmailAsync(model.ClientUid);
+        var destinationEmail = await GetUserEmailAsync(model.ClientUid);
         return new()
         {
             DestinationEmail = destinationEmail,
