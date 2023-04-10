@@ -6,7 +6,7 @@ using Rewriting.Context.Entities;
 
 namespace Rewriting.Services.Offers
 {
-    internal class OfferService : IOfferService, IOffersObservable
+    internal class OfferService : IOfferService, IOfferObservable
     {
         private readonly IDbContextFactory<AppDbContext> _contextFactory;
         private readonly IMapper _mapper;

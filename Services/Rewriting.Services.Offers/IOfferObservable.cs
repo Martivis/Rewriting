@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Offers;
 
-public interface IOffersObservable
+public interface IOfferObservable
 {
     event Action<OfferModel> OnOfferAdd;
     event Action<OfferModel> OnOfferAccept;

@@ -13,6 +13,7 @@
     <ProjectReference Include="..\Rewriting.Services.Offers\Rewriting.Services.Offers.csproj" />
     <ProjectReference Include="..\Rewriting.Services.Orders\Rewriting.Services.Orders.csproj" />
     <ProjectReference Include="..\Rewriting.Services.SmtpSender\Rewriting.Services.SmtpSender.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.UserAccount\Rewriting.Services.UserAccount.csproj" />
   </ItemGroup>
 
 </Project>
