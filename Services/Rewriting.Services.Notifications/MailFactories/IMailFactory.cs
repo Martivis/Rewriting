@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Notifications;
 
-internal interface IMailProvider<TModel>
+internal interface IMailFactory<TModel>
 {
     Task<MailModel> GetMailModelAsync(TModel model);
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Rewriting.Services.Orders;
+using Rewriting.Services.Contracts;
 using Rewriting.Services.SmtpSender;
 using Rewriting.Services.UserAccount;
 using System;
@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Notifications;
 
-internal class CancelOrderMailFactory : IMailProvider<OrderDetailsModel>
+internal class DeclineContractorClientMailFactory : IMailFactory<ContractDetailsModel>
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public CancelOrderMailFactory(IServiceProvider serviceProvider)
+    public DeclineContractorClientMailFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<MailModel> GetMailModelAsync(OrderDetailsModel model)
+    public async Task<MailModel> GetMailModelAsync(ContractDetailsModel model)
     {
         using var scope = _serviceProvider.CreateScope();
         var userDataService = scope.ServiceProvider.GetService<IUserDataService>();
@@ -28,8 +28,8 @@ internal class CancelOrderMailFactory : IMailProvider<OrderDetailsModel>
         return new()
         {
             DestinationEmail = destinationEmail,
-            Subject = "Order canceled",
-            Text = $"Order was canceled"
+            Subject = "Contractor declined",
+            Text = $"Contractor of order {model.Uid} was successfully declined"
         };
     }
 }

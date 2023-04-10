@@ -6,10 +6,15 @@ using Rewriting.Context.Entities;
 
 namespace Rewriting.Services.Contracts;
 
-internal class ContractService : IContractService
+internal class ContractService : IContractService, IContractObservable
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
     private readonly IMapper _mapper;
+
+    public event Action<ContractDetailsModel> OnResultAdd;
+    public event Action<ContractDetailsModel> OnResultAccept;
+    public event Action<ContractDetailsModel> OnResultDecline;
+    public event Action<ContractDetailsModel> OnContractorDecline;
 
     public ContractService(IDbContextFactory<AppDbContext> contextFactory, IMapper mapper)
     {
@@ -81,6 +86,9 @@ internal class ContractService : IContractService
 
         context.Add(result);
         context.SaveChanges();
+
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        OnResultAdd.Invoke(contractDetailsModel);
     }
 
     public async Task AcceptResultAsync(Guid contractUid)
@@ -97,6 +105,9 @@ internal class ContractService : IContractService
 
         contract.Order.Status = OrderStatus.Done;
         context.SaveChanges();
+
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        OnResultAccept.Invoke(contractDetailsModel);
     }
 
     public async Task DeclineResultAsync(Guid contractUid)
@@ -113,6 +124,9 @@ internal class ContractService : IContractService
         order.Status = OrderStatus.InProgress;
         
         context.SaveChanges();
+
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        OnResultDecline.Invoke(contractDetailsModel);
     }
 
     public async Task DeclineContractorAsync(Guid contractUid)
@@ -131,5 +145,8 @@ internal class ContractService : IContractService
 
         context.Remove(contract);
         context.SaveChanges();
+
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        OnContractorDecline.Invoke(contractDetailsModel);
     }
 }

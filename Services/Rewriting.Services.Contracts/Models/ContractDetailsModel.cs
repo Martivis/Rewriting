@@ -14,7 +14,7 @@ public class ContractDetailsModel
     public OrderStatus Status { get; set; }
     public Guid ClientUid { get; set; }
     public string ClientName { get; set; }
-    public Guid? ContractorUid { get; set; }
-    public string? ContractorName { get; set; }
+    public Guid ContractorUid { get; set; }
+    public string ContractorName { get; set; }
     public decimal Price { get; set; }
 }

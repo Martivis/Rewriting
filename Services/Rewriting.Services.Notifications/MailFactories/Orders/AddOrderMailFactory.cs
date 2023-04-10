@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Rewriting.Services.Offers;
+using Rewriting.Services.Orders;
 using Rewriting.Services.SmtpSender;
 using Rewriting.Services.UserAccount;
 using System;
@@ -10,26 +10,26 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Notifications;
 
-internal class OfferAcceptedContractorFactory : IMailProvider<OfferModel>
+internal class AddOrderMailFactory : IMailFactory<OrderDetailsModel>
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public OfferAcceptedContractorFactory(IServiceProvider serviceProvider)
+    public AddOrderMailFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<MailModel> GetMailModelAsync(OfferModel model)
+    public async Task<MailModel> GetMailModelAsync(OrderDetailsModel model)
     {
         using var scope = _serviceProvider.CreateScope();
-        var userDataService = scope.ServiceProvider.GetService<IUserDataService>();
+        var userDataService = _serviceProvider.GetService<IUserDataService>();
 
-        var destinationEmail = await userDataService.GetUserEmailAsync(model.ContractorUid);
+        var destinationEmail = await userDataService.GetUserEmailAsync(model.ClientUid);
         return new()
         {
             DestinationEmail = destinationEmail,
-            Subject = "New offer",
-            Text = $"Your offer {model.Uid} was accepted"
+            Subject = "New order created",
+            Text = $"Order was succesfully created"
         };
     }
 }

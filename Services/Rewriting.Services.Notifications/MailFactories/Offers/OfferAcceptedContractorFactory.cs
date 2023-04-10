@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Rewriting.Services.Notifications;
 
-internal class OfferAcceptedClientMailFactory : IMailProvider<OfferModel>
+internal class OfferAcceptedContractorFactory : IMailFactory<OfferModel>
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public OfferAcceptedClientMailFactory(IServiceProvider serviceProvider)
+    public OfferAcceptedContractorFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
@@ -24,12 +24,12 @@ internal class OfferAcceptedClientMailFactory : IMailProvider<OfferModel>
         using var scope = _serviceProvider.CreateScope();
         var userDataService = scope.ServiceProvider.GetService<IUserDataService>();
 
-        var destinationEmail = await userDataService.GetUserEmailAsync(model.ClientUid);
+        var destinationEmail = await userDataService.GetUserEmailAsync(model.ContractorUid);
         return new()
         {
             DestinationEmail = destinationEmail,
-            Subject = "Offer accepted",
-            Text = $"Offer {model.Uid} was successfully accepted"
+            Subject = "New offer",
+            Text = $"Your offer {model.Uid} was accepted"
         };
     }
 }
