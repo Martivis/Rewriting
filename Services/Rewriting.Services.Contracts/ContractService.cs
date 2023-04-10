@@ -87,7 +87,8 @@ internal class ContractService : IContractService, IContractObservable
         context.Add(result);
         context.SaveChanges();
 
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        var refresedOrder = context.Set<Order>().Find(model.ContractUid);
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
         OnResultAdd.Invoke(contractDetailsModel);
     }
 
@@ -106,7 +107,8 @@ internal class ContractService : IContractService, IContractObservable
         contract.Order.Status = OrderStatus.Done;
         context.SaveChanges();
 
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        var refresedOrder = context.Set<Order>().Find(contractUid);
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
         OnResultAccept.Invoke(contractDetailsModel);
     }
 
@@ -125,7 +127,8 @@ internal class ContractService : IContractService, IContractObservable
         
         context.SaveChanges();
 
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
+        var refresedOrder = context.Set<Order>().Find(contractUid);
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
         OnResultDecline.Invoke(contractDetailsModel);
     }
 
@@ -143,10 +146,12 @@ internal class ContractService : IContractService, IContractObservable
 
         order.Status = OrderStatus.New;
 
+        var refresedOrder = context.Set<Order>().Find(contractUid);
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
+
         context.Remove(contract);
         context.SaveChanges();
 
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(contract);
         OnContractorDecline.Invoke(contractDetailsModel);
     }
 }

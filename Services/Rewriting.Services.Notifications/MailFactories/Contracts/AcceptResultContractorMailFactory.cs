@@ -22,8 +22,8 @@ internal class AcceptResultContractorMailFactory : MailFactoryBase<ContractDetai
         return new()
         {
             DestinationEmail = destinationEmail,
-            Subject = "New result",
-            Text = $"New result was added to order {model.Uid}"
+            Subject = "Result accepted",
+            Text = $"Contract {model.Uid} has been finished"
         };
     }
 }

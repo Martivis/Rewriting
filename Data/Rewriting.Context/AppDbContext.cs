@@ -60,6 +60,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid
 
         modelBuilder.Entity<Result>().ToTable("results")
             .HasOne(t => t.Contract).WithMany(t => t.Result)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
