@@ -68,6 +68,20 @@ internal class ContractService : IContractService, IContractObservable
         return _mapper.Map<IEnumerable<ContractModel>>(contracts);
     }
 
+    public async Task<IEnumerable<ResultModel>> GetResultsAsync(Guid contractUid, int page = 0, int pageSize = 10)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync();
+
+        var results = context.Set<Result>()
+            .Where(result => result.ContractUid == contractUid)
+            .OrderByDescending(result => result.PublishDate)
+            .Skip(pageSize * page)
+            .Take(pageSize)
+            .ToList();
+
+        return _mapper.Map<IEnumerable<ResultModel>>(results);
+    }
+
     public async Task AddResultAsync(AddResultModel model)
     {
         using var context = await _contextFactory.CreateDbContextAsync();

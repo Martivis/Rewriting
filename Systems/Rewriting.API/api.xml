@@ -74,6 +74,13 @@
             <param name="contractUid">Uid of target contract</param>
             <returns>ContractDetailsResponse</returns>
         </member>
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetResults(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Get results for specified contract
+            </summary>
+            <param name="contractUid">Uid of target contract</param>
+            <returns>IEnumerable of ResultResponse</returns>
+        </member>
         <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.AddResult(Rewriting.API.Controllers.Contracts.AddResultRequest)">
             <summary>
             Add new result

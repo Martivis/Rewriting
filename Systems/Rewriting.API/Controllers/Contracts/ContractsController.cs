@@ -66,6 +66,31 @@ public class ContractsController : ControllerBase
     }
 
     /// <summary>
+    /// Get results for specified contract
+    /// </summary>
+    /// <param name="contractUid">Uid of target contract</param>
+    /// <returns>IEnumerable of ResultResponse</returns>
+    [HttpGet]
+    [Authorize]
+    public async Task<IEnumerable<ResultResponse>> GetResults(Guid contractUid, int page = 0, int pageSize = 10)
+    {
+        var clientAuth = await _contractService.GetClientAuthAsync(contractUid);
+        var contractorAuth = await _contractService.GetContractorAuthAsync(contractUid);
+    
+        var clientAuthResult = await _authorizationService.AuthorizeAsync(User, clientAuth, AppScopes.ContractsEdit);
+        var contractorAuthResult = await _authorizationService.AuthorizeAsync(User, contractorAuth, AppScopes.ContractsEdit);
+    
+        if (!clientAuthResult.Succeeded && !contractorAuthResult.Succeeded)
+        {
+            HttpContext.Response.StatusCode = 403;
+            return new List<ResultResponse>();
+        }
+    
+        var results = await _contractService.GetResultsAsync(contractUid, page, pageSize);
+        return _mapper.Map<IEnumerable<ResultResponse>>(results);
+    }
+
+    /// <summary>
     /// Add new result
     /// </summary>
     /// <param name="request">AddResultRequest</param>
