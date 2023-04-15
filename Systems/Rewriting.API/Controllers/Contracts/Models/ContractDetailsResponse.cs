@@ -7,7 +7,6 @@ public class ContractDetailsResponse
     public Guid Uid { get; set; }
     public string Title { get; set; }
     public string Text { get; set; }
-    public IEnumerable<string> Results { get; set; }
     public string Comment { get; set; }
     public DateTime PublishDate { get; set; }
     public DateTime OrderPublishDate { get; set; }
