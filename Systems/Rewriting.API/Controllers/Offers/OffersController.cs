@@ -7,7 +7,7 @@ using Rewriting.Services.Offers;
 
 namespace Rewriting.API.Controllers.Offers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class OffersController : ControllerBase
     {

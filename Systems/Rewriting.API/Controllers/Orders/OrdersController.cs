@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace Rewriting.API.Controllers.Orders
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class OrdersController : ControllerBase
     {

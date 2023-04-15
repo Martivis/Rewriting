@@ -9,7 +9,7 @@ using Rewriting.Services.Orders;
 
 namespace Rewriting.API.Controllers.Contracts;
 
-[Route("api/[controller]/[action]")]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 [ApiController]
 public class ContractsController : ControllerBase
 {
