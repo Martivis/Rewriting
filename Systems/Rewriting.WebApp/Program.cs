@@ -1,11 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
+using Rewriting.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+
+var services = builder.Services;
+services.AddRazorPages();
+services.AddServerSideBlazor();
+services.AddMudServices();
+
+services.AddSingleton<IOrderService, OrderStub>();
 
 var app = builder.Build();
 

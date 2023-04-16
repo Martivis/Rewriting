@@ -8,11 +8,14 @@
 <MudAppBar Color="Color.Primary" Fixed="false">
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleMenu"/>
     <MudSpacer />
-    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
+    <LoginPaper />
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/Martivis/Rewriting"/>
 </MudAppBar>
 
 <MudDrawer @bind-Open="IsMenuOpened" Variant="DrawerVariant.Persistent">
     <MudList Clickable="true">
+        <MudListItem Href="/">Home</MudListItem>
+        <MudDivider />
         <MudListItem Href="/new_orders">Find job</MudListItem>
         <MudDivider />
         <MudListItem Href="/my_orders">My orders</MudListItem>
@@ -26,3 +29,13 @@
 <MudContainer Fixed="true">
     @Body
 </MudContainer>
+
+@code
+{
+    public bool IsMenuOpened { get; set; }
+
+    public void ToggleMenu()
+    {
+        IsMenuOpened = !IsMenuOpened;
+    }
+}

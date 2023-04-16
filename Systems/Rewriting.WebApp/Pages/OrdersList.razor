@@ -1,0 +1,62 @@
+﻿@page "/new_orders"
+
+@inject IOrderService OrderService
+
+<h3>Available orders</h3>
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudStack AlignItems="AlignItems.Stretch">
+        @foreach (var order in _orders)
+        {
+            <OrderCard Model="order" />
+        }
+    </MudStack>
+
+    <MudCard>
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Text">
+            <MudButton @onclick="PrevPage">Prev</MudButton>
+            <MudButton Disabled="true">@_page</MudButton>
+            <MudButton @onclick="NextPage">Next</MudButton>
+        </MudButtonGroup>
+    </MudCard>
+</MudContainer>
+
+
+@code {
+    private IEnumerable<OrderModel> _orders;
+    private int _page = 1;
+    private int _pageSize = 10;
+    private int _pagesCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrders();
+    }
+
+    private async Task GetOrders()
+    {
+        _orders = await OrderService.GetOrdersAsync(_page - 1, _pageSize);
+        SetPagesCount();
+    }
+
+    private void SetPagesCount()
+    {
+        _pagesCount = _orders.Count() / _pageSize;
+    }
+
+    private async Task NextPage()
+    {
+        _page++;
+        await GetOrders();
+        if (!_orders.Any())
+            PrevPage();
+    }
+
+    private async Task PrevPage()
+    {
+        if (_page <= 1)
+            return;
+        _page--;
+        GetOrders();
+    }
+}

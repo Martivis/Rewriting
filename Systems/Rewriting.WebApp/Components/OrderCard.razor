@@ -1,0 +1,17 @@
+﻿
+<MudCard>
+    <MudCardContent>
+        <MudText>@Model.Title</MudText>
+        <MudText Typo="Typo.body2">@Model.ClientName</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+    </MudCardActions>
+</MudCard>
+
+
+@code 
+{
+    [Parameter]
+    public OrderModel Model { get; set; }
+}
