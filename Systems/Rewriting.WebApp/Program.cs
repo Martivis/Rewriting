@@ -9,8 +9,9 @@ var services = builder.Services;
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddMudServices();
+services.AddHttpClient();
 
-services.AddSingleton<IOrderService, OrderStub>();
+services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
