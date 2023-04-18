@@ -1,0 +1,37 @@
+﻿@inject IAuthService AuthService
+
+<MudDialog>
+    <DialogContent>
+        <div style="width: 500px">
+            <MudForm @ref="_form" ReadOnly="false">
+
+                <MudTextField T="string" Label="Email" @bind-Value="_model.Email" For="@(() => _model.Email)"/>
+
+                <MudTextField T="string" Label="Password" InputType="InputType.Password" @bind-Value="_model.Password" For="@(() => _model.Password)"/>
+
+                <div class="d-flex align-center justify-space-between">
+                    <MudCheckBox T="bool" Label="Remember me" @bind-Checked="_model.RememberMe" For="@(() => _model.RememberMe)" />
+                </div>
+
+            </MudForm>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton @onclick="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private MudForm _form = new();
+    private LoginModel _model = new();
+
+    private async Task Submit()
+    {
+        var result = await AuthService.Login(_model);
+
+        if (result.Successful)
+            MudDialog.Close();
+    }
+}

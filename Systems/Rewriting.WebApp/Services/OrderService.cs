@@ -6,15 +6,17 @@ namespace Rewriting.WebApp.Services;
 public class OrderService : IOrderService
 {
     private readonly HttpClient _httpClient;
+    private readonly WebAppSettings _settings;
 
-    public OrderService(HttpClient httpClient)
+    public OrderService(HttpClient httpClient, WebAppSettings settings)
     {
         _httpClient = httpClient;
+        _settings = settings;
     }
 
     public async Task<IEnumerable<OrderModel>> GetOrdersAsync(int page, int pageSize)
     {
-        string url = $"{WebAppSettings.ApiUri}/v1/Orders/GetNewOrders?page={page}&pageSize={pageSize}";
+        string url = $"{_settings.ApiUri}/v1/Orders/GetNewOrders?page={page}&pageSize={pageSize}";
 
         var response = await _httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();

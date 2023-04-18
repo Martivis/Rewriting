@@ -1,17 +1,29 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
+using Rewriting.Settings;
+using Rewriting.WebApp;
 using Rewriting.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
+
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddMudServices();
 services.AddHttpClient();
+//services.AddAuthorizationCore();
+services.AddBlazoredLocalStorage();
 
+services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<IOrderService, OrderService>();
+
+var settings = SettingsLoader.Load<WebAppSettings>("WebApp");
+services.AddSingleton(settings);
 
 var app = builder.Build();
 

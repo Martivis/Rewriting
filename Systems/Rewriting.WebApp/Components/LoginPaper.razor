@@ -1,4 +1,26 @@
-﻿<div>
-    <MudText>Here will be your name</MudText>
-</div>
+﻿
+@inject IDialogService DialogService
 
+<AuthorizeView>
+    <Authorized>
+        <MudText>You are logged in</MudText>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton @onclick="OpenDialog" Color="Color.Inherit" Variant="Variant.Text">Sign in</MudButton>
+        <MudButton Color="Color.Inherit" Variant="Variant.Text">Register</MudButton>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    private void OpenDialog()
+    {
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                CloseButton = true,
+                DisableBackdropClick = true,
+            };
+        DialogService.Show<LoginDialog>("Login", options);
+    }
+}
