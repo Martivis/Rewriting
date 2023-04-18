@@ -18,11 +18,13 @@
         <MudDivider />
         <MudListItem Href="/new_orders">Find job</MudListItem>
         <MudDivider />
-        <MudListItem Href="/my_orders">My orders</MudListItem>
-        <MudDivider />
-        <MudListItem Href="my_contracts">My contracts</MudListItem>
-        <MudDivider />
-        <MudListItem Href="my_offers">My offers</MudListItem>
+        <AuthorizeView>
+            <MudListItem Href="/my_orders">My orders</MudListItem>
+            <MudDivider />
+            <MudListItem Href="my_contracts">My contracts</MudListItem>
+            <MudDivider />
+            <MudListItem Href="my_offers">My offers</MudListItem>
+        </AuthorizeView>
     </MudList>
 </MudDrawer>
 

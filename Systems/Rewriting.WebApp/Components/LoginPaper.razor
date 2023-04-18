@@ -3,24 +3,32 @@
 
 <AuthorizeView>
     <Authorized>
-        <MudText>You are logged in</MudText>
+        <MudMenu Icon="@Icons.Material.Sharp.AccountCircle" Color="Color.Inherit">
+            <MudMenuItem @onclick="OpenLogoutDialog">Logout</MudMenuItem>
+        </MudMenu>
     </Authorized>
     <NotAuthorized>
-        <MudButton @onclick="OpenDialog" Color="Color.Inherit" Variant="Variant.Text">Sign in</MudButton>
+        <MudButton @onclick="OpenLoginDialog" Color="Color.Inherit" Variant="Variant.Text">Sign in</MudButton>
         <MudButton Color="Color.Inherit" Variant="Variant.Text">Register</MudButton>
     </NotAuthorized>
 </AuthorizeView>
 
 @code
 {
-    private void OpenDialog()
+    private readonly DialogOptions dialogOptions = new()
+        {
+            CloseOnEscapeKey = true,
+            CloseButton = true,
+            DisableBackdropClick = true,
+        };
+
+    private void OpenLoginDialog()
     {
-        var options = new DialogOptions
-            {
-                CloseOnEscapeKey = true,
-                CloseButton = true,
-                DisableBackdropClick = true,
-            };
-        DialogService.Show<LoginDialog>("Login", options);
+        DialogService.Show<LoginDialog>("Login", dialogOptions);
+    }
+
+    private void OpenLogoutDialog()
+    {
+        DialogService.Show<LogoutDialog>("Logout?", dialogOptions);
     }
 }

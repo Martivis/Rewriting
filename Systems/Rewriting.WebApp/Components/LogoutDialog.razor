@@ -1,0 +1,20 @@
+﻿@inject IAuthService AuthService
+
+<MudDialog>
+    <DialogContent>
+        <div style="width:150px"></div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton @onclick="Logout" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Logout</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private async Task Logout()
+    {
+        await AuthService.Logout();
+        MudDialog.Close();
+    }
+}
