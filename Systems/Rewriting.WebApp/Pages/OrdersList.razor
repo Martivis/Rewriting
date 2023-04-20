@@ -1,9 +1,4 @@
-﻿@page "/new_orders"
-
-@inject IOrderService OrderService
-
-<MudText Typo="Typo.h4" Align="Align.Center">Available orders</MudText>
-
+﻿
 <MudContainer MaxWidth="MaxWidth.Medium">
     <MudStack AlignItems="AlignItems.Stretch">
         @if (_orders is null)
@@ -31,8 +26,12 @@
     </MudCard>
 </MudContainer>
 
+@code
+{
+    [Parameter]
+    [EditorRequired]
+    public AbstractListService<OrderModel> OrderService { get; set; }
 
-@code {
     private IEnumerable<OrderModel>? _orders;
     private int _page = 1;
     private int _pageSize = 10;

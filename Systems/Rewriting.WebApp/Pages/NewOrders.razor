@@ -1,0 +1,12 @@
+﻿@page "/new_orders"
+
+@inject NewOrderService OrderService
+
+<MudText Typo="Typo.h4" Align="Align.Center">Available orders</MudText>
+
+<OrdersList OrderService="OrderService"/>
+
+
+@code {
+    
+}

@@ -1,6 +1,6 @@
 ﻿namespace Rewriting.WebApp.Services;
 
-public class OrderStub : IOrderService
+public class OrderStub
 {
     public async Task<IEnumerable<OrderModel>> GetOrdersAsync(int page, int pageSize)
     {
