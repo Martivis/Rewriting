@@ -27,7 +27,7 @@ public class BearerTokenService : IAuthService
         if (jwt is null)
             return "";
 
-        if (jwt.ExpireDate < DateTime.UtcNow)
+        if (jwt.ExpireDate > DateTime.UtcNow)
             return jwt.Token;
 
         var refreshToken = await _localStorage.GetItemAsync<string>(RefreshTokenKey);
