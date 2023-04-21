@@ -46,8 +46,8 @@ public static class AuthConfiguration
                 options.Authority = identitySettings.URL;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = false,
+                    ValidateIssuer = false,
                     ValidateAudience = false,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
