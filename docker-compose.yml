@@ -33,3 +33,9 @@ services:
       - rewriting.api
       - rewriting.rabbitmq
 
+  rewriting.webapp:
+    image: ${DOCKER_REGISTRY-}rewritingwebapp
+    build:
+      context: .
+      dockerfile: Systems/Rewriting.WebApp/Dockerfile
+

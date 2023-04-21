@@ -45,7 +45,21 @@ services:
     env_file:
       - env.worker
 
+  rewriting.webapp:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    env_file:
+      - env.webapp
+
 networks:
   shared_rewriting:
     name: rewriting
     driver: bridge
+

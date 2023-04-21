@@ -7,16 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Systems/Rewriting.WebApi/Rewriting.WebApi.csproj", "Systems/Rewriting.WebApi/"]
-RUN dotnet restore "Systems/Rewriting.WebApi/Rewriting.WebApi.csproj"
+COPY ["Systems/Rewriting.WebApp/Rewriting.WebApp.csproj", "Systems/Rewriting.WebApp/"]
+COPY ["Shared/Rewriting.SettingsLoader/Rewriting.Settings.csproj", "Shared/Rewriting.SettingsLoader/"]
+RUN dotnet restore "Systems/Rewriting.WebApp/Rewriting.WebApp.csproj"
 COPY . .
-WORKDIR "/src/Systems/Rewriting.WebApi"
-RUN dotnet build "Rewriting.WebApi.csproj" -c Release -o /app/build
+WORKDIR "/src/Systems/Rewriting.WebApp"
+RUN dotnet build "Rewriting.WebApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Rewriting.WebApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Rewriting.WebApp.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Rewriting.WebApi.dll"]
+ENTRYPOINT ["dotnet", "Rewriting.WebApp.dll"]
