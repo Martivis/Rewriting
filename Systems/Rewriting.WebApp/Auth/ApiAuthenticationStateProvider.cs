@@ -14,6 +14,7 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
         _authService = authService;
     }
+
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await _authService.GetAccessTokenAsync();
@@ -22,20 +23,6 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
-    }
-
-    public void MarkUserAsAuthenticated(string email)
-    {
-        var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }, "apiauth"));
-        var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
-        NotifyAuthenticationStateChanged(authState);
-    }
-
-    public void MarkUserAsLoggedOut()
-    {
-        var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
-        var authState = Task.FromResult(new AuthenticationState(anonymousUser));
-        NotifyAuthenticationStateChanged(authState);
     }
 
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
