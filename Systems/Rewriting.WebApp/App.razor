@@ -1,8 +1,28 @@
-﻿<CascadingAuthenticationState>
+﻿@inject IDialogService DialogService
+
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-            
+
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <Authorizing>
+                    <div>
+                        <MudText>Authorizing</MudText>
+                        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+                    </div>
+                </Authorizing>
+                <NotAuthorized>
+                    @if (@context.User.Identity?.IsAuthenticated == true)
+                    {
+                        <MudAlert Severity="Severity.Warning">You are not authorized to be here</MudAlert>
+                    }
+                    else
+                    {
+                        OpenLoginDialog();
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
@@ -15,4 +35,15 @@
 
 @code
 {
+    private readonly DialogOptions dialogOptions = new()
+        {
+            CloseOnEscapeKey = true,
+            CloseButton = true,
+            DisableBackdropClick = true,
+        };
+
+    private void OpenLoginDialog()
+    {
+        DialogService.Show<LoginDialog>("Login", dialogOptions);
+    }
 }
