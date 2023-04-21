@@ -16,7 +16,7 @@ public class LoginResult
     public string RefreshToken { get; set; }
 
     [JsonPropertyName("expires_in")]
-    public int? ExpiresIn { get; set; }
+    public int ExpiresIn { get; set; }
 
     [JsonPropertyName("token_type")]
     public string TokenType { get; set; }

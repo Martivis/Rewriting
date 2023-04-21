@@ -8,32 +8,20 @@ using System.Text.Json;
 
 public class ApiAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private readonly HttpClient _httpClient;
-    private readonly ILocalStorageService _localStorage;
+    private readonly IAuthService _authService;
 
-    public ApiAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+    public ApiAuthenticationStateProvider(IAuthService authService)
     {
-        _httpClient = httpClient;
-        _localStorage = localStorage;
+        _authService = authService;
     }
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        string savedToken = "";
-        try
-        {
-            savedToken = await _localStorage.GetItemAsync<string>("authToken");
-        }
-        catch (Exception ex)
-        {
-            await Console.Out.WriteLineAsync(ex.Message);
-        }
+        var token = await _authService.GetAccessTokenAsync();
 
-        if (string.IsNullOrWhiteSpace(savedToken))
+        if (string.IsNullOrWhiteSpace(token))
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
-
-        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
     }
 
     public void MarkUserAsAuthenticated(string email)

@@ -5,7 +5,8 @@ namespace Rewriting.WebApp.Services
 {
     public class NewOrderService : AbstractListService<OrderModel>
     {
-        public NewOrderService(HttpClient httpClient, WebAppSettings settings) : base(httpClient, settings)
+        public NewOrderService(HttpClient httpClient, WebAppSettings settings, IAuthService authService) 
+            : base(httpClient, settings, authService)
         {
         }
 

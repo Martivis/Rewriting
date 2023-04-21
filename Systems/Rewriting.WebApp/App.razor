@@ -1,6 +1,4 @@
-﻿@inject AuthenticationStateProvider AuthStateProvider
-
-<CascadingAuthenticationState>
+﻿<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -17,8 +15,4 @@
 
 @code
 {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await AuthStateProvider.GetAuthenticationStateAsync();
-    }
 }

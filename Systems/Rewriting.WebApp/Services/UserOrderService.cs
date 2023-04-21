@@ -2,7 +2,8 @@
 {
     public class UserOrderService : AbstractListService<OrderModel>
     {
-        public UserOrderService(HttpClient httpClient, WebAppSettings settings) : base(httpClient, settings)
+        public UserOrderService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
+            : base(httpClient, settings, authService)
         {
         }
 

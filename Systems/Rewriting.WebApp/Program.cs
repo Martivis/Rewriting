@@ -15,12 +15,13 @@ services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddMudServices();
 services.AddHttpClient();
-//services.AddAuthorizationCore();
 services.AddBlazoredLocalStorage();
 
 services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
-services.AddScoped<IAuthService, AuthService>();
-services.AddScoped<IOrderService, OrderService>();
+services.AddScoped<IAuthService, BearerTokenService>();
+
+services.AddScoped<NewOrderService>();
+services.AddScoped<UserOrderService>();
 
 var settings = SettingsLoader.Load<WebAppSettings>("WebApp");
 services.AddSingleton(settings);

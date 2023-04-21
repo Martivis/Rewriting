@@ -1,4 +1,5 @@
 ﻿@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
 
 <MudDialog>
     <DialogContent>
@@ -29,9 +30,17 @@
 
     private async Task Submit()
     {
-        var result = await AuthService.Login(_model);
+        var result = await AuthService.LoginAsync(_model);
 
         if (result.Successful)
+        {
+            Refresh();
             MudDialog.Close();
+        }
+    }
+
+    private void Refresh()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }

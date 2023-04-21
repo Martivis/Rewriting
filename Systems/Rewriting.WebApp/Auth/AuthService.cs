@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 
-public class AuthService : IAuthService
+public class AuthService// : IAuthService
 {
     private readonly HttpClient _httpClient;
     private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -27,7 +27,7 @@ public class AuthService : IAuthService
         _settings = webAppSettings;
     }
 
-    public async Task<LoginResult> Login(LoginModel loginModel)
+    public async Task<LoginResult> LoginAsync(LoginModel loginModel)
     {
         var url = $"{_settings.IdentityTokenUri}";
 
@@ -64,7 +64,7 @@ public class AuthService : IAuthService
         return loginResult;
     }
 
-    public async Task Logout()
+    public async Task LogoutAsync()
     {
         await _localStorage.RemoveItemAsync("authToken");
         await _localStorage.RemoveItemAsync("refreshToken");
