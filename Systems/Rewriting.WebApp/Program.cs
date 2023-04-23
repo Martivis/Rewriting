@@ -18,7 +18,7 @@ services.AddHttpClient();
 services.AddBlazoredLocalStorage();
 
 services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
-services.AddScoped<IAuthService, BearerTokenService>();
+services.AddScoped<IAuthService, AuthService>();
 
 services.AddScoped<NewOrderService>();
 services.AddScoped<UserOrderService>();

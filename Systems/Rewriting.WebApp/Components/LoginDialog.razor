@@ -6,6 +6,13 @@
         <div style="width: 500px">
             <MudForm @ref="_form" ReadOnly="false">
 
+                @if (ShowError)
+                {
+                    <MudAlert Severity="Severity.Error">
+                        @ErrorDescription
+                    </MudAlert>
+                }
+
                 <MudTextField T="string" Label="Email" @bind-Value="_model.Email" For="@(() => _model.Email)"/>
 
                 <MudTextField T="string" Label="Password" InputType="InputType.Password" @bind-Value="_model.Password" For="@(() => _model.Password)"/>
@@ -28,6 +35,9 @@
     private MudForm _form = new();
     private LoginModel _model = new();
 
+    private bool ShowError;
+    private string ErrorDescription = "";
+
     private async Task Submit()
     {
         var result = await AuthService.LoginAsync(_model);
@@ -36,6 +46,11 @@
         {
             Refresh();
             MudDialog.Close();
+        }
+        else
+        {
+            ErrorDescription = result.ErrorDescription;
+            ShowError = true;
         }
     }
 

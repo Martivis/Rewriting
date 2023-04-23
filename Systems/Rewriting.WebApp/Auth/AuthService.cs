@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Rewriting.WebApp;
 
-public class BearerTokenService : IAuthService
+public class AuthService : IAuthService
 {
     private const string AccessTokenKey = "accessToken";
     private const string RefreshTokenKey = "refreshToken";
@@ -13,7 +13,7 @@ public class BearerTokenService : IAuthService
     private readonly HttpClient _httpClient;
     private readonly WebAppSettings _settings;
 
-    public BearerTokenService(ILocalStorageService localStorage, HttpClient httpClient, WebAppSettings settings)
+    public AuthService(ILocalStorageService localStorage, HttpClient httpClient, WebAppSettings settings)
     {
         _localStorage = localStorage;
         _httpClient = httpClient;
@@ -65,14 +65,31 @@ public class BearerTokenService : IAuthService
         var url = _settings.IdentityTokenUri;
 
         var requestContent = new FormUrlEncodedContent(requestBody);
-        var response = await _httpClient.PostAsync(url, requestContent);
-        var content = await response.Content.ReadAsStringAsync();
 
-        var loginResult = JsonSerializer.Deserialize<LoginResult>(content, 
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new LoginResult();
-        loginResult.Successful = response.IsSuccessStatusCode;
+        try
+        {
+            var response = await _httpClient.PostAsync(url, requestContent);
+            var content = await response.Content.ReadAsStringAsync();
 
-        return loginResult;
+            var loginResult = JsonSerializer.Deserialize<LoginResult>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new LoginResult();
+            loginResult.Successful = response.IsSuccessStatusCode;
+            return loginResult;
+        }
+        catch (HttpRequestException)
+        {
+            return new()
+            {
+                ErrorDescription = "Unable to connect to server",
+            };
+        }
+        catch
+        {
+            return new()
+            {
+                ErrorDescription = "Unknown error"
+            };
+        }
     }
 
     private async Task<TokenModel> RefreshAccessTokenAsync(string refreshToken)
