@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Net.Http.Headers;
 
-namespace Rewriting.WebApp.Services;
+namespace Rewriting.WebApp;
 
 public abstract class AbstractListService<TData>
 {
@@ -17,11 +17,11 @@ public abstract class AbstractListService<TData>
         _authService = authService;        
     }
 
-    public async Task<IEnumerable<TData>> GetOrdersAsync(int page, int pageSize)
+    public async Task<IEnumerable<TData>> GetItemsAsync(int page, int pageSize, string otherParams = "")
     {
         await SetAuthHeader();
 
-        string url = $"{_settings.ApiUri}/{GetEndpointUrn()}?page={page}&pageSize={pageSize}";
+        string url = $"{_settings.ApiUri}/{GetEndpointUrn()}?{otherParams}&page={page}&pageSize={pageSize}";
 
         var response = await _httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();

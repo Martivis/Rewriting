@@ -1,0 +1,27 @@
+﻿@page "/order/{orderId:Guid}"
+
+@inject OrderDetailsService OrderDetailsService
+@inject OrderOffersService OffersService
+
+<MudText Typo="Typo.h3">Order</MudText>
+<MudText>@_model.Title</MudText>
+<MudText>@_model.Text</MudText>
+<MudDivider />
+<MudText>@_model.Comment</MudText>
+<MudText>@_model.ClientName</MudText>
+<MudText>@_model.PublishDate</MudText>
+<MudText>@_model.Status</MudText>
+
+@if (_model.ContractorUid is not null)
+{
+    <MudText>Contractor: @_model.ContractorName</MudText>
+    <MudText>Contract publish date: @_model.ContractPublishDate</MudText>
+}
+
+
+@code {
+    [Parameter]
+    public Guid Uid { get; set; }
+
+    private OrderDetailsModel _model;
+}

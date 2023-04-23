@@ -43,7 +43,7 @@
 
     private async Task GetOrders()
     {
-        _orders = await OrderService.GetOrdersAsync(_page - 1, _pageSize);
+        _orders = await OrderService.GetItemsAsync(_page - 1, _pageSize);
     }
 
     private async Task NextPage()

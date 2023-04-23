@@ -1,4 +1,4 @@
-﻿namespace Rewriting.WebApp.Services;
+﻿namespace Rewriting.WebApp;
 
 public enum OrderStatus
 {
