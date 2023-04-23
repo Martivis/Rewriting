@@ -4,25 +4,33 @@
 <MudDialog>
     <DialogContent>
         <div style="width: 500px">
-            <MudForm @ref="_form" ReadOnly="false">
-
-                @if (ShowError)
+            <MudForm @ref="_form" @bind-IsValid="@_isValid">
+                @if (_showError)
                 {
                     <MudAlert Severity="Severity.Error">
-                        @ErrorDescription
+                        @_errorDescription
                     </MudAlert>
                 }
 
-                <MudTextField T="string" Label="Email" @bind-Value="_model.Email" For="@(() => _model.Email)"/>
+                <MudTextField T="string" 
+                    Label="Email" 
+                    @bind-Value="_model.Email" 
+                    For="@(() => _model.Email)"
+                    Required="true"/>
 
-                <MudTextField T="string" Label="Password" InputType="InputType.Password" @bind-Value="_model.Password" For="@(() => _model.Password)"/>
+                <MudTextField T="string"
+                    Label="Password"
+                    InputType="InputType.Password"
+                    @bind-Value="_model.Password"
+                    For="@(() => _model.Password)"
+                    Required="true"/>
 
                 <div class="d-flex align-center justify-space-between">
                     <MudCheckBox T="bool" Label="Remember me" @bind-Checked="_model.RememberMe" For="@(() => _model.RememberMe)" />
                 </div>
-
             </MudForm>
         </div>
+
     </DialogContent>
     <DialogActions>
         <MudButton @onclick="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
@@ -35,11 +43,18 @@
     private MudForm _form = new();
     private LoginModel _model = new();
 
-    private bool ShowError;
-    private string ErrorDescription = "";
+    private bool _isValid;
+    private bool _showError;
+    private string _errorDescription = "";
 
     private async Task Submit()
     {
+        if (!_isValid)
+        {
+            await _form.Validate();
+            return;
+        }
+
         var result = await AuthService.LoginAsync(_model);
 
         if (result.Successful)
@@ -49,8 +64,8 @@
         }
         else
         {
-            ErrorDescription = result.ErrorDescription;
-            ShowError = true;
+            _errorDescription = result.ErrorDescription;
+            _showError = true;
         }
     }
 
