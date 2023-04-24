@@ -7,8 +7,15 @@ public class OrderOffersService : AbstractListService<OfferModel>
     {
     }
 
+    public Guid OrderUid { get; set; }
+
     protected override string GetEndpointUrn()
     {
-        return "v1/Offers/GetOffersByOrders";
+        return "v1/Offers/GetOffersByOrder";
+    }
+
+    protected override string GetAdditionalParameters()
+    {
+        return "orderUid=" + OrderUid.ToString();
     }
 }

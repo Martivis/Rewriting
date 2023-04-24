@@ -16,7 +16,7 @@ public class OrderDetailsService
         _authService = authService;
     }
 
-    public async Task<OrderDetailsModel> GetOrder(Guid uid)
+    public async Task<OrderDetailsModel> GetOrderAsync(Guid uid)
     {
         await SetAuthHeader();
 
@@ -26,7 +26,7 @@ public class OrderDetailsService
         var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
-            throw new Exception(content);
+            throw new HttpRequestException(content);
 
         var data = JsonSerializer.Deserialize<OrderDetailsModel>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new OrderDetailsModel();

@@ -22,6 +22,8 @@ services.AddScoped<IAuthService, AuthService>();
 
 services.AddScoped<NewOrderService>();
 services.AddScoped<UserOrderService>();
+services.AddScoped<OrderDetailsService>();
+services.AddScoped<OrderOffersService>();
 
 var settings = SettingsLoader.Load<WebAppSettings>("WebApp");
 services.AddSingleton(settings);

@@ -3,37 +3,52 @@
 @inject OrderDetailsService OrderDetailsService
 @inject OrderOffersService OffersService
 
-<MudCard>\
-
-<MudText Typo="Typo.h3">Order</MudText>
-<MudText>@_model.Title</MudText>
-<MudText>@_model.Text</MudText>
-<MudDivider />
-<MudText>@_model.Comment</MudText>
-<MudText>@_model.ClientName</MudText>
-<MudText>@_model.PublishDate</MudText>
-<MudText>@_model.Status</MudText>
-
-</MudCard>
-
-<MudCard>
-
-    
-
-</MudCard>
-
-@if (_model.ContractorUid is not null)
+@if (_orderModel is null)
 {
-    <MudText>Contractor: @_model.ContractorName</MudText>
-    <MudText>Contract publish date: @_model.ContractPublishDate</MudText>
-}
 
+}
+else
+{
+    <MudCard>
+        <MudText Typo="Typo.h3">Order</MudText>
+        <MudText>@_orderModel.Title</MudText>
+        <MudText>@_orderModel.Text</MudText>
+        <MudDivider />
+        <MudText>@_orderModel.Comment</MudText>
+        <MudText>@_orderModel.ClientName</MudText>
+        <MudText>@_orderModel.PublishDate</MudText>
+        <MudText>@_orderModel.Status</MudText>
+    </MudCard>
+
+    <MudCard>
+
+        @if (_orderModel.ContractorUid is not null)
+        {
+            <MudText>Contractor: @_orderModel.ContractorName</MudText>
+            <MudText>Contract publish date: @_orderModel.ContractPublishDate</MudText>
+        }
+        else
+        {
+            <ItemsList ItemService="OffersService">
+                <OfferCard Model="@context" />    
+            </ItemsList>
+        }
+
+    </MudCard>
+}
 
 @code {
     [Parameter]
     public string orderUid { get; set; }
 
     private Guid _uid;
+    private OrderDetailsModel _orderModel;
 
-    private OrderDetailsModel _model;
+    protected override async Task OnInitializedAsync()
+    {
+        _uid = Guid.Parse(orderUid);
+        OffersService.OrderUid = _uid;
+
+        _orderModel = await OrderDetailsService.GetOrderAsync(_uid);
+    }
 }

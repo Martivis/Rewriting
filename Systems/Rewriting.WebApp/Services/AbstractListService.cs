@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Net.Http.Headers;
 
 namespace Rewriting.WebApp;
@@ -17,21 +16,18 @@ public abstract class AbstractListService<TData>
         _authService = authService;        
     }
 
-    public async Task<IEnumerable<TData>> GetItemsAsync(int page, int pageSize, string otherParams = "")
+    public async Task<IEnumerable<TData>> GetItemsAsync(int page, int pageSize)
     {
         var headerTask = SetAuthHeader();
 
-        if (!string.IsNullOrEmpty(otherParams))
-            otherParams = "&" + otherParams;
-
-        string url = $"{_settings.ApiUri}/{GetEndpointUrn()}?page={page}&pageSize={pageSize}{otherParams}";
+        string url = $"{_settings.ApiUri}/{GetEndpointUrn()}?page={page}&pageSize={pageSize}{GetRequestParameters()}";
 
         await headerTask;
         var response = await _httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
-            throw new Exception(content);
+            throw new HttpRequestException(content);
 
         var data = JsonSerializer.Deserialize<IEnumerable<TData>>(content, 
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<TData>();
@@ -46,4 +42,13 @@ public abstract class AbstractListService<TData>
     }
 
     protected abstract string GetEndpointUrn();
+
+    private string GetRequestParameters()
+    {
+        var additionalParameters = GetAdditionalParameters();
+        if (string.IsNullOrEmpty(additionalParameters))
+            return "";
+        return "&" + additionalParameters;
+    }
+    protected virtual string GetAdditionalParameters() => "";
 }

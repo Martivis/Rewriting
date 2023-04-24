@@ -6,7 +6,7 @@
         <MudText Typo="Typo.subtitle1">@Model.PublishDate</MudText>
     </MudCardContent>
     <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Details</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/order/{Model.Uid.ToString()}")">Details</MudButton>
     </MudCardActions>
 </MudCard>
 

@@ -1,0 +1,14 @@
+﻿<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.h5">Contractor: @Model.ContractorName</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.Price</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.Comment</MudText>
+    </MudCardContent>
+</MudCard>
+
+
+@code
+{
+    [Parameter]
+    public OfferModel Model { get; set; }
+}
