@@ -7,7 +7,7 @@ public class UserOrderService : AbstractListService<OrderModel>
     {
     }
 
-    protected override string GetEndpointUrn()
+    protected override string GetEndpoint()
     {
         return "v1/Orders/GetOrdersByUser";
     }

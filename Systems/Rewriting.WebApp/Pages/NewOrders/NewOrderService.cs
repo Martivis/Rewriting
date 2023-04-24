@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
-
-namespace Rewriting.WebApp;
+﻿namespace Rewriting.WebApp;
 
 public class NewOrderService : AbstractListService<OrderModel>
 {
@@ -10,7 +7,7 @@ public class NewOrderService : AbstractListService<OrderModel>
     {
     }
 
-    protected override string GetEndpointUrn()
+    protected override string GetEndpoint()
     {
         return "v1/Orders/GetNewOrders";
     }

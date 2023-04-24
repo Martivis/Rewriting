@@ -9,7 +9,7 @@ public class OrderOffersService : AbstractListService<OfferModel>
 
     public Guid OrderUid { get; set; }
 
-    protected override string GetEndpointUrn()
+    protected override string GetEndpoint()
     {
         return "v1/Offers/GetOffersByOrder";
     }
