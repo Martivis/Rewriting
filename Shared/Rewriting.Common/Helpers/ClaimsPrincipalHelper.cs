@@ -12,6 +12,7 @@ public static class ClaimsPrincipalHelper
     public static Guid GetUid(this ClaimsPrincipal principal)
     {
         var nameIdentifierClaim = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)
+            ?? principal.Claims.FirstOrDefault(claim => claim.Type == "sub")
             ?? throw new InvalidOperationException("Claim containing Uid now found");
 
         return Guid.Parse(nameIdentifierClaim.Value);

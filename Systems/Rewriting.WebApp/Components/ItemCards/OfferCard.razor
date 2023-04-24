@@ -1,0 +1,34 @@
+﻿
+<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.h5">Contractor: @Model.ContractorName</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.Price</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.Comment</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        @if (UserIsClient())
+        {
+            <MudButton Color="Color.Primary">Accept</MudButton>
+        }
+    </MudCardActions>
+</MudCard>
+
+
+@code
+{
+    [Parameter]
+    public OfferModel Model { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private ClaimsPrincipal User;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        User = authState.User;
+    }
+
+    private bool UserIsClient() => User.GetUid() == Model.ClientUid;
+}

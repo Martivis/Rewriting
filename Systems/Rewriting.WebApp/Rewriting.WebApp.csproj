@@ -18,11 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Rewriting.Common\Rewriting.Common.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.SettingsLoader\Rewriting.Settings.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Components\LogoutDialog.razor">
+    <Content Update="Components\Login\LogoutDialog.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
