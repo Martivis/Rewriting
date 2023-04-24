@@ -1,7 +1,9 @@
-﻿@page "/order/{orderId:Guid}"
+﻿@page "/order/{orderUid}"
 
 @inject OrderDetailsService OrderDetailsService
 @inject OrderOffersService OffersService
+
+<MudCard>\
 
 <MudText Typo="Typo.h3">Order</MudText>
 <MudText>@_model.Title</MudText>
@@ -12,6 +14,14 @@
 <MudText>@_model.PublishDate</MudText>
 <MudText>@_model.Status</MudText>
 
+</MudCard>
+
+<MudCard>
+
+    
+
+</MudCard>
+
 @if (_model.ContractorUid is not null)
 {
     <MudText>Contractor: @_model.ContractorName</MudText>
@@ -21,7 +31,9 @@
 
 @code {
     [Parameter]
-    public Guid Uid { get; set; }
+    public string orderUid { get; set; }
+
+    private Guid _uid;
 
     private OrderDetailsModel _model;
 }

@@ -1,7 +1,9 @@
-﻿
+﻿@typeparam TModel
+
+
 <MudContainer MaxWidth="MaxWidth.Medium">
     <MudStack AlignItems="AlignItems.Stretch">
-        @if (_orders is null)
+        @if (_items is null)
         {
             @for (int i = 0; i < _pageSize; i++)
             {
@@ -10,9 +12,9 @@
         }
         else
         {
-            @foreach (var order in _orders)
+            @foreach (var item in _items)
             {
-                <OrderCard Model="order" />
+                @ChildContent(item)
             }
         }
     </MudStack>
@@ -30,38 +32,42 @@
 {
     [Parameter]
     [EditorRequired]
-    public AbstractListService<OrderModel> OrderService { get; set; }
+    public AbstractListService<TModel> ItemService { get; set; }
 
-    private IEnumerable<OrderModel>? _orders;
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment<TModel> ChildContent { get; set; }
+
+    private IEnumerable<TModel>? _items;
     private int _page = 1;
     private int _pageSize = 10;
 
     protected override async Task OnInitializedAsync()
     {
-        await GetOrders();
+        await GetItems();
     }
 
-    private async Task GetOrders()
+    private async Task GetItems()
     {
-        _orders = await OrderService.GetItemsAsync(_page - 1, _pageSize);
+        _items = await ItemService.GetItemsAsync(_page - 1, _pageSize);
     }
 
     private async Task NextPage()
     {
-        if (_orders is null)
+        if (_items is null)
             return;
 
         _page++;
-        await GetOrders();
-        if (!_orders.Any())
+        await GetItems();
+        if (!_items.Any())
             await PrevPage();
     }
 
     private async Task PrevPage()
     {
-        if (_orders is null || _page <= 1)
+        if (_items is null || _page <= 1)
             return;
         _page--;
-        await GetOrders();
+        await GetItems();
     }
 }

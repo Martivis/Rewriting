@@ -4,7 +4,9 @@
 
 <MudText Typo="Typo.h4" Align="Align.Center">My orders</MudText>
 
-<OrdersList OrderService="OrderService" />
+<OrdersList ItemService="OrderService">
+    <OrderCard Model="@context" />
+</OrdersList>
 
 @code {
 

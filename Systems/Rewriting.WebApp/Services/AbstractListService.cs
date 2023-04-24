@@ -19,10 +19,14 @@ public abstract class AbstractListService<TData>
 
     public async Task<IEnumerable<TData>> GetItemsAsync(int page, int pageSize, string otherParams = "")
     {
-        await SetAuthHeader();
+        var headerTask = SetAuthHeader();
 
-        string url = $"{_settings.ApiUri}/{GetEndpointUrn()}?{otherParams}&page={page}&pageSize={pageSize}";
+        if (!string.IsNullOrEmpty(otherParams))
+            otherParams = "&" + otherParams;
 
+        string url = $"{_settings.ApiUri}/{GetEndpointUrn()}?page={page}&pageSize={pageSize}{otherParams}";
+
+        await headerTask;
         var response = await _httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
 
