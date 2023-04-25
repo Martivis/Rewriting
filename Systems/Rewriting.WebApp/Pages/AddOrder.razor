@@ -1,0 +1,40 @@
+﻿@page "/add_order"
+
+@inject OrderService OrderService
+@inject NavigationManager NavigationManager
+
+<MudCard>
+    <MudCardHeader>
+        <MudText>Add order</MudText>
+    </MudCardHeader>
+
+    <MudCardContent>
+        <MudForm @ref="_form">
+            <MudTextField @bind-Value="_model.Title" T="string" Variant="Variant.Outlined" Counter="50" 
+                Label="Title" Immediate="true" Required="true" />
+            <MudTextField @bind-Value="_model.Text" T="string" Variant="Variant.Outlined" 
+                Label="Text" Lines="10" Required="true" />
+            <MudTextField @bind-Value="_model.Comment" T="string" Variant="Variant.Outlined" 
+                Label="Comment" Lines="5" Required="true"/>
+        </MudForm>
+    </MudCardContent>
+
+    <MudCardActions>
+        <MudButton OnClick="Submit" Color="Color.Primary">Add</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    private MudForm? _form = new();
+    private AddOrderModel _model = new();
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+        if (_form!.IsValid)
+        {
+            await OrderService.AddNewOrder(_model);
+            NavigationManager.NavigateTo("/my_orders");
+        }
+    }
+}
