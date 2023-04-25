@@ -65,7 +65,7 @@ namespace Rewriting.API.Controllers.Offers
         /// <returns>OfferResponse with information about created offer</returns>
         [HttpPost]
         [Authorize(Policy = AppScopes.OffersWrite)]
-        public async Task<OfferResponse> AddOffer(AddOfferRequest request)
+        public async Task<OfferResponse> AddOffer([FromBody] AddOfferRequest request)
         {
             var addOfferModel = _mapper.Map<AddOfferModel>(request);
             addOfferModel.ContractorUid = User.GetUid();
@@ -81,7 +81,7 @@ namespace Rewriting.API.Controllers.Offers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AcceptOffer(Guid offerUid)
+        public async Task<IActionResult> AcceptOffer([FromBody] Guid offerUid)
         {
             var offer = await _offerService.GetOfferAuthAsync(offerUid);
 

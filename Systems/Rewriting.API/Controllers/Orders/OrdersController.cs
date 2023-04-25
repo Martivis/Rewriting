@@ -38,7 +38,8 @@ namespace Rewriting.API.Controllers.Orders
         /// </summary>
         /// <returns>The IEnumerable of OrderResponse representing new orders</returns>
         [HttpGet]
-        public async Task<IEnumerable<OrderResponse>> GetNewOrders([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+        public async Task<IEnumerable<OrderResponse>> GetNewOrders([FromQuery] int page = 0, 
+                                                                   [FromQuery] int pageSize = 10)
         {
             var orderModels = await _orderService.GetNewOrdersAsync(page, pageSize);
             return _mapper.Map<IEnumerable<OrderResponse>>(orderModels);
@@ -51,7 +52,8 @@ namespace Rewriting.API.Controllers.Orders
         /// <exception cref="ProcessException"></exception>
         [HttpGet]
         [Authorize(Policy = AppScopes.OrdersRead)]
-        public async Task<IEnumerable<OrderResponse>> GetOrdersByUser([FromQuery] int page = 0, [FromQuery] int pageSize = 10)
+        public async Task<IEnumerable<OrderResponse>> GetOrdersByUser([FromQuery] int page = 0, 
+                                                                      [FromQuery] int pageSize = 10)
         {
             var userUid = User.GetUid();
             
@@ -66,7 +68,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <returns>OrderDetailsResponse</returns>
         [HttpGet]
         [Authorize]
-        public async Task<OrderDetailsResponse> GetOrderDetails(Guid orderUid)
+        public async Task<OrderDetailsResponse> GetOrderDetails([FromQuery] Guid orderUid)
         {
             var orderModel = await _orderService.GetOrderDetailsAsync(orderUid);
             return _mapper.Map<OrderDetailsResponse>(orderModel);
@@ -79,7 +81,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <returns>OrderDetailsResponse with information about created order</returns>
         [HttpPost]
         [Authorize(Policy = AppScopes.OrdersWrite)]
-        public async Task<OrderDetailsResponse> AddOrder(AddOrderRequest request)
+        public async Task<OrderDetailsResponse> AddOrder([FromBody] AddOrderRequest request)
         {
             var orderModel =  _mapper.Map<AddOrderModel>(request);
             orderModel.ClientUid = User.GetUid();
@@ -96,7 +98,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <returns></returns>
         [HttpPatch]
         [Authorize]
-        public async Task<IActionResult> CancelOrder(Guid orderUid)
+        public async Task<IActionResult> CancelOrder([FromBody] Guid orderUid)
         {
             var orderModel = await _orderService.GetOrderAsync(orderUid);
 
@@ -122,7 +124,7 @@ namespace Rewriting.API.Controllers.Orders
         /// <returns></returns>
         [HttpDelete]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> DeleteOrder(Guid orderUid)
+        public async Task<IActionResult> DeleteOrder([FromBody] Guid orderUid)
         {
             await _orderService.DeleteOrderAsync(orderUid);
             return Ok();

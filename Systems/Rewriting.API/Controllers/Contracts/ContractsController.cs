@@ -50,7 +50,7 @@ public class ContractsController : ControllerBase
     /// <returns>ContractDetailsResponse</returns>
     [HttpGet]
     [Authorize]
-    public async Task<ContractDetailsResponse> GetContractDetails(Guid contractUid)
+    public async Task<ContractDetailsResponse> GetContractDetails([FromQuery] Guid contractUid)
     {
         var contract = await _contractService.GetContractorAuthAsync(contractUid);
 
@@ -72,7 +72,9 @@ public class ContractsController : ControllerBase
     /// <returns>IEnumerable of ResultResponse</returns>
     [HttpGet]
     [Authorize]
-    public async Task<IEnumerable<ResultResponse>> GetResults(Guid contractUid, int page = 0, int pageSize = 10)
+    public async Task<IEnumerable<ResultResponse>> GetResults([FromQuery] Guid contractUid,
+                                                              [FromQuery] int page = 0, 
+                                                              [FromQuery] int pageSize = 10)
     {
         var clientAuth = await _contractService.GetClientAuthAsync(contractUid);
         var contractorAuth = await _contractService.GetContractorAuthAsync(contractUid);
@@ -97,7 +99,7 @@ public class ContractsController : ControllerBase
     /// <returns>IActionResult</returns>
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddResult(AddResultRequest request)
+    public async Task<IActionResult> AddResult([FromBody] AddResultRequest request)
     {
         var contractAuth = await _contractService.GetContractorAuthAsync(request.ContractUid);
 
@@ -117,7 +119,7 @@ public class ContractsController : ControllerBase
     /// <returns>IActionResult</returns>
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> AcceptResult(Guid contractUid)
+    public async Task<IActionResult> AcceptResult([FromBody] Guid contractUid)
     {
         var contractAuth = await _contractService.GetClientAuthAsync(contractUid);
 
@@ -136,7 +138,7 @@ public class ContractsController : ControllerBase
     /// <returns>IActionResult</returns>
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> DeclineResult(Guid contractUid)
+    public async Task<IActionResult> DeclineResult([FromBody] Guid contractUid)
     {
         var contractAuth = await _contractService.GetClientAuthAsync(contractUid);
 
@@ -155,7 +157,7 @@ public class ContractsController : ControllerBase
     /// <returns>IActionResult</returns>
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> DeclineContractor(Guid contractUid)
+    public async Task<IActionResult> DeclineContractor([FromBody] Guid contractUid)
     {
         var contractAuth = await _contractService.GetClientAuthAsync(contractUid);
 
