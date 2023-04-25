@@ -4,7 +4,7 @@
 <MudDialog>
     <DialogContent>
         <div style="width: 500px">
-            <MudForm @ref="_form" @bind-IsValid="@_isValid">
+            <MudForm @ref="_form">
                 @if (_showError)
                 {
                     <MudAlert Severity="Severity.Error">
@@ -40,20 +40,17 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    private MudForm _form = new();
+    private MudForm? _form = new();
     private LoginModel _model = new();
 
-    private bool _isValid;
     private bool _showError;
     private string _errorDescription = "";
 
     private async Task Submit()
     {
-        if (!_isValid)
-        {
-            await _form.Validate();
+        await _form!.Validate();
+        if (!_form.IsValid)
             return;
-        }
 
         var result = await AuthService.LoginAsync(_model);
 
