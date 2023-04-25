@@ -1,4 +1,5 @@
-﻿
+﻿@inject OfferAcceptService OfferAcceptService
+
 <MudCard>
     <MudCardContent>
         <MudText Typo="Typo.h5">Contractor: @Model.ContractorName</MudText>
@@ -8,7 +9,7 @@
     <MudCardActions>
         @if (UserIsClient())
         {
-            <MudButton Color="Color.Primary">Accept</MudButton>
+            <MudButton Color="Color.Primary" OnClick="AcceptOffer">Accept</MudButton>
         }
     </MudCardActions>
 </MudCard>
@@ -31,4 +32,6 @@
     }
 
     private bool UserIsClient() => User.GetUid() == Model.ClientUid;
+
+    private async Task AcceptOffer() => await OfferAcceptService.AcceptOfferAsync(Model.Uid);
 }
