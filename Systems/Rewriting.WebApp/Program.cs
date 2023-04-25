@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
 using Rewriting.Settings;
 using Rewriting.WebApp;
-using Rewriting.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,14 +19,14 @@ services.AddBlazoredLocalStorage();
 services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 services.AddScoped<IAuthService, AuthService>();
 
-services.AddScoped<IApiGetService, ApiGetService>();
-services.AddScoped<IApiPostService, ApiPostService>();
+services.AddScoped<IApiService, ApiService>();
 
 services.AddScoped<NewOrdersService>();
 services.AddScoped<UserOrdersService>();
-services.AddScoped<OrderDetailsService>();
+services.AddScoped<OrderService>();
+
 services.AddScoped<OrderOffersService>();
-services.AddScoped<OfferAcceptService>();
+services.AddScoped<OfferService>();
 
 var settings = SettingsLoader.Load<WebAppSettings>("WebApp");
 services.AddSingleton(settings);

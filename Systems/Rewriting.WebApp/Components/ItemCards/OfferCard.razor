@@ -1,4 +1,4 @@
-﻿@inject OfferAcceptService OfferAcceptService
+﻿@inject OfferService OfferService
 
 <MudCard>
     <MudCardContent>
@@ -33,5 +33,5 @@
 
     private bool UserIsClient() => User.GetUid() == Model.ClientUid;
 
-    private async Task AcceptOffer() => await OfferAcceptService.AcceptOfferAsync(Model.Uid);
+    private async Task AcceptOffer() => await OfferService.AcceptOfferAsync(Model.Uid);
 }

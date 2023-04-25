@@ -1,8 +1,9 @@
-﻿namespace Rewriting.WebApp;
+﻿
+namespace Rewriting.WebApp;
 
 public class UserOrdersService : AbstractListService<OrderModel>
 {
-    public UserOrdersService(IApiGetService apiService) : base(apiService)
+    public UserOrdersService(IApiService apiService) : base(apiService)
     {
     }
 

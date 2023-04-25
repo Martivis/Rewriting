@@ -2,7 +2,7 @@
 
 public class OrderOffersService : AbstractListService<OfferModel>
 {
-    public OrderOffersService(IApiGetService apiService) : base(apiService)
+    public OrderOffersService(IApiService apiService) : base(apiService)
     {
     }
 

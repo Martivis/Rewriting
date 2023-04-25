@@ -5,9 +5,9 @@ namespace Rewriting.WebApp;
 
 public abstract class AbstractListService<TData>
 {
-    private readonly IApiGetService _apiService;
+    private readonly IApiService _apiService;
 
-    protected AbstractListService(IApiGetService apiService)
+    protected AbstractListService(IApiService apiService)
     {
         _apiService = apiService;
     }
