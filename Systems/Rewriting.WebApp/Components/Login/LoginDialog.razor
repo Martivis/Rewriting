@@ -59,7 +59,7 @@
 
         if (result.Successful)
         {
-            Refresh();
+            NavigationManager.RefreshPage();
             MudDialog.Close();
         }
         else
@@ -67,10 +67,5 @@
             _errorDescription = result.ErrorDescription;
             _showError = true;
         }
-    }
-
-    private void Refresh()
-    {
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }

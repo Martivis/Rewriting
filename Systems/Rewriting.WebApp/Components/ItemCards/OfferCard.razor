@@ -1,4 +1,5 @@
 ﻿@inject OfferService OfferService
+@inject NavigationManager NavigationManager
 
 <MudCard>
     <MudCardContent>
@@ -33,5 +34,11 @@
 
     private bool UserIsClient() => User.GetUid() == Model.ClientUid;
 
-    private async Task AcceptOffer() => await OfferService.AcceptOfferAsync(Model.Uid);
+    private async Task AcceptOffer()
+    {
+        await OfferService.AcceptOfferAsync(Model.Uid);
+        NavigationManager.RefreshPage();
+    }
+
+    
 }
