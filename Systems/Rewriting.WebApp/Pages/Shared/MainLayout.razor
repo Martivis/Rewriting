@@ -4,34 +4,42 @@
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+<MudLayout>
+    <MudAppBar Color="Color.Primary">
 
-<MudAppBar Color="Color.Primary" Fixed="false">
-    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleMenu"/>
-    <MudSpacer />
-    <LoginPaper />
-    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/Martivis/Rewriting"/>
-</MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleMenu"/>
+        <MudSpacer />
+        <LoginPaper />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/Martivis/Rewriting"/>
 
-<MudDrawer @bind-Open="IsMenuOpened" Variant="DrawerVariant.Persistent">
-    <MudList Clickable="true">
-        <MudListItem Href="/">Home</MudListItem>
-        <MudDivider />
-        <MudListItem Href="/new_orders">Find job</MudListItem>
-        <MudDivider />
-        <AuthorizeView>
-            <MudListItem Href="/my_orders">My orders</MudListItem>
-            <MudDivider />
-            <MudListItem Href="my_contracts">My contracts</MudListItem>
-            <MudDivider />
-            <MudListItem Href="my_offers">My offers</MudListItem>
-        </AuthorizeView>
-    </MudList>
-</MudDrawer>
+    </MudAppBar>
+    
+    <MudDrawer @bind-Open="IsMenuOpened" Variant="DrawerVariant.Responsive" Elevation="1">
 
-<MudContainer Fixed="true">
-    @Body
-</MudContainer>
+        <MudDrawerHeader>
+            <MudButton Href="/" FullWidth="true">
+                <MudText Typo="Typo.h5">Rewriting</MudText>
+            </MudButton>
+        </MudDrawerHeader>
+    
+        <MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Href="/">Home</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="/new_orders">Find job</MudNavLink>
 
+            <AuthorizeView>
+                <MudNavLink Match="NavLinkMatch.All" Href="/my_orders">My orders</MudNavLink>
+                <MudNavLink Match="NavLinkMatch.All" Href="my_contracts">My contracts</MudNavLink>
+                <MudNavLink Match="NavLinkMatch.All" Href="my_offers">My offers</MudNavLink>
+            </AuthorizeView>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Medium">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 @code
 {
     public bool IsMenuOpened { get; set; }
