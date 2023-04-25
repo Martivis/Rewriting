@@ -2,8 +2,7 @@
 
 public class OrderOffersService : AbstractListService<OfferModel>
 {
-    public OrderOffersService(HttpClient httpClient, WebAppSettings settings, IAuthService authService) 
-        : base(httpClient, settings, authService)
+    public OrderOffersService(IApiGetService apiService) : base(apiService)
     {
     }
 

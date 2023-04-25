@@ -3,15 +3,17 @@ using System.Text.Json;
 
 namespace Rewriting.WebApp;
 
-public class OfferAcceptService : AbstractApiPostService<Guid>
+public class OfferAcceptService
 {
-    public OfferAcceptService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
-        : base(httpClient, settings, authService)
+    private readonly IApiPostService _apiService;
+
+    public OfferAcceptService(IApiPostService apiService)
     {
+        _apiService = apiService;
     }
 
     public async Task AcceptOfferAsync(Guid offerUid)
     {
-        await PostDataAsync($"v1/Offers/AcceptOffer", offerUid);
+        await _apiService.PostDataAsync($"v1/Offers/AcceptOffer", offerUid);
     }
 }

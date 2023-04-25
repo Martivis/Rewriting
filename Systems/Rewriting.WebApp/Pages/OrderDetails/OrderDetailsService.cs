@@ -1,15 +1,16 @@
 ﻿namespace Rewriting.WebApp;
 
-public class OrderDetailsService : AbstractApiGetService<OrderDetailsModel>
+public class OrderDetailsService
 {
+    private readonly IApiGetService _apiService;
 
-    public OrderDetailsService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
-        : base(httpClient, settings, authService)
+    public OrderDetailsService(IApiGetService apiService)
     {
+        _apiService = apiService;
     }
 
     public async Task<OrderDetailsModel> GetOrderAsync(Guid uid)
     {
-        return await GetDataAsync($"v1/Orders/GetOrderDetails?orderUid={uid}");
+        return await _apiService.GetDataAsync<OrderDetailsModel>($"v1/Orders/GetOrderDetails?orderUid={uid}");
     }
 }

@@ -3,20 +3,20 @@ using System.Text.Json;
 
 namespace Rewriting.WebApp;
 
-public abstract class AbstractApiGetService<TData>
+public class ApiGetService : IApiGetService
 {
     private HttpClient _httpClient;
     private WebAppSettings _settings;
     private IAuthService _authService;
 
-    public AbstractApiGetService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
+    public ApiGetService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
     {
         _httpClient = httpClient;
         _settings = settings;
         _authService = authService;
     }
 
-    protected async Task<TData> GetDataAsync(string urn)
+    public async Task<TData> GetDataAsync<TData>(string urn)
     {
         await SetAuthHeader();
 
@@ -29,7 +29,7 @@ public abstract class AbstractApiGetService<TData>
             throw new HttpRequestException(content);
 
         var data = JsonSerializer.Deserialize<TData>(content,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) 
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
             ?? throw new HttpRequestException("Unable to get data");
 
         return data;

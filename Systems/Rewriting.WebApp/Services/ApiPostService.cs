@@ -4,20 +4,20 @@ using System.Text.Json;
 
 namespace Rewriting.WebApp;
 
-public class AbstractApiPostService<TData>
+public class ApiPostService : IApiPostService
 {
     private HttpClient _httpClient;
     private WebAppSettings _settings;
     private IAuthService _authService;
 
-    public AbstractApiPostService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
+    public ApiPostService(HttpClient httpClient, WebAppSettings settings, IAuthService authService)
     {
         _httpClient = httpClient;
         _settings = settings;
         _authService = authService;
     }
 
-    protected async Task PostDataAsync(string urn, TData data)
+    public async Task PostDataAsync<TData>(string urn, TData data)
     {
         await SetAuthHeader();
         string url = $"{_settings.ApiUri}/{urn}";

@@ -20,8 +20,11 @@ services.AddBlazoredLocalStorage();
 services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 services.AddScoped<IAuthService, AuthService>();
 
-services.AddScoped<NewOrderService>();
-services.AddScoped<UserOrderService>();
+services.AddScoped<IApiGetService, ApiGetService>();
+services.AddScoped<IApiPostService, ApiPostService>();
+
+services.AddScoped<NewOrdersService>();
+services.AddScoped<UserOrdersService>();
 services.AddScoped<OrderDetailsService>();
 services.AddScoped<OrderOffersService>();
 services.AddScoped<OfferAcceptService>();
