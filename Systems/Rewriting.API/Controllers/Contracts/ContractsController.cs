@@ -115,57 +115,57 @@ public class ContractsController : ControllerBase
     /// <summary>
     /// Accept result in specified contract
     /// </summary>
-    /// <param name="contractUid">Uid of the target contract</param>
+    /// <param name="request">Uid of the target contract</param>
     /// <returns>IActionResult</returns>
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> AcceptResult([FromBody] Guid contractUid)
+    public async Task<IActionResult> AcceptResult([FromBody] ContractUidRequest request)
     {
-        var contractAuth = await _contractService.GetClientAuthAsync(contractUid);
+        var contractAuth = await _contractService.GetClientAuthAsync(request.ContractUid);
 
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, contractAuth, AppScopes.ContractsEdit);
         if (!authorizationResult.Succeeded)
             return Forbid();
 
-        await _contractService.AcceptResultAsync(contractUid);
+        await _contractService.AcceptResultAsync(request.ContractUid);
         return Ok();
     }
 
     /// <summary>
     /// Decline result in specified contract
     /// </summary>
-    /// <param name="contractUid">Uid of the target contract</param>
+    /// <param name="request">Uid of the target contract</param>
     /// <returns>IActionResult</returns>
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> DeclineResult([FromBody] Guid contractUid)
+    public async Task<IActionResult> DeclineResult([FromBody] ContractUidRequest request)
     {
-        var contractAuth = await _contractService.GetClientAuthAsync(contractUid);
+        var contractAuth = await _contractService.GetClientAuthAsync(request.ContractUid);
 
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, contractAuth, AppScopes.ContractsEdit);
         if (!authorizationResult.Succeeded)
             return Forbid();
 
-        await _contractService.DeclineResultAsync(contractUid);
+        await _contractService.DeclineResultAsync(request.ContractUid);
         return Ok();
     }
 
     /// <summary>
     /// Decline contractor in specified contract.
     /// </summary>
-    /// <param name="contractUid">Uid of the target contract</param>
+    /// <param name="request">Uid of the target contract</param>
     /// <returns>IActionResult</returns>
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> DeclineContractor([FromBody] Guid contractUid)
+    public async Task<IActionResult> DeclineContractor([FromBody] ContractUidRequest request)
     {
-        var contractAuth = await _contractService.GetClientAuthAsync(contractUid);
+        var contractAuth = await _contractService.GetClientAuthAsync(request.ContractUid);
 
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, contractAuth, AppScopes.ContractsEdit);
         if (!authorizationResult.Succeeded)
             return Forbid();
 
-        await _contractService.DeclineContractorAsync(contractUid);
+        await _contractService.DeclineContractorAsync(request.ContractUid);
         return Ok();
     }
 }

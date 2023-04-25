@@ -94,13 +94,13 @@ namespace Rewriting.API.Controllers.Orders
         /// <summary>
         /// Cancel order
         /// </summary>
-        /// <param name="orderUid">Uid of target order</param>
+        /// <param name="request">Uid of target order</param>
         /// <returns></returns>
         [HttpPatch]
         [Authorize]
-        public async Task<IActionResult> CancelOrder([FromBody] Guid orderUid)
+        public async Task<IActionResult> CancelOrder([FromBody] OrderUidRequest request)
         {
-            var orderModel = await _orderService.GetOrderAsync(orderUid);
+            var orderModel = await _orderService.GetOrderAsync(request.OrderUid);
 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, orderModel, AppScopes.OrdersEdit);
             if (!authorizationResult.Succeeded)
@@ -108,7 +108,7 @@ namespace Rewriting.API.Controllers.Orders
 
             var cancelOrderModel = new CancelOrderModel
             {
-                OrderUid = orderUid,
+                OrderUid = request.OrderUid,
                 Issuer = User,
             };
 
@@ -120,13 +120,13 @@ namespace Rewriting.API.Controllers.Orders
         /// <summary>
         /// Delete order
         /// </summary>
-        /// <param name="orderUid">Uid of target order</param>
+        /// <param name="request">Uid of target order</param>
         /// <returns></returns>
         [HttpDelete]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> DeleteOrder([FromBody] Guid orderUid)
+        public async Task<IActionResult> DeleteOrder([FromBody] OrderUidRequest request)
         {
-            await _orderService.DeleteOrderAsync(orderUid);
+            await _orderService.DeleteOrderAsync(request.OrderUid);
             return Ok();
         }
     }

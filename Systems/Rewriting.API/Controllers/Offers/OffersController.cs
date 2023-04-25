@@ -77,19 +77,19 @@ namespace Rewriting.API.Controllers.Offers
         /// <summary>
         /// Accept specified offer
         /// </summary>
-        /// <param name="offerUid">Uid of the target offer</param>
+        /// <param name="request">Uid of the target offer</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AcceptOffer([FromBody] Guid offerUid)
+        public async Task<IActionResult> AcceptOffer([FromBody] OfferUidRequest request)
         {
-            var offer = await _offerService.GetOfferAuthAsync(offerUid);
+            var offer = await _offerService.GetOfferAuthAsync(request.OfferUid);
 
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, offer, AppScopes.OffersEdit);
             if (!authorizationResult.Succeeded)
                 return Forbid();
 
-            await _offerService.AcceptOfferAsync(offerUid);
+            await _offerService.AcceptOfferAsync(request.OfferUid);
             return Ok();
         }
     }
