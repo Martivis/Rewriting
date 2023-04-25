@@ -41,7 +41,7 @@ else
         {
             if (!UserIsClient())
             {
-                <MudButton Color="Color.Primary">Add offer</MudButton>
+                <MudButton Color="Color.Primary" Href="@($"/add_offer/{_orderModel.Uid}")">Add offer</MudButton>
             }
         }
 
@@ -80,7 +80,7 @@ else
 
     private async Task CancelOrder()
     {
-        await OrderService.CancelOrder(_orderUid);
+        await OrderService.CancelOrderAsync(_orderUid);
         await RefreshModel();
     }
 }

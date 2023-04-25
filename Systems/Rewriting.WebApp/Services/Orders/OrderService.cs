@@ -14,12 +14,12 @@ public class OrderService
         return await _apiService.GetDataAsync<OrderDetailsModel>($"v1/Orders/GetOrderDetails?orderUid={uid}");
     }
 
-    public async Task AddNewOrder(AddOrderModel model)
+    public async Task AddOrderAsync(AddOrderModel model)
     {
         await _apiService.PostDataAsync("v1/Orders/AddOrder", model);
     }
 
-    public async Task CancelOrder(Guid orderUid)
+    public async Task CancelOrderAsync(Guid orderUid)
     {
         await _apiService.PatchDataAsync("v1/Orders/CancelOrder", new { OrderUid = orderUid });
     }

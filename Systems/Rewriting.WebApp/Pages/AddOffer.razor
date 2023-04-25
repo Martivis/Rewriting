@@ -1,0 +1,44 @@
+﻿@page "/add_offer/{orderUid}"
+
+@inject OfferService OfferService
+@inject NavigationManager NavigationManager
+
+<MudCard>
+    <MudCardHeader>
+        <MudText>Add order</MudText>
+    </MudCardHeader>
+
+    <MudCardContent>
+        <MudForm @ref="_form">
+            <MudTextField @bind-Value="_model.Price" T="decimal" Variant="Variant.Outlined" Label="Price" Required="true" />
+            <MudTextField @bind-Value="_model.Comment" T="string" Variant="Variant.Outlined" Label="Comment" Lines="5" Required="true" />
+        </MudForm>
+    </MudCardContent>
+
+    <MudCardActions>
+        <MudButton OnClick="Submit" Color="Color.Primary">Add</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string OrderUid { get; set; }
+
+    private MudForm? _form = new();
+    private AddOfferModel _model = new();
+
+    protected override void OnInitialized()
+    {
+        _model.OrderUid = Guid.Parse(OrderUid);
+    }
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+        if (_form!.IsValid)
+        {
+            await OfferService.AddOfferAsync(_model);
+            NavigationManager.NavigateTo($"/order/{_model.OrderUid}");
+        }
+    }
+}

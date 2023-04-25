@@ -33,7 +33,7 @@
         await _form!.Validate();
         if (_form!.IsValid)
         {
-            await OrderService.AddNewOrder(_model);
+            await OrderService.AddOrderAsync(_model);
             NavigationManager.NavigateTo("/my_orders");
         }
     }
