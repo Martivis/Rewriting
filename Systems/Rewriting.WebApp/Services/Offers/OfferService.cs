@@ -12,7 +12,7 @@ public class OfferService
 
     public async Task AcceptOfferAsync(Guid offerUid)
     {
-        await _apiService.PostDataAsync("v1/Offers/AcceptOffer", offerUid);
+        await _apiService.PostDataAsync("v1/Offers/AcceptOffer", new { OfferUid = offerUid });
     }
 
     public async Task AddOfferAsync(AddOfferModel model)

@@ -21,6 +21,6 @@ public class OrderService
 
     public async Task CancelOrder(Guid orderUid)
     {
-        await _apiService.PatchDataAsync("v1/Orders/CancelOrder", orderUid);
+        await _apiService.PatchDataAsync("v1/Orders/CancelOrder", new { OrderUid = orderUid });
     }
 }

@@ -29,13 +29,20 @@ else
         }
         else
         {
+            <ItemsList ItemService="OrderOffersService">
+                <OfferCard Model="@context" />    
+            </ItemsList>
+        }
+        @if (IsCancelable())
+        {
+            <MudButton Color="Color.Error" OnClick="CancelOrder">Cancel order</MudButton>
+        }
+        else
+        {
             if (!UserIsClient())
             {
                 <MudButton Color="Color.Primary">Add offer</MudButton>
             }
-            <ItemsList ItemService="OrderOffersService">
-                <OfferCard Model="@context" />    
-            </ItemsList>
         }
 
     </MudCard>
@@ -43,13 +50,13 @@ else
 
 @code {
     [Parameter]
-    public string orderUid { get; set; }
+    public string OrderUid { get; set; }
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
+    private Guid _orderUid;
     private ClaimsPrincipal User;
-    private Guid _uid;
     private OrderDetailsModel _orderModel;
 
     protected override async Task OnInitializedAsync()
@@ -57,11 +64,23 @@ else
         var authState = await AuthenticationStateTask;
         User = authState.User;
 
-        _uid = Guid.Parse(orderUid);
-        OrderOffersService.OrderUid = _uid;
+        _orderUid = Guid.Parse(OrderUid);
+        OrderOffersService.OrderUid = _orderUid;
 
-        _orderModel = await OrderService.GetOrderDetailsAsync(_uid);
+        await RefreshModel();
     }
 
+    private async Task RefreshModel() => _orderModel = await OrderService.GetOrderDetailsAsync(_orderUid);
+
+    private bool IsCancelable() => UserIsClient() && StatusIsCancelable();
+
+    private bool StatusIsCancelable() => _orderModel.Status == OrderStatus.New || _orderModel.Status == OrderStatus.InProgress;
+
     private bool UserIsClient() => User.GetUid() == _orderModel.ClientUid;
+
+    private async Task CancelOrder()
+    {
+        await OrderService.CancelOrder(_orderUid);
+        await RefreshModel();
+    }
 }
