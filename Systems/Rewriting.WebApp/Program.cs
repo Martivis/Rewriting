@@ -26,6 +26,7 @@ services.AddScoped<UserOrdersService>();
 services.AddScoped<OrderService>();
 
 services.AddScoped<OrderOffersService>();
+services.AddScoped<UserOffersService>();
 services.AddScoped<OfferService>();
 
 var settings = SettingsLoader.Load<WebAppSettings>("WebApp");

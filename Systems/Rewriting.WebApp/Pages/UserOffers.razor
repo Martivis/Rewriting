@@ -1,0 +1,13 @@
+﻿@page "/my_offers"
+
+@inject UserOffersService OffersService
+
+<MudText Typo="Typo.h4" Align="Align.Center">My offers</MudText>
+
+<ItemsList ItemService="OffersService">
+    <OfferCard Model="@context" />
+</ItemsList>
+
+@code {
+
+}
