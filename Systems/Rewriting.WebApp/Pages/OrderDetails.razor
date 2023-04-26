@@ -5,45 +5,107 @@
 
 @if (_orderModel is null)
 {
+    <MudCard>
+        <MudContainer Class="pa-3" MaxWidth="MaxWidth.Medium">
+            <MudPaper Class="pa-3 ma-4" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudSkeleton Height="100px" Width="550px" />
+                    <MudSkeleton Height="50px" Width="100px" />
+                </MudGrid>
+            </MudPaper>
 
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Status</MudText>
+                <MudSkeleton Height="50px" Width="150px"/>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Text</MudText>
+                <MudSkeleton Height="150px" Width="100%" />
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Comment</MudText>
+                <MudSkeleton Height="70px" Width="100%" />
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudText Typo="Typo.h5">Client</MudText>
+                        <MudSkeleton Height="50px" Width="150px" />
+                    </MudPaper>
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /><MudSkeleton Height="50px" Width="150px" />
+                    </MudPaper>
+                </MudGrid>
+            </MudPaper>
+        </MudContainer>
+
+    </MudCard>
 }
 else
 {
     <MudCard>
-        <MudText Typo="Typo.h3">Order</MudText>
-        <MudText>@_orderModel.Title</MudText>
-        <MudText>@_orderModel.Text</MudText>
-        <MudDivider />
-        <MudText>@_orderModel.Comment</MudText>
-        <MudText>@_orderModel.ClientName</MudText>
-        <MudText>@_orderModel.PublishDate</MudText>
-        <MudText>@_orderModel.Status</MudText>
-    </MudCard>
+        <MudContainer Class="pa-3" MaxWidth="MaxWidth.Medium">
+            <MudPaper Class="pa-3 ma-4" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudText Typo="Typo.h5">@_orderModel.Title</MudText>
+                    @if (IsCancelable())
+                    {
+                        <MudButton Color="Color.Error" OnClick="CancelOrder">Cancel order</MudButton>
+                    }
+                </MudGrid>
+            </MudPaper>
 
-    <MudCard>
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Status</MudText>
+                <MudText>@_orderModel.Status</MudText>
+            </MudPaper>
 
-        @if (_orderModel.ContractorUid is not null)
-        {
-            <MudText>Contractor: @_orderModel.ContractorName</MudText>
-            <MudText>Contract publish date: @_orderModel.ContractPublishDate</MudText>
-        }
-        else
-        {
-            <ItemsList ItemService="OrderOffersService">
-                <OfferCard Model="@context" />    
-            </ItemsList>
-        }
-        @if (IsCancelable())
-        {
-            <MudButton Color="Color.Error" OnClick="CancelOrder">Cancel order</MudButton>
-        }
-        else
-        {
-            if (!UserIsClient())
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Text</MudText>
+                <MudText>@_orderModel.Text</MudText>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Comment</MudText>
+                <MudText>@_orderModel.Comment</MudText>
+            </MudPaper>
+            
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudText Typo="Typo.h5">Client</MudText> 
+                        <MudText>@_orderModel.ClientName</MudText>
+                    </MudPaper>
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudText><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /> @_orderModel.PublishDate</MudText>
+                    </MudPaper>
+                </MudGrid>
+            </MudPaper>
+
+            @if (_orderModel.ContractorUid is not null)
+            {
+                <MudPaper Class="pa-3 ma-2" Elevation="0">
+                    <MudText>Contractor: @_orderModel.ContractorName</MudText>
+                    <MudText><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /> @_orderModel.ContractPublishDate</MudText>
+                </MudPaper>
+            }
+            else
+            {
+                <MudPaper Class="pa-3 ma-2" Elevation="0">
+                    <MudText Typo="Typo.h5">Offers</MudText>
+                    <ItemsList ItemService="OrderOffersService">
+                        <OfferCard Model="@context" />    
+                    </ItemsList>
+                </MudPaper>
+            }
+            @if (!UserIsClient())
             {
                 <MudButton Color="Color.Primary" Href="@($"/add_offer/{_orderModel.Uid}")">Add offer</MudButton>
             }
-        }
+        </MudContainer>
 
     </MudCard>
 }
