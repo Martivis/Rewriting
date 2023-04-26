@@ -10,7 +10,7 @@
 
     <MudCardContent>
         <MudForm @ref="_form">
-            <MudTextField @bind-Value="_model.Title" T="string" Variant="Variant.Outlined" Counter="50" 
+            <MudTextField @bind-Value="_model.Title" T="string" Variant="Variant.Outlined" Counter="50" MaxLength="50"
                 Label="Title" Immediate="true" Required="true" />
             <MudTextField @bind-Value="_model.Text" T="string" Variant="Variant.Outlined" 
                 Label="Text" Lines="10" Required="true" />
