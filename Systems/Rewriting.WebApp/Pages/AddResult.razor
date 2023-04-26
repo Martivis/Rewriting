@@ -1,0 +1,43 @@
+﻿@page "/add_result/{contractUid}"
+
+@inject ContractService ContractService
+@inject NavigationManager NavigationManager
+
+<MudCard>
+    <MudCardHeader>
+        <MudText>Add result</MudText>
+    </MudCardHeader>
+
+    <MudCardContent>
+        <MudForm @ref="_form">
+            <MudTextField @bind-Value="_model.Text" T="string" Variant="Variant.Outlined" Label="Text" Lines="5" Required="true" />
+        </MudForm>
+    </MudCardContent>
+
+    <MudCardActions>
+        <MudButton OnClick="Submit" Color="Color.Primary">Add</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string ContractUid { get; set; }
+
+    private MudForm? _form = new();
+    private AddResultModel _model = new();
+
+    protected override void OnInitialized()
+    {
+        _model.ContractUid = Guid.Parse(ContractUid);
+    }
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+        if (_form!.IsValid)
+        {
+            await ContractService.AddResultAsync(_model);
+            NavigationManager.NavigateTo($"/contract/{_model.ContractUid}");
+        }
+    }
+}
