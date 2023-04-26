@@ -29,6 +29,10 @@ services.AddScoped<OrderOffersService>();
 services.AddScoped<UserOffersService>();
 services.AddScoped<OfferService>();
 
+services.AddScoped<ContractResultsService>();
+services.AddScoped<UserContractsService>();
+services.AddScoped<ContractService>();
+
 var settings = SettingsLoader.Load<WebAppSettings>("WebApp");
 services.AddSingleton(settings);
 
