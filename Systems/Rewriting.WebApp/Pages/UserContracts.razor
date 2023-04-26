@@ -1,0 +1,13 @@
+﻿@page "/my_contracts"
+
+@inject UserContractsService ContractsService
+
+<MudText Typo="Typo.h4" Align="Align.Center">My orders</MudText>
+
+<ItemsList ItemService="ContractsService">
+    <ContractCard Model="@context" />
+</ItemsList>
+
+@code {
+
+}

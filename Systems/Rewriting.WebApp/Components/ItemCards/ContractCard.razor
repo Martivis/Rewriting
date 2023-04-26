@@ -1,0 +1,18 @@
+﻿
+<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.h5">@Model.Title</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.ClientName</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.PublishDate</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/contract/{Model.Uid.ToString()}")">Details</MudButton>
+    </MudCardActions>
+</MudCard>
+
+
+@code
+{
+    [Parameter]
+    public ContractModel Model { get; set; }
+}

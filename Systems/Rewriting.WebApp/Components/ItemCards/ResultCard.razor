@@ -1,0 +1,14 @@
+﻿
+<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.h5">@Model.Text</MudText>
+        <MudText Typo="Typo.subtitle1">@Model.PublishDate</MudText>
+    </MudCardContent>
+</MudCard>
+
+
+@code
+{
+    [Parameter]
+    public ResultModel Model { get; set; }
+}

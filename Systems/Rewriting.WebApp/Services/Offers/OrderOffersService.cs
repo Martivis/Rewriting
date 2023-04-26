@@ -15,6 +15,6 @@ public class OrderOffersService : AbstractListService<OfferModel>
 
     protected override string GetAdditionalParameters()
     {
-        return "orderUid=" + OrderUid.ToString();
+        return $"orderUid={OrderUid}";
     }
 }

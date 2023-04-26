@@ -1,0 +1,121 @@
+﻿@page "/contract/{contractUid}"
+
+@inject ContractService ContractService
+@inject ContractResultsService ResultsService
+
+@if (_contractModel is null)
+{
+    <MudCard>
+        <MudContainer Class="pa-3" MaxWidth="MaxWidth.Medium">
+            <MudPaper Class="pa-3 ma-4" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudSkeleton Height="100px" Width="550px" />
+                    <MudSkeleton Height="50px" Width="100px" />
+                </MudGrid>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Status</MudText>
+                <MudSkeleton Height="50px" Width="150px" />
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Text</MudText>
+                <MudSkeleton Height="150px" Width="100%" />
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Comment</MudText>
+                <MudSkeleton Height="70px" Width="100%" />
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudText Typo="Typo.h5">Client</MudText>
+                        <MudSkeleton Height="50px" Width="150px" />
+                    </MudPaper>
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /><MudSkeleton Height="50px" Width="150px" />
+                    </MudPaper>
+                </MudGrid>
+            </MudPaper>
+        </MudContainer>
+
+    </MudCard>
+}
+else
+{
+    <MudCard>
+        <MudContainer Class="pa-3" MaxWidth="MaxWidth.Medium">
+            <MudPaper Class="pa-3 ma-4" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudText Typo="Typo.h5">@_contractModel.Title</MudText>
+                    <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.AttachMoney" /> @_contractModel.Price</MudText>
+                </MudGrid>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Status</MudText>
+                <MudText>@_contractModel.Status</MudText>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Text</MudText>
+                <MudText>@_contractModel.Text</MudText>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Comment</MudText>
+                <MudText>@_contractModel.Comment</MudText>
+            </MudPaper>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudText Typo="Typo.h5">Client</MudText>
+                        <MudText>@_contractModel.ClientName</MudText>
+                    </MudPaper>
+                    <MudPaper Class="pa-3" Elevation="0">
+                        <MudText><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /> @_contractModel.PublishDate</MudText>
+                    </MudPaper>
+                </MudGrid>
+            </MudPaper>
+
+            <MudButton Color="Color.Primary" Href="/add_result">Add result</MudButton>
+
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Results</MudText>
+                <ItemsList ItemService="ResultsService">
+                    <ResultCard Model="@context" />
+                </ItemsList>
+            </MudPaper>
+
+        </MudContainer>
+    </MudCard>
+}
+
+@code {
+    [Parameter]
+    public string ContractUid { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private Guid _contractUid;
+    private ClaimsPrincipal User;
+    private ContractDetailsModel _contractModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        User = authState.User;
+
+        _contractUid = Guid.Parse(ContractUid);
+        ResultsService.ContractUid = _contractUid;
+
+        await RefreshModel();
+    }
+
+    private async Task RefreshModel() => _contractModel = await ContractService.GetContractDetailsAsync(_contractUid);
+}
