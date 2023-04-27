@@ -4,6 +4,7 @@
 <AuthorizeView>
     <Authorized>
         <MudMenu Icon="@Icons.Material.Sharp.AccountCircle" Color="Color.Inherit">
+            <MudMenuItem @onclick="OpenChangePasswordDialog">Change password</MudMenuItem>
             <MudMenuItem @onclick="OpenLogoutDialog">Logout</MudMenuItem>
         </MudMenu>
     </Authorized>
@@ -16,11 +17,11 @@
 @code
 {
     private readonly DialogOptions dialogOptions = new()
-        {
-            CloseOnEscapeKey = true,
-            CloseButton = true,
-            DisableBackdropClick = true,
-        };
+    {
+        CloseOnEscapeKey = true,
+        CloseButton = true,
+        DisableBackdropClick = true,
+    };
 
     private void OpenLoginDialog()
     { 
@@ -35,5 +36,10 @@
     private void OpenRegisterDialog()
     {
         DialogService.Show<RegisterDialog>("Register", dialogOptions);
+    }
+
+    private void OpenChangePasswordDialog()
+    {
+        DialogService.Show<ChangePasswordDialog>("ChangePassword", dialogOptions);
     }
 }
