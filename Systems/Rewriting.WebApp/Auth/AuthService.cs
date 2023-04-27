@@ -39,25 +39,23 @@ public class AuthService : IAuthService
         return accessToken.Token;
     }
 
-    public async Task<LoginResult> LoginAsync(LoginModel loginModel)
+    private async Task<TokenModel> RefreshAccessTokenAsync(string refreshToken)
     {
         var requestBody = new[]
         {
-            new KeyValuePair<string, string>("grant_type", "password"),
+            new KeyValuePair<string, string>("grant_type", "refresh_token"),
             new KeyValuePair<string, string>("client_id", _settings.Client),
             new KeyValuePair<string, string>("client_secret", _settings.Secret),
-            new KeyValuePair<string, string>("username", loginModel.Email),
-            new KeyValuePair<string, string>("password", loginModel.Password)
+            new KeyValuePair<string, string>("refresh_token", refreshToken),
         };
 
         var loginResult = await RequestAsync(requestBody);
 
         var accessToken = new TokenModel(loginResult.AccessToken, loginResult.ExpiresIn);
 
-        await _localStorage.SetItemAsync(AccessTokenKey, accessToken);
         await _localStorage.SetItemAsync(RefreshTokenKey, loginResult.RefreshToken);
 
-        return loginResult;
+        return accessToken;
     }
 
     private async Task<LoginResult> RequestAsync(KeyValuePair<string, string>[] requestBody)
@@ -92,23 +90,25 @@ public class AuthService : IAuthService
         }
     }
 
-    private async Task<TokenModel> RefreshAccessTokenAsync(string refreshToken)
+    public async Task<LoginResult> LoginAsync(LoginModel loginModel)
     {
         var requestBody = new[]
         {
-            new KeyValuePair<string, string>("grant_type", "refresh_token"),
+            new KeyValuePair<string, string>("grant_type", "password"),
             new KeyValuePair<string, string>("client_id", _settings.Client),
             new KeyValuePair<string, string>("client_secret", _settings.Secret),
-            new KeyValuePair<string, string>("refresh_token", refreshToken),
+            new KeyValuePair<string, string>("username", loginModel.Email),
+            new KeyValuePair<string, string>("password", loginModel.Password)
         };
 
         var loginResult = await RequestAsync(requestBody);
 
         var accessToken = new TokenModel(loginResult.AccessToken, loginResult.ExpiresIn);
 
+        await _localStorage.SetItemAsync(AccessTokenKey, accessToken);
         await _localStorage.SetItemAsync(RefreshTokenKey, loginResult.RefreshToken);
 
-        return accessToken;
+        return loginResult;
     }
 
     public async Task LogoutAsync()

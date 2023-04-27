@@ -1,0 +1,88 @@
+﻿@inject IAccountService AccountService
+@inject NavigationManager NavigationManager
+
+<MudDialog>
+    <DialogContent>
+        <div style="width: 500px">
+            <MudForm @ref="_form">
+                @if (_showError)
+                {
+                    <MudAlert Severity="Severity.Error">
+                        @_errorDescription
+                    </MudAlert>
+                }
+
+                <MudTextField T="string" 
+                              Label="First name" 
+                              @bind-Value="_model.FirstName" 
+                              For="@(() => _model.FirstName)"
+                              Required="true"/>
+
+                <MudTextField T="string"
+                              Label="LastName"
+                              @bind-Value="_model.LastName"
+                              For="@(() => _model.LastName)"
+                              Required="true" />
+
+                <MudTextField T="string" 
+                              Label="Email" 
+                              @bind-Value="_model.Email" 
+                              For="@(() => _model.Email)"
+                              Required="true"/>
+
+                <MudTextField T="string"
+                              Label="Password"
+                              InputType="InputType.Password"
+                              @bind-Value="_model.Password"
+                              For="@(() => _model.Password)"
+                              Required="true"/>
+
+                <MudTextField T="string"
+                              Label="Repeat password"
+                              InputType="InputType.Password"
+                              Validation="@(new Func<string, string>(PasswordMatch))"
+                              Required="true" />
+            </MudForm>
+        </div>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton @onclick="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private MudForm? _form = new();
+    private RegisterModel _model = new();
+
+    private bool _showError;
+    private string _errorDescription = "";
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+        if (!_form.IsValid)
+            return;
+
+        try
+        {
+            await AccountService.RegisterAsync(_model);
+            NavigationManager.RefreshPage();
+            MudDialog.Close();
+        }
+        catch (Exception e)
+        {
+            _errorDescription = e.Message;
+            _showError = true;
+        }
+    }
+
+    private string PasswordMatch(string repeatedPassword)
+    {
+        if (_model.Password != repeatedPassword)
+            return "Passwords don't match";
+        return null;
+    }
+}

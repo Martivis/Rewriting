@@ -19,6 +19,7 @@ services.AddBlazoredLocalStorage();
 
 services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<IAccountService, AccountService>();
 
 services.AddScoped<IApiService, ApiService>();
 

@@ -9,7 +9,7 @@
     </Authorized>
     <NotAuthorized>
         <MudButton @onclick="OpenLoginDialog" Color="Color.Inherit" Variant="Variant.Text">Sign in</MudButton>
-        <MudButton Color="Color.Inherit" Variant="Variant.Text">Register</MudButton>
+        <MudButton @onclick="OpenRegisterDialog" Color="Color.Inherit" Variant="Variant.Text">Register</MudButton>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -30,5 +30,10 @@
     private void OpenLogoutDialog()
     {
         DialogService.Show<LogoutDialog>("Logout?", dialogOptions);
+    }
+
+    private void OpenRegisterDialog()
+    {
+        DialogService.Show<RegisterDialog>("Register", dialogOptions);
     }
 }
