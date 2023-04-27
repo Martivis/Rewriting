@@ -1,5 +1,6 @@
 ﻿@typeparam TModel
 
+@inject ISnackbar SnackbarService
 
 <MudContainer MaxWidth="MaxWidth.Medium">
     <MudStack AlignItems="AlignItems.Stretch">
@@ -49,7 +50,14 @@
 
     private async Task GetItems()
     {
-        _items = await ItemService.GetItemsAsync(_page - 1, _pageSize);
+        try
+        {
+            _items = await ItemService.GetItemsAsync(_page - 1, _pageSize);
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
     }
 
     private async Task NextPage()

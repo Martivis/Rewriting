@@ -4,6 +4,7 @@
 
 @inject ContractService ContractService
 @inject ContractResultsService ResultsService
+@inject ISnackbar SnackbarService
 
 @if (_contractModel is null)
 {
@@ -119,5 +120,26 @@ else
         await RefreshModel();
     }
 
-    private async Task RefreshModel() => _contractModel = await ContractService.GetContractDetailsAsync(_contractUid);
+    private async Task RefreshModel()
+    {
+        try
+        {   
+            _contractModel = await ContractService.GetContractDetailsAsync(_contractUid);
+        }
+        catch (Exception e)
+        {
+            AddErrorSnackbar("Error", e.Message);
+        }
+    }
+
+    private void AddErrorSnackbar(string title, string text)
+    {
+        SnackbarService.Add
+        (
+            @<div>
+                <h3>@title</h3>
+                <p>@text</p>
+            </div>
+        );
+    }
 }

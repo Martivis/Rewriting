@@ -6,6 +6,7 @@
 @inject OrderOffersService OrderOffersService
 @inject ContractService ContractService
 @inject ContractResultsService ResultsService
+@inject ISnackbar SnackbarService
 
 @if (_orderModel is null)
 {
@@ -20,7 +21,7 @@
 
             <MudPaper Class="pa-3 ma-2" Elevation="0">
                 <MudText Typo="Typo.h5">Status</MudText>
-                <MudSkeleton Height="50px" Width="150px"/>
+                <MudSkeleton Height="50px" Width="150px" />
             </MudPaper>
 
             <MudPaper Class="pa-3 ma-2" Elevation="0">
@@ -76,11 +77,11 @@ else
                 <MudText Typo="Typo.h5">Comment</MudText>
                 <MudText>@_orderModel.Comment</MudText>
             </MudPaper>
-            
+
             <MudPaper Class="pa-3 ma-2" Elevation="0">
                 <MudGrid Justify="Justify.SpaceBetween">
                     <MudPaper Class="pa-3" Elevation="0">
-                        <MudText Typo="Typo.h5">Client</MudText> 
+                        <MudText Typo="Typo.h5">Client</MudText>
                         <MudText>@_orderModel.ClientName</MudText>
                     </MudPaper>
                     <MudPaper Class="pa-3" Elevation="0">
@@ -113,7 +114,7 @@ else
                     <MudPaper Class="pa-3 ma-2" Elevation="0">
                         <MudText Typo="Typo.h5">Results</MudText>
                         <ItemsList ItemService="ResultsService">
-                            <ResultCard Model="@context" />    
+                            <ResultCard Model="@context" />
                         </ItemsList>
                     </MudPaper>
 
@@ -161,8 +162,6 @@ else
         await RefreshModel();
     }
 
-    private async Task RefreshModel() => _orderModel = await OrderService.GetOrderDetailsAsync(_orderUid);
-
     private bool IsCancelable() => UserIsClient() && StatusIsCancelable();
 
     private bool StatusIsCancelable() => _orderModel.Status == OrderStatus.New || _orderModel.Status == OrderStatus.InProgress;
@@ -171,27 +170,67 @@ else
 
     private bool IsActionsAvailable() => _orderModel.Status != OrderStatus.Canceled && _orderModel.Status != OrderStatus.Done;
 
+    private async Task RefreshModel()
+    {
+        try
+        {
+            _orderModel = await OrderService.GetOrderDetailsAsync(_orderUid);
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
+    }
+
     private async Task CancelOrderAsync()
     {
-        await OrderService.CancelOrderAsync(_orderUid);
-        await RefreshModel();
+        try
+        {
+            await OrderService.CancelOrderAsync(_orderUid);
+            await RefreshModel();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
     }
 
     private async Task AcceptResultAsync()
     {
-        await ContractService.AcceptResultAsync(_orderUid);
-        await RefreshModel();
+        try
+        {
+            await ContractService.AcceptResultAsync(_orderUid);
+            await RefreshModel();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
     }
 
     private async Task DeclineResultAsync()
     {
-        await ContractService.DeclineResultAsync(_orderUid);
-        await RefreshModel();
+        try
+        {
+            await ContractService.DeclineResultAsync(_orderUid);
+            await RefreshModel();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
     }
 
     private async Task DeclineContractorAsync()
     {
-        await ContractService.DeclineContractorAsync(_orderUid);
-        await RefreshModel();
+        try
+        {
+            await ContractService.DeclineContractorAsync(_orderUid);
+            await RefreshModel();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
     }
 }
