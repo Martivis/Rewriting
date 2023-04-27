@@ -1,5 +1,7 @@
 ﻿@page "/add_offer/{orderUid}"
 
+@attribute [Authorize]
+
 @inject OfferService OfferService
 @inject NavigationManager NavigationManager
 

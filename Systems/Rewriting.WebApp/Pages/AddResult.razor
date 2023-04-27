@@ -1,5 +1,7 @@
 ﻿@page "/add_result/{contractUid}"
 
+@attribute [Authorize]
+
 @inject ContractService ContractService
 @inject NavigationManager NavigationManager
 

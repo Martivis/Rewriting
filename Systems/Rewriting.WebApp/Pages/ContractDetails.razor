@@ -1,5 +1,7 @@
 ﻿@page "/contract/{contractUid}"
 
+@attribute [Authorize]
+
 @inject ContractService ContractService
 @inject ContractResultsService ResultsService
 

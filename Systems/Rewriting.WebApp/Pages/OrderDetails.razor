@@ -1,5 +1,7 @@
 ﻿@page "/order/{orderUid}"
 
+@attribute [Authorize]
+
 @inject OrderService OrderService
 @inject OrderOffersService OrderOffersService
 @inject ContractService ContractService
