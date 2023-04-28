@@ -11,23 +11,40 @@ namespace Rewriting.Context;
 
 public static class AppDbStateChecker
 {
+    private const int MaxRetries = 5;
+    private const int RetryDelayMs = 1000;
     public static void Check(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.GetService<IServiceScopeFactory>()!.CreateScope();
 
         var dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-        using var context = dbContextFactory.CreateDbContext();
 
-        if (!context.Database.CanConnect())
-            throw new InvalidOperationException("Can't connect to database");
+        int retries = 0;
 
-        if (context.Database.GetPendingMigrations().Any())
-            throw new InvalidOperationException("Some migrations were not applied");
+        while (retries < MaxRetries)
+        {
+            using var context = dbContextFactory.CreateDbContext();
 
-        var appliedMigrations = context.Database.GetAppliedMigrations();
-        var assemblyMigrations = context.Database.GetMigrations();
+            if (!context.Database.CanConnect())
+            {
+                retries++;
+                Task.Delay(RetryDelayMs);
+            }
+            else
+            {
+                if (context.Database.GetPendingMigrations().Any())
+                    throw new InvalidOperationException("Some migrations were not applied");
 
-        if (!appliedMigrations.SequenceEqual(assemblyMigrations))
-            throw new InvalidOperationException("Can't match applied migrations with assembly migrations");
+                var appliedMigrations = context.Database.GetAppliedMigrations();
+                var assemblyMigrations = context.Database.GetMigrations();
+
+                if (!appliedMigrations.SequenceEqual(assemblyMigrations))
+                    throw new InvalidOperationException("Can't match applied migrations with assembly migrations");
+
+                return;
+            }
+        }
+
+        throw new InvalidOperationException("Can't connect to database");
     }
 }
