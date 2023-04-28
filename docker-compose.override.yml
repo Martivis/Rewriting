@@ -10,6 +10,8 @@ services:
       - ~/.docker-conf/mssql/data/:/var/lib/mssql/data
     env_file:
       - env.postgres
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   rewriting.rabbitmq:
     ports:
@@ -20,6 +22,8 @@ services:
       - shared_rewriting
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
+    extra_hosts:
+      - host.docker.internal:host-gateway
   
   rewriting.api:
     ports:
@@ -28,6 +32,8 @@ services:
       - shared_rewriting
     env_file:
       - env.api
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   rewriting.identity:
     ports:
@@ -36,6 +42,8 @@ services:
       - shared_rewriting
     env_file:
       - env.identity
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   rewriting.worker:
     environment:
@@ -44,19 +52,18 @@ services:
       - "80"
     env_file:
       - env.worker
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   rewriting.webapp:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "10010:80"
+    networks:
+      - shared_rewriting
     env_file:
       - env.webapp
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 networks:
   shared_rewriting:
