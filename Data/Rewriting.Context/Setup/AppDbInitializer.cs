@@ -24,12 +24,12 @@ public static class AppDbInitializer
         {
             using var context = dbContextFactory.CreateDbContext();
 
-            if (context.Database.CanConnect())
+            try
             {
                 context.Database.Migrate();
                 return;
             }
-            else
+            catch
             {
                 retries++;
                 Task.Delay(RetryDelayMs);
