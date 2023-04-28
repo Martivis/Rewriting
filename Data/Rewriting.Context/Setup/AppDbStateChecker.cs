@@ -23,28 +23,30 @@ public static class AppDbStateChecker
 
         while (retries < MaxRetries)
         {
-            using var context = dbContextFactory.CreateDbContext();
+        	try
+        	{
+            	using var context = dbContextFactory.CreateDbContext();
 
-            if (!context.Database.CanConnect())
+            	if (!context.Database.CanConnect())
+        			throw new InvalidOperationException("Can't connect to database");
+
+            	if (context.Database.GetPendingMigrations().Any())
+                	throw new InvalidOperationException("Some migrations were not applied");
+
+            	var appliedMigrations = context.Database.GetAppliedMigrations();
+                	var assemblyMigrations = context.Database.GetMigrations();
+
+            	if (!appliedMigrations.SequenceEqual(assemblyMigrations))
+                	throw new InvalidOperationException("Can't match applied migrations with assembly migrations");
+
+            	return;
+            }
+            catch
             {
                 retries++;
                 Task.Delay(RetryDelayMs).Wait();
             }
-            else
-            {
-                if (context.Database.GetPendingMigrations().Any())
-                    throw new InvalidOperationException("Some migrations were not applied");
-
-                var appliedMigrations = context.Database.GetAppliedMigrations();
-                var assemblyMigrations = context.Database.GetMigrations();
-
-                if (!appliedMigrations.SequenceEqual(assemblyMigrations))
-                    throw new InvalidOperationException("Can't match applied migrations with assembly migrations");
-
-                return;
-            }
         }
 
-        throw new InvalidOperationException("Can't connect to database");
     }
 }
