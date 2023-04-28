@@ -25,6 +25,18 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
   
+  rewriting.redis:
+    ports:
+      - "6379:6379"
+    networks:
+      - shared_rewriting
+    volumes:
+      - ~/.docker-conf/redis/data/:/data
+    env_file:
+      - env.redis
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
   rewriting.api:
     ports:
       - "10000:80"
