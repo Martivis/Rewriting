@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ public static class AppDbInitializer
     public static void Execute(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.GetService<IServiceScopeFactory>()!.CreateScope();
-
+        
         var dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
 
         int retries = 0;
@@ -32,7 +33,7 @@ public static class AppDbInitializer
             catch
             {
                 retries++;
-                Task.Delay(RetryDelayMs);
+                Task.Delay(RetryDelayMs).Wait();
             }
         }
     }

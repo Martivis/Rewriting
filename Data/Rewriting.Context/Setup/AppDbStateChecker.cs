@@ -28,7 +28,7 @@ public static class AppDbStateChecker
             if (!context.Database.CanConnect())
             {
                 retries++;
-                Task.Delay(RetryDelayMs);
+                Task.Delay(RetryDelayMs).Wait();
             }
             else
             {

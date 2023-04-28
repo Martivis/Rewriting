@@ -88,25 +88,25 @@
             <param name="request">AddResultRequest</param>
             <returns>IActionResult</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.AcceptResult(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.AcceptResult(Rewriting.API.Controllers.Contracts.ContractUidRequest)">
             <summary>
             Accept result in specified contract
             </summary>
-            <param name="contractUid">Uid of the target contract</param>
+            <param name="request">Uid of the target contract</param>
             <returns>IActionResult</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.DeclineResult(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.DeclineResult(Rewriting.API.Controllers.Contracts.ContractUidRequest)">
             <summary>
             Decline result in specified contract
             </summary>
-            <param name="contractUid">Uid of the target contract</param>
+            <param name="request">Uid of the target contract</param>
             <returns>IActionResult</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.DeclineContractor(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.DeclineContractor(Rewriting.API.Controllers.Contracts.ContractUidRequest)">
             <summary>
             Decline contractor in specified contract.
             </summary>
-            <param name="contractUid">Uid of the target contract</param>
+            <param name="request">Uid of the target contract</param>
             <returns>IActionResult</returns>
         </member>
         <member name="M:Rewriting.API.Controllers.Offers.OffersController.GetOffersByOrder(System.Guid,System.Int32,System.Int32)">
@@ -133,11 +133,11 @@
             <param name="request">AddOfferRequest</param>
             <returns>OfferResponse with information about created offer</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Offers.OffersController.AcceptOffer(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Offers.OffersController.AcceptOffer(Rewriting.API.Controllers.Offers.OfferUidRequest)">
             <summary>
             Accept specified offer
             </summary>
-            <param name="offerUid">Uid of the target offer</param>
+            <param name="request">Uid of the target offer</param>
             <returns>IActionResult</returns>
         </member>
         <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetNewOrders(System.Int32,System.Int32)">
@@ -167,18 +167,18 @@
             <param name="request">Add order request model</param>
             <returns>OrderDetailsResponse with information about created order</returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.CancelOrder(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.CancelOrder(Rewriting.API.Controllers.Orders.OrderUidRequest)">
             <summary>
             Cancel order
             </summary>
-            <param name="orderUid">Uid of target order</param>
+            <param name="request">Uid of target order</param>
             <returns></returns>
         </member>
-        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.DeleteOrder(System.Guid)">
+        <member name="M:Rewriting.API.Controllers.Orders.OrdersController.DeleteOrder(Rewriting.API.Controllers.Orders.OrderUidRequest)">
             <summary>
             Delete order
             </summary>
-            <param name="orderUid">Uid of target order</param>
+            <param name="request">Uid of target order</param>
             <returns></returns>
         </member>
     </members>
