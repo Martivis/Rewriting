@@ -1,6 +1,6 @@
 # Rewriting service
 
-##### Rewriting service is a platform that connects clients who need content to be rewritten with freelance writers who can provide high-quality rewritten content.
+Rewriting service is a platform that connects clients who need content to be rewritten with freelance writers who can provide high-quality rewritten content.
 
 ## Setup
 
