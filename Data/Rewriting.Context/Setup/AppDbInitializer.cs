@@ -30,10 +30,13 @@ public static class AppDbInitializer
                 context.Database.Migrate();
                 return;
             }
-            catch
+            catch (Exception e)
             {
                 retries++;
                 Task.Delay(RetryDelayMs).Wait();
+
+                if (retries >= MaxRetries)
+                    throw;
             }
         }
     }

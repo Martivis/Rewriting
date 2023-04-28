@@ -41,10 +41,13 @@ public static class AppDbStateChecker
 
             	return;
             }
-            catch
+            catch (InvalidOperationException e)
             {
                 retries++;
                 Task.Delay(RetryDelayMs).Wait();
+                
+                if (retries >= MaxRetries)
+                    throw;
             }
         }
 
