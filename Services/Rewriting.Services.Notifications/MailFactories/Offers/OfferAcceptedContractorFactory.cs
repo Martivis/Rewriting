@@ -22,7 +22,7 @@ internal class OfferAcceptedContractorFactory : MailFactoryBase<OfferModel>
         return new()
         {
             DestinationEmail = destinationEmail,
-            Subject = "New offer",
+            Subject = "Offer accepted",
             Text = $"Your offer {model.Uid} was accepted"
         };
     }
