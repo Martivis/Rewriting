@@ -22,10 +22,10 @@ public static class AppDbInitializer
         int retries = 0;
         while (retries < MaxRetries)
         {
-            using var context = dbContextFactory.CreateDbContext();
-
             try
             {
+                using var context = dbContextFactory.CreateDbContext();
+
                 context.Database.Migrate();
                 return;
             }
