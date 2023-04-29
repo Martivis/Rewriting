@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
+using Rewriting.Services.Cache;
 
 namespace Rewriting.Services.Offers
 {
     internal class OfferService : IOfferService, IOfferObservable
     {
         private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly ICacheService _cache;
         private readonly IMapper _mapper;
 
         public event Action<OfferModel> OnOfferAdd;
@@ -16,9 +18,11 @@ namespace Rewriting.Services.Offers
 
         public OfferService(
             IDbContextFactory<AppDbContext> contextFactory,
+            ICacheService cache,
             IMapper mapper)
         {
             _contextFactory = contextFactory;
+            _cache = cache;
             _mapper = mapper;
         }
 
@@ -117,8 +121,10 @@ namespace Rewriting.Services.Offers
             context.Add(contract);
             context.SaveChanges();
 
-            var offerMovel = _mapper.Map<OfferModel>(offer);
-            OnOfferAccept.Invoke(offerMovel);
+            await _cache.Remove($"order_{offer.Order.Uid}");
+
+            var offerModel = _mapper.Map<OfferModel>(offer);
+            OnOfferAccept.Invoke(offerModel);
         }
     }
 }

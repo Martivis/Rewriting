@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
+using Rewriting.Services.Cache;
 
 namespace Rewriting.Services.Orders;
 
 internal class OrderService : IOrderService, IOrderObservable
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
+    private readonly ICacheService _cache;
     private readonly IMapper _mapper;
 
     public event Action<OrderDetailsModel> OnOrderAdd;
@@ -17,10 +19,12 @@ internal class OrderService : IOrderService, IOrderObservable
 
     public OrderService(
         IDbContextFactory<AppDbContext> dbContextFactory,
+        ICacheService cache,
         IMapper mapper
         )
     {
         _contextFactory = dbContextFactory;
+        _cache = cache;
         _mapper = mapper;
     }
 
@@ -101,10 +105,18 @@ internal class OrderService : IOrderService, IOrderObservable
     {
         using var context = await _contextFactory.CreateDbContextAsync();
 
+        var orderDetails = await _cache.Get<OrderDetailsModel>($"order_{uid}");
+
+        if (orderDetails is not null)
+            return orderDetails;
+
         var order = context.Set<Order>().Find(uid)
             ?? throw new ProcessException($"Order {uid} not found");
 
-        return _mapper.Map<OrderDetailsModel>(order);
+        orderDetails = _mapper.Map<OrderDetailsModel>(order);
+        await _cache.Set($"order_{uid}", orderDetails);
+
+        return orderDetails;
     }
 
     /// <summary>
@@ -124,6 +136,9 @@ internal class OrderService : IOrderService, IOrderObservable
         context.SaveChanges();
 
         var orderDetailsModel = _mapper.Map<OrderDetailsModel>(order);
+
+        await _cache.Set($"order_{orderDetailsModel.Uid}", orderDetailsModel);
+
         OnOrderAdd?.Invoke(orderDetailsModel);
 
         return orderDetailsModel;
@@ -147,6 +162,8 @@ internal class OrderService : IOrderService, IOrderObservable
 
         order.Status = OrderStatus.Canceled;
         context.SaveChanges();
+
+        await _cache.Remove($"order_{model.OrderUid}");
 
         var orderDetails = _mapper.Map<OrderDetailsModel>(order);
         OnOrderCancel?.Invoke(orderDetails);
@@ -175,6 +192,8 @@ internal class OrderService : IOrderService, IOrderObservable
 
         context.Remove(order);
         context.SaveChanges();
+
+        await _cache.Remove($"order_{orderUid}");
 
         var orderDetails = _mapper.Map<OrderDetailsModel>(order);
         OnorderDelete?.Invoke(orderDetails);

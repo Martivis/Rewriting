@@ -4,8 +4,6 @@
 
 @inject OrderService OrderService
 @inject OrderOffersService OrderOffersService
-@inject ContractService ContractService
-@inject ContractResultsService ResultsService
 @inject ISnackbar SnackbarService
 
 @if (_orderModel is null)
@@ -90,47 +88,14 @@ else
                 </MudGrid>
             </MudPaper>
 
-            @if (_orderModel.ContractorUid is not null)
-            {
-                <MudPaper Class="pa-3 ma-2" Elevation="0">
-                    <MudText Typo="Typo.h5">Contractor</MudText>
-                    <MudText>@_orderModel.ContractorName</MudText>
-                    <MudText><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /> @_orderModel.ContractPublishDate</MudText>
-                </MudPaper>
-            }
-            else
-            {
-                <MudPaper Class="pa-3 ma-2" Elevation="0">
-                    <MudText Typo="Typo.h5">Offers</MudText>
-                    <ItemsList ItemService="OrderOffersService">
-                        <OfferCard Model="@context" />
-                    </ItemsList>
-                </MudPaper>
-            }
-            @if (UserIsClient())
-            {
-                @if (_orderModel.ContractorUid is not null)
-                {
-                    <MudPaper Class="pa-3 ma-2" Elevation="0">
-                        <MudText Typo="Typo.h5">Results</MudText>
-                        <ItemsList ItemService="ResultsService">
-                            <ResultCard Model="@context" />
-                        </ItemsList>
-                    </MudPaper>
+            <MudPaper Class="pa-3 ma-2" Elevation="0">
+                <MudText Typo="Typo.h5">Offers</MudText>
+                <ItemsList ItemService="OrderOffersService">
+                    <OfferCard Model="@context" />
+                </ItemsList>
+            </MudPaper>
 
-                    @if (_orderModel.Status != OrderStatus.Done)
-                    {
-                        <MudPaper Class="pa-3 ma-2" Elevation="0">
-                            <MudGrid Justify="Justify.SpaceBetween">
-                                <MudButton OnClick="AcceptResultAsync" Color="Color.Success">Accept result</MudButton>
-                                <MudButton OnClick="DeclineResultAsync" Color="Color.Error">Decline result</MudButton>
-                                <MudButton OnClick="DeclineContractorAsync" Color="Color.Error">Decline contractor</MudButton>
-                            </MudGrid>
-                        </MudPaper>
-                    }
-                }
-            }
-            else
+            @if (!UserIsClient())
             {
                 <MudButton Color="Color.Primary" Href="@($"/add_offer/{_orderModel.Uid}")">Add offer</MudButton>
             }
@@ -157,18 +122,15 @@ else
 
         _orderUid = Guid.Parse(OrderUid);
         OrderOffersService.OrderUid = _orderUid;
-        ResultsService.ContractUid = _orderUid;
 
         await RefreshModel();
     }
 
     private bool IsCancelable() => UserIsClient() && StatusIsCancelable();
 
-    private bool StatusIsCancelable() => _orderModel.Status == OrderStatus.New || _orderModel.Status == OrderStatus.InProgress;
+    private bool StatusIsCancelable() => _orderModel.Status == OrderStatus.New;
 
     private bool UserIsClient() => User.GetUid() == _orderModel.ClientUid;
-
-    private bool IsActionsAvailable() => _orderModel.Status != OrderStatus.Canceled && _orderModel.Status != OrderStatus.Done;
 
     private async Task RefreshModel()
     {
@@ -187,45 +149,6 @@ else
         try
         {
             await OrderService.CancelOrderAsync(_orderUid);
-            await RefreshModel();
-        }
-        catch (Exception e)
-        {
-            SnackbarService.Add(e.Message);
-        }
-    }
-
-    private async Task AcceptResultAsync()
-    {
-        try
-        {
-            await ContractService.AcceptResultAsync(_orderUid);
-            await RefreshModel();
-        }
-        catch (Exception e)
-        {
-            SnackbarService.Add(e.Message);
-        }
-    }
-
-    private async Task DeclineResultAsync()
-    {
-        try
-        {
-            await ContractService.DeclineResultAsync(_orderUid);
-            await RefreshModel();
-        }
-        catch (Exception e)
-        {
-            SnackbarService.Add(e.Message);
-        }
-    }
-
-    private async Task DeclineContractorAsync()
-    {
-        try
-        {
-            await ContractService.DeclineContractorAsync(_orderUid);
             await RefreshModel();
         }
         catch (Exception e)

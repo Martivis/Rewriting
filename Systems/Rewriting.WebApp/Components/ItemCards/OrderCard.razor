@@ -6,7 +6,8 @@
         <MudText Typo="Typo.subtitle1">@Model.PublishDate</MudText>
     </MudCardContent>
     <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/order/{Model.Uid.ToString()}")">Details</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary"
+            Href="@($"/" + (IsContract() ? "contract" : "order") + $"/{Model.Uid.ToString()}")">Details</MudButton>
     </MudCardActions>
 </MudCard>
 
@@ -15,4 +16,10 @@
 {
     [Parameter]
     public OrderModel Model { get; set; }
+
+    private bool IsContract()
+    {
+        return Model.Status != OrderStatus.New &&
+               Model.Status != OrderStatus.Canceled;
+    }
 }

@@ -52,10 +52,13 @@ public class ContractsController : ControllerBase
     [Authorize]
     public async Task<ContractDetailsResponse> GetContractDetails([FromQuery] Guid contractUid)
     {
-        var contract = await _contractService.GetContractorAuthAsync(contractUid);
+        var contractorAuth = await _contractService.GetContractorAuthAsync(contractUid);
+        var clientAuth = await _contractService.GetClientAuthAsync(contractUid);
 
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, contract, AppScopes.ContractsEdit);
-        if (!authorizationResult.Succeeded)
+        var contractorAuthResult = await _authorizationService.AuthorizeAsync(User, contractorAuth, AppScopes.ContractsEdit);
+        var clientAuchResult = await _authorizationService.AuthorizeAsync(User, clientAuth, AppScopes.ContractsEdit);
+
+        if (!contractorAuthResult.Succeeded && !clientAuchResult.Succeeded)
         {
             HttpContext.Response.StatusCode = 403;
             return new ContractDetailsResponse();

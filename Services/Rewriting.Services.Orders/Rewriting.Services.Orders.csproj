@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\Data\Rewriting.Context.Entities\Rewriting.Context.Entities.csproj" />
     <ProjectReference Include="..\..\Data\Rewriting.Context\Rewriting.Context.csproj" />
     <ProjectReference Include="..\..\Shared\Rewriting.Common\Rewriting.Common.csproj" />
+    <ProjectReference Include="..\Rewriting.Services.Cache\Rewriting.Services.Cache.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 using Rewriting.API;
 using Rewriting.API.Configuration;
 using Rewriting.Context;
+using Rewriting.Services.Cache;
 using Rewriting.Services.Contracts;
 using Rewriting.Services.EmailService;
 using Rewriting.Services.Notifications;
@@ -38,6 +39,7 @@ services.AddContractService();
 services.AddNotificationService();
 services.AddEmailService();
 services.AddRabbitMQ();
+services.AddAppCache();
 
 var app = builder.Build();
 

@@ -7,6 +7,9 @@ services:
   rewriting.rabbitmq:
     image: rabbitmq:management
 
+  rewriting.redis:
+    image: redis:latest
+
   rewriting.api:
     image: ${DOCKER_REGISTRY-}rewritingapi
     build:

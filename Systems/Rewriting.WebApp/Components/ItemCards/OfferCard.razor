@@ -37,8 +37,6 @@
     private async Task AcceptOffer()
     {
         await OfferService.AcceptOfferAsync(Model.Uid);
-        NavigationManager.RefreshPage();
+        NavigationManager.NavigateTo($"/contract/{Model.OrderUid.ToString()}");
     }
-
-    
 }

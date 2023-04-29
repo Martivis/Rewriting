@@ -108,8 +108,7 @@ namespace Rewriting.API.Controllers.Orders
 
             var cancelOrderModel = new CancelOrderModel
             {
-                OrderUid = request.OrderUid,
-                Issuer = User,
+                OrderUid = request.OrderUid
             };
 
             await _orderService.CancelOrderAsync(cancelOrderModel);

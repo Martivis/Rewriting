@@ -4,6 +4,7 @@
 
 @inject ContractService ContractService
 @inject ContractResultsService ResultsService
+@inject NavigationManager NavigationManager
 @inject ISnackbar SnackbarService
 
 @if (_contractModel is null)
@@ -85,7 +86,10 @@ else
                 </MudGrid>
             </MudPaper>
 
-            <MudButton Color="Color.Primary" Href="@($"/add_result/{_contractModel.Uid}")">Add result</MudButton>
+            @if (UserIsContractor())
+            {
+                <MudButton Color="Color.Primary" Href="@($"/add_result/{_contractModel.Uid}")">Add result</MudButton>
+            }
 
             <MudPaper Class="pa-3 ma-2" Elevation="0">
                 <MudText Typo="Typo.h5">Results</MudText>
@@ -94,6 +98,19 @@ else
                 </ItemsList>
             </MudPaper>
 
+            @if (IsClientActionsAvailable())
+            {
+                <MudPaper Class="pa-3 ma-2" Elevation="0">
+                    <MudGrid Justify="Justify.SpaceBetween">
+                        @if (IsResultActionsAvailable())
+                        {
+                            <MudButton OnClick="AcceptResultAsync" Color="Color.Success">Accept result</MudButton>
+                            <MudButton OnClick="DeclineResultAsync" Color="Color.Error">Decline result</MudButton>
+                        }
+                        <MudButton OnClick="DeclineContractorAsync" Color="Color.Error">Decline contractor</MudButton>
+                    </MudGrid>
+                </MudPaper>
+            }
         </MudContainer>
     </MudCard>
 }
@@ -139,7 +156,52 @@ else
             @<div>
                 <h3>@title</h3>
                 <p>@text</p>
-            </div>
-        );
+        </div>
+    );
+    }
+
+    private bool IsClientActionsAvailable() => !UserIsContractor() && _contractModel.Status != OrderStatus.Done;
+
+    private bool IsResultActionsAvailable() => _contractModel.Status == OrderStatus.Evaluation;
+
+    private bool UserIsContractor() => User.GetUid() == _contractModel.ContractorUid;
+
+    private async Task AcceptResultAsync()
+    {
+        try
+        {
+            await ContractService.AcceptResultAsync(_contractUid);
+            await RefreshModel();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
+    }
+
+    private async Task DeclineResultAsync()
+    {
+        try
+        {
+            await ContractService.DeclineResultAsync(_contractUid);
+            await RefreshModel();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
+    }
+
+    private async Task DeclineContractorAsync()
+    {
+        try
+        {
+            await ContractService.DeclineContractorAsync(_contractUid);
+            NavigationManager.NavigateTo($"/order/{_contractModel.Uid}");
+        }
+        catch (Exception e)
+        {
+            SnackbarService.Add(e.Message);
+        }
     }
 }

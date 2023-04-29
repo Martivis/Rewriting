@@ -63,12 +63,9 @@ public class CancelOrderTests
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
 
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
         var cancelOrderModel = new CancelOrderModel()
         {
-            OrderUid = orderUid,
-            Issuer = claimsPrincipalStub.Object
+            OrderUid = orderUid
         };
 
         // Act
@@ -96,12 +93,9 @@ public class CancelOrderTests
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
 
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
         var cancelOrderModel = new CancelOrderModel()
         {
-            OrderUid = orderUid,
-            Issuer = claimsPrincipalStub.Object
+            OrderUid = orderUid
         };
 
         // Act
@@ -130,12 +124,9 @@ public class CancelOrderTests
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
 
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
         var cancelOrderModel = new CancelOrderModel()
         {
-            OrderUid = orderUid,
-            Issuer = claimsPrincipalStub.Object
+            OrderUid = orderUid
         };
 
         // Act
@@ -164,12 +155,9 @@ public class CancelOrderTests
         _contextHelper.Context.Add(order);
         _contextHelper.Context.SaveChanges();
 
-        var claimsPrincipalStub = new Mock<ClaimsPrincipal>();
-
         var cancelOrderModel = new CancelOrderModel()
         {
-            OrderUid = unexistingOrderUid,
-            Issuer = claimsPrincipalStub.Object
+            OrderUid = unexistingOrderUid
         };
 
         // Act
