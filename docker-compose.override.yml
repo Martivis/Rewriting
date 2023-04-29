@@ -32,8 +32,6 @@ services:
       - shared_rewriting
     volumes:
       - ~/.docker-conf/redis/data/:/data
-    env_file:
-      - env.redis
     extra_hosts:
       - host.docker.internal:host-gateway
 
