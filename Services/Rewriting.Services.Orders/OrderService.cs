@@ -9,8 +9,7 @@ namespace Rewriting.Services.Orders;
 
 internal class OrderService : IOrderService, IOrderObservable
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
-    private readonly ICacheService _cache;
+    private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
 
     public event Action<OrderDetailsModel> OnOrderAdd;
@@ -18,13 +17,11 @@ internal class OrderService : IOrderService, IOrderObservable
     public event Action<OrderDetailsModel> OnorderDelete;
 
     public OrderService(
-        IDbContextFactory<AppDbContext> dbContextFactory,
-        ICacheService cache,
+        IOrderRepository orderRepository,
         IMapper mapper
         )
     {
-        _contextFactory = dbContextFactory;
-        _cache = cache;
+        _orderRepository = orderRepository;
         _mapper = mapper;
     }
 
@@ -36,9 +33,7 @@ internal class OrderService : IOrderService, IOrderObservable
     /// <exception cref="ProcessException">Thrown when order with specified Uid doesn't exist in database</exception>
     public async Task<OrderModel> GetOrderAsync(Guid orderUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-        var order = await context.Set<Order>().FindAsync(orderUid)
-            ?? throw new ProcessException($"Order {orderUid} not found");
+        var order = await _orderRepository.GetOrderAsync(orderUid);
 
         return _mapper.Map<OrderModel>(order);
     }
@@ -57,14 +52,7 @@ internal class OrderService : IOrderService, IOrderObservable
         if (pageSize < 1)
             throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size should be greater than zero");
 
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var orders = context.Set<Order>()
-            .Where(order => order.Status == OrderStatus.New)
-            .OrderByDescending(order => order.PublishDate)
-            .Skip(page * pageSize)
-            .Take(pageSize)
-            .ToList();
+        var orders = await _orderRepository.GetNewOrdersAsync(page, pageSize);
 
         return _mapper.Map<IEnumerable<OrderModel>>(orders);
     }
@@ -84,14 +72,7 @@ internal class OrderService : IOrderService, IOrderObservable
         if (pageSize < 1)
             throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "Page size should be greater than zero");
 
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var orders = context.Set<Order>()
-            .Where(order => order.ClientUid == userUid)
-            .OrderByDescending(order => order.PublishDate)
-            .Skip(pageSize * page)
-            .Take(pageSize)
-            .ToList();
+        var orders = await _orderRepository.GetOrdersByUserAsync(userUid, page, pageSize);
 
         return _mapper.Map<IEnumerable<OrderModel>>(orders);
     }
@@ -103,18 +84,7 @@ internal class OrderService : IOrderService, IOrderObservable
     /// <returns>A Task containing an OrderDetailsModel object</returns>
     public async Task<OrderDetailsModel> GetOrderDetailsAsync(Guid uid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var orderDetails = await _cache.Get<OrderDetailsModel>($"order_{uid}");
-
-        if (orderDetails is not null)
-            return orderDetails;
-
-        var order = context.Set<Order>().Find(uid)
-            ?? throw new ProcessException($"Order {uid} not found");
-
-        orderDetails = _mapper.Map<OrderDetailsModel>(order);
-        await _cache.Set($"order_{uid}", orderDetails);
+        var orderDetails = await _orderRepository.GetOrderDetailsAsync(uid);
 
         return orderDetails;
     }
@@ -126,18 +96,13 @@ internal class OrderService : IOrderService, IOrderObservable
     /// <returns>A Task containing an OrderDetailsModel object</returns>
     public async Task<OrderDetailsModel> AddOrderAsync(AddOrderModel model)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
         var order = _mapper.Map<Order>(model);
         order.Status = OrderStatus.New;
         order.PublishDate = DateTime.UtcNow;
 
-        await context.AddAsync(order);
-        context.SaveChanges();
+        await _orderRepository.AddOrderAsync(order);
 
         var orderDetailsModel = _mapper.Map<OrderDetailsModel>(order);
-
-        await _cache.Set($"order_{orderDetailsModel.Uid}", orderDetailsModel);
 
         OnOrderAdd?.Invoke(orderDetailsModel);
 
@@ -152,18 +117,14 @@ internal class OrderService : IOrderService, IOrderObservable
     /// <exception cref="ProcessException">Thrown when order is not cancalable</exception>
     public async Task CancelOrderAsync(CancelOrderModel model)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var order = context.Set<Order>().Find(model.OrderUid)
-            ?? throw new ProcessException($"Order {model.OrderUid} not found");
+        var order = await _orderRepository.GetOrderAsync(model.OrderUid);
 
         if (!IsCancelable(order))
             throw new ProcessException($"Unable to cancel order {order.Uid}");
 
         order.Status = OrderStatus.Canceled;
-        context.SaveChanges();
-
-        await _cache.Remove($"order_{model.OrderUid}");
+        
+        await _orderRepository.UpdateOrderAsync(order);
 
         var orderDetails = _mapper.Map<OrderDetailsModel>(order);
         OnOrderCancel?.Invoke(orderDetails);
@@ -185,17 +146,10 @@ internal class OrderService : IOrderService, IOrderObservable
     /// <exception cref="ProcessException">Thrown when order with specified Uid doesn't exist in database</exception>
     public async Task DeleteOrderAsync(Guid orderUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
+        var orderDetails = await _orderRepository.GetOrderDetailsAsync(orderUid);
 
-        var order = context.Set<Order>().Find(orderUid)
-            ?? throw new ProcessException($"Order {orderUid} not found");
+        await _orderRepository.DeleteOrderAsync(orderUid);
 
-        context.Remove(order);
-        context.SaveChanges();
-
-        await _cache.Remove($"order_{orderUid}");
-
-        var orderDetails = _mapper.Map<OrderDetailsModel>(order);
         OnorderDelete?.Invoke(orderDetails);
     }
 }
