@@ -21,6 +21,8 @@ namespace Rewriting.Services.Orders
 
         private readonly AppDbContext _context;
 
+        private const string OrderCachePrefix = "order_";
+
         public OrderRepository(IDbContextFactory<AppDbContext> contextFactory, ICacheService cache, IMapper mapper)
         {
             _contextFactory = contextFactory;
@@ -62,8 +64,13 @@ namespace Rewriting.Services.Orders
 
         public async Task<OrderDetailsModel> GetOrderDetailsAsync(Guid orderUid)
         {
-            var order = await GetOrderAsync(orderUid);
-            var orderDetails = _mapper.Map<OrderDetailsModel>(order);
+            var orderDetails = await _cache.Get<OrderDetailsModel>($"{OrderCachePrefix}{orderUid}");
+            if (orderDetails is null)
+            {
+                var order = await GetOrderAsync(orderUid);
+                orderDetails = _mapper.Map<OrderDetailsModel>(order);
+                await _cache.Set($"{OrderCachePrefix}{orderUid}", orderDetails);
+            }
             return orderDetails;
         }
 
@@ -77,6 +84,7 @@ namespace Rewriting.Services.Orders
         {
             _context.Set<Order>().Attach(order);
             await _context.SaveChangesAsync();
+            await _cache.Remove($"{OrderCachePrefix}{order.Uid}");
         }
 
         public async Task DeleteOrderAsync(Guid orderUid)
@@ -84,6 +92,7 @@ namespace Rewriting.Services.Orders
             var order = await GetOrderAsync(orderUid);
             _context.Remove(order);
             await _context.SaveChangesAsync();
+            await _cache.Remove($"{OrderCachePrefix}{order.Uid}");
         }
 
         public void Dispose()
