@@ -16,6 +16,8 @@ public static class CacheBootstraper
             options.Configuration = settings.Url;
         });
 
+        services.AddScoped<ICacheService, CacheService>();
+
         return services;
     }
 }

@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
+using Rewriting.Services.Cache;
 
 namespace Rewriting.Services.Contracts;
 
 internal class ContractService : IContractService, IContractObservable
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
+    private readonly ICacheService _cache;
     private readonly IMapper _mapper;
 
     public event Action<ContractDetailsModel> OnResultAdd;
@@ -16,9 +18,13 @@ internal class ContractService : IContractService, IContractObservable
     public event Action<ContractDetailsModel> OnResultDecline;
     public event Action<ContractDetailsModel> OnContractorDecline;
 
-    public ContractService(IDbContextFactory<AppDbContext> contextFactory, IMapper mapper)
+    public ContractService(
+        IDbContextFactory<AppDbContext> contextFactory,
+        ICacheService cache,
+        IMapper mapper)
     {
         _contextFactory = contextFactory;
+        _cache = cache;
         _mapper = mapper;
     }
 
@@ -102,8 +108,10 @@ internal class ContractService : IContractService, IContractObservable
         context.Add(result);
         context.SaveChanges();
 
-        var refresedOrder = context.Set<Order>().Find(model.ContractUid);
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
+        await _cache.Remove($"order_{contract.Uid}");
+        
+        var refreshedOrder = context.Set<Order>().Find(model.ContractUid);
+        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refreshedOrder);
         OnResultAdd.Invoke(contractDetailsModel);
     }
 

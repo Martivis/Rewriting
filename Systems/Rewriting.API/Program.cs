@@ -32,7 +32,7 @@ services.AddAppHealthChecks();
 services.AddAppAutomapper();
 
 services.AddAppUserAccountService();
-services.AddCachedOrderService();
+services.AddOrderService();
 services.AddOfferService();
 services.AddContractService();
 
