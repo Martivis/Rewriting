@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Rewriting.Context;
 using Rewriting.Common.Validator;
 using Rewriting.Context.Entities;
-using Rewriting.Services.Orders;
 using AutoMapper;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 
-namespace Rewriting.Services.Orders.Tests;
+namespace Rewriting.Services.Orders.Tests.RepositoryTests;
 
 [TestClass]
 public class GetNewOrdersTests
@@ -16,23 +16,24 @@ public class GetNewOrdersTests
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
     private IMapper _mapper;
-    
-    private IOrderService _orderService;
+
+    private IOrderRepository _orderRepository;
 
     [TestInitialize]
     public void TestInitialize()
     {
         _contextHelper = new DbContextHelper();
-        
+
         _contextFactoryStub = new Mock<IDbContextFactory<AppDbContext>>();
-        _contextFactoryStub.Setup(method => 
+        _contextFactoryStub.Setup(method =>
             method.CreateDbContextAsync(It.IsAny<CancellationToken>()))
                   .Returns(Task.FromResult(_contextHelper.Context));
 
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderModelProfile())));
 
-        _orderService = new OrderService(
+        _orderRepository = new OrderRepository(
             _contextFactoryStub.Object,
+            CacheHelper.GetCacheStub(),
             _mapper
             );
     }
@@ -85,7 +86,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrdersAsync(0, 2);
+        var result = await _orderRepository.GetNewOrdersAsync(0, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -139,35 +140,11 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrdersAsync(1, 2);
+        var result = await _orderRepository.GetNewOrdersAsync(1, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
         CollectionAssert.AreEqual(expected, actual);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Exceprion was not thrown")]
-    public async Task GetNewOrders_NegativePage_ThrowsException()
-    {
-        // Act
-        await _orderService.GetNewOrdersAsync(-1, 2);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Exceprion was not thrown")]
-    public async Task GetNewOrders_ZeroPageSize_ThrowsException()
-    {
-        // Act
-        await _orderService.GetNewOrdersAsync(0, 0);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Exceprion was not thrown")]
-    public async Task GetNewOrders_NegativePageSize_ThrowsException()
-    {
-        // Act
-        await _orderService.GetNewOrdersAsync(0, -1);
     }
 
     [TestMethod]
@@ -238,7 +215,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrdersAsync();
+        var result = await _orderRepository.GetNewOrdersAsync();
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -283,7 +260,7 @@ public class GetNewOrdersTests
         };
 
         // Act
-        var result = await _orderService.GetNewOrdersAsync(0, 2);
+        var result = await _orderRepository.GetNewOrdersAsync(0, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert

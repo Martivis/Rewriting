@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
+using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.Orders.Tests;
+namespace Rewriting.Services.Orders.Tests.RepositoryTests;
 
 [TestClass]
 public class GetOrdersByUserTests
@@ -18,9 +19,8 @@ public class GetOrdersByUserTests
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
     private IMapper _mapper;
-    private Mock<IAuthorizationService> _authorizationServiceStub;
 
-    private IOrderService _orderService;
+    private IOrderRepository _orderRepository;
 
     [TestInitialize]
     public void TestInitialize()
@@ -34,8 +34,9 @@ public class GetOrdersByUserTests
 
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderModelProfile())));
 
-        _orderService = new OrderService(
+        _orderRepository = new OrderRepository(
             _contextFactoryStub.Object,
+            CacheHelper.GetCacheStub(),
             _mapper
             );
     }
@@ -89,7 +90,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUserAsync(userUid, 0, 2);
+        var result = await _orderRepository.GetOrdersByUserAsync(userUid, 0, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -144,44 +145,11 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUserAsync(userUid, 1, 2);
+        var result = await _orderRepository.GetOrdersByUserAsync(userUid, 1, 2);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
         CollectionAssert.AreEqual(expected, actual);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Exceprion was not thrown")]
-    public async Task GetOrdersByUser_NegativePage_ThrowsException()
-    {
-        // Arrange
-        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
-
-        // Act
-        await _orderService.GetOrdersByUserAsync(userUid, -1, 2);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Exceprion was not thrown")]
-    public async Task GetOrdersByUser_ZeroPageSize_ThrowsException()
-    {
-        // Arrange
-        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
-
-        // Act
-        await _orderService.GetOrdersByUserAsync(userUid, 0, 0);
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Exceprion was not thrown")]
-    public async Task GetOrdersByUser_NegativePageSize_ThrowsException()
-    {
-        // Arrange
-        var userUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
-
-        // Act
-        await _orderService.GetOrdersByUserAsync(userUid, 0, -1);
     }
 
     [TestMethod]
@@ -245,7 +213,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUserAsync(userUid);
+        var result = await _orderRepository.GetOrdersByUserAsync(userUid);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert
@@ -313,7 +281,7 @@ public class GetOrdersByUserTests
         };
 
         // Act
-        var result = await _orderService.GetOrdersByUserAsync(user1Uid);
+        var result = await _orderRepository.GetOrdersByUserAsync(user1Uid);
         var actual = result.Select(x => x.Uid).ToList();
 
         // Assert

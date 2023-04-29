@@ -32,7 +32,7 @@ namespace Rewriting.Services.Orders
             _context = _contextFactory.CreateDbContextAsync().Result;
         }
 
-        public async Task<IEnumerable<OrderModel>> GetNewOrdersAsync(int page, int pageSize)
+        public async Task<IEnumerable<OrderModel>> GetNewOrdersAsync(int page = 0, int pageSize = 10)
         {
             var orders = await _context.Set<Order>()
                 .Where(order => order.Status == OrderStatus.New)
@@ -44,7 +44,7 @@ namespace Rewriting.Services.Orders
             return _mapper.Map<IEnumerable<OrderModel>>(orders);
         }
 
-        public async Task<IEnumerable<OrderModel>> GetOrdersByUserAsync(Guid userUid, int page, int pageSize)
+        public async Task<IEnumerable<OrderModel>> GetOrdersByUserAsync(Guid userUid, int page = 0, int pageSize = 10)
         {
             var orders = await _context.Set<Order>()
                 .Where(order => order.ClientUid == userUid)

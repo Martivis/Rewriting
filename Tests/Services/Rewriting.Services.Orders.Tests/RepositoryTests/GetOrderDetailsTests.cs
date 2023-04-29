@@ -5,13 +5,14 @@ using Moq;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
+using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rewriting.Services.Orders.Tests;
+namespace Rewriting.Services.Orders.Tests.RepositoryTests;
 
 [TestClass]
 public class GetOrderDetailsTests
@@ -19,9 +20,8 @@ public class GetOrderDetailsTests
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
     private IMapper _mapper;
-    private Mock<IAuthorizationService> _authorizationServiceStub;
 
-    private IOrderService _orderService;
+    private IOrderRepository _orderRepository;
 
     [TestInitialize]
     public void TestInitialize()
@@ -36,8 +36,9 @@ public class GetOrderDetailsTests
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderDetailsModelProfile())));
 
 
-        _orderService = new OrderService(
+        _orderRepository = new OrderRepository(
             _contextFactoryStub.Object,
+            CacheHelper.GetCacheStub(),
             _mapper
             );
     }
@@ -47,7 +48,7 @@ public class GetOrderDetailsTests
     public async Task GetOrderDetails_NoExisting_ThrowsException()
     {
         // Act
-        await _orderService.GetOrderDetailsAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
+        await _orderRepository.GetOrderDetailsAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
     }
 
     [TestMethod]
@@ -78,14 +79,14 @@ public class GetOrderDetailsTests
                 PublishDate = DateTime.Parse("01.01.2020")
             },
         };
-        
+
         _contextHelper.Context.AddRange(data);
         _contextHelper.Context.SaveChanges();
 
         var expected = new Guid("22222222-2222-2222-2222-222222222222");
 
         // Act
-        var result = await _orderService.GetOrderDetailsAsync(orderUid);
+        var result = await _orderRepository.GetOrderDetailsAsync(orderUid);
         var actual = result.Uid;
 
         // Assert
