@@ -20,9 +20,6 @@ public class OrderDetailsResponse
     public OrderStatus Status { get; set; }
     public Guid ClientUid { get; set; }
     public string ClientName { get; set; }
-    public DateTime? ContractPublishDate { get; set; }
-    public Guid? ContractorUid { get; set; }
-    public string? ContractorName { get; set; }
 }
 
 public class OrderDetailsResponseProfile : Profile
