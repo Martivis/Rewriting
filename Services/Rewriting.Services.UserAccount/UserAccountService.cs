@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Rewriting.Common.Exceptions;
 using Rewriting.Common.Validator;
 using Rewriting.Context.Entities;
+using Rewriting.Services.EmailService;
 using System.Security.Claims;
 
 namespace Rewriting.Services.UserAccount
@@ -10,6 +11,7 @@ namespace Rewriting.Services.UserAccount
     internal class UserAccountService : IUserAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IModelValidator<RegisterUserModel> _registerUserAccountModelValidator;
         private readonly IModelValidator<ChangePasswordModel> _changePasswordModelValidator;
@@ -78,6 +80,11 @@ namespace Rewriting.Services.UserAccount
             return _mapper.Map<UserModel>(userIdentity);
         }
 
+        private static string AggregateErrors(IdentityResult result)
+        {
+            return result.Errors.ToList().Select(a => a.Description).Aggregate((a, b) => a + "\n" + b);
+        }
+
         public async Task AddToRoleAsync(AddToRoleModel model)
         {
             var userIdentity = await _userManager.FindByIdAsync(model.UserUid.ToString())
@@ -88,9 +95,23 @@ namespace Rewriting.Services.UserAccount
             await _userManager.AddClaimAsync(userIdentity, claim);
         }
 
-        private static string AggregateErrors(IdentityResult result)
+        public async Task InitializePasswordReset(InitialResetPasswordModel model)
         {
-            return result.Errors.ToList().Select(a => a.Description).Aggregate((a, b) => a + "\n" + b);
+            var user = await _userManager.FindByEmailAsync(model.Email)
+                ?? throw new ProcessException($"User registered with email {model.Email} not found");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var mailModel = ResetPasswordMailFactory.GetMailModel(model.Email, token);
+            await _emailService.SendMail(mailModel);
+        }
+
+        public async Task ResetPassword(ResetPasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email)
+                ?? throw new ProcessException($"User registered with email {model.Email} not found");
+
+            await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
         }
     }
 }
