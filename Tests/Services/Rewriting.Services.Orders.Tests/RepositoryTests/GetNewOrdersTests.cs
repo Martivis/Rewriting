@@ -1,11 +1,8 @@
-using Moq;
-using Microsoft.EntityFrameworkCore;
-using Rewriting.Context;
-using Rewriting.Common.Validator;
-using Rewriting.Context.Entities;
 using AutoMapper;
-using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Rewriting.Context;
+using Rewriting.Context.Entities;
 using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 
 namespace Rewriting.Services.Orders.Tests.RepositoryTests;

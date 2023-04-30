@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
 using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rewriting.Services.Orders.Tests.RepositoryTests;
 

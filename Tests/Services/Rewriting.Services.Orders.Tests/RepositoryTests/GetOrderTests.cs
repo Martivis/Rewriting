@@ -1,15 +1,21 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
 using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Rewriting.Services.Orders.Tests.RepositoryTests;
 
 [TestClass]
-public class GetOrderDetailsTests
+public class GetOrderTests
 {
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
@@ -27,7 +33,7 @@ public class GetOrderDetailsTests
             method.CreateDbContextAsync(It.IsAny<CancellationToken>()))
                   .Returns(Task.FromResult(_contextHelper.Context));
 
-        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new OrderDetailsModelProfile())));
+        _mapper = new Mapper(new MapperConfiguration(_ => { }));
 
 
         _orderRepository = new OrderRepository(
@@ -45,14 +51,14 @@ public class GetOrderDetailsTests
 
     [TestMethod]
     [ExpectedException(typeof(ProcessException), "Exceprion was not thrown")]
-    public async Task GetOrderDetails_NoExisting_ThrowsException()
+    public async Task GetOrder_NoExisting_ThrowsException()
     {
         // Act
-        await _orderRepository.GetOrderDetailsAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
+        await _orderRepository.GetOrderAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
     }
 
     [TestMethod]
-    public async Task GetOrderDetails_Normal_Returns1elem()
+    public async Task GetOrder_Normal_Returns1elem()
     {
         // Arrange
         var orderUid = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -86,7 +92,7 @@ public class GetOrderDetailsTests
         var expected = new Guid("22222222-2222-2222-2222-222222222222");
 
         // Act
-        var result = await _orderRepository.GetOrderDetailsAsync(orderUid);
+        var result = await _orderRepository.GetOrderAsync(orderUid);
         var actual = result.Uid;
 
         // Assert
