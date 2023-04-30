@@ -62,7 +62,7 @@ namespace Rewriting.API.Controllers.Orders
         }
 
         /// <summary>
-        /// Get delailed information about an order with specified Uid including offers and results
+        /// Get delailed information about an order with specified Uid
         /// </summary>
         /// <param name="orderUid">Uid of the target offer</param>
         /// <returns>OrderDetailsResponse</returns>
