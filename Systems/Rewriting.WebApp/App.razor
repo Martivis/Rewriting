@@ -18,7 +18,10 @@
                     }
                     else
                     {
-                        OpenLoginDialog();
+                        <MudAlert Severity="Severity.Warning">
+                            To view this page, please,
+                            <MudButton OnClick="OpenLoginDialog">Login</MudButton>
+                        </MudAlert>
                     }
                 </NotAuthorized>
             </AuthorizeRouteView>
