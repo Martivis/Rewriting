@@ -1,12 +1,9 @@
-using Moq;
-using Microsoft.EntityFrameworkCore;
-using Rewriting.Context;
-using Rewriting.Common.Validator;
-using Rewriting.Context.Entities;
-using Rewriting.Services.Orders;
 using AutoMapper;
-using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Rewriting.Context;
+using Rewriting.Context.Entities;
+using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 
 namespace Rewriting.Services.Orders.Tests;
 
@@ -33,6 +30,7 @@ public class GetNewOrdersTests
 
         _orderService = new OrderService(
             _contextFactoryStub.Object,
+            CacheHelper.GetCacheStub(),
             _mapper
             );
     }

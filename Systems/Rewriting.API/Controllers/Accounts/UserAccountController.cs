@@ -7,7 +7,7 @@ using Rewriting.Services.UserAccount;
 
 namespace Rewriting.API.Controllers.Accounts
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     [ApiController]
     public class UserAccountController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace Rewriting.API.Controllers.Accounts
         /// </summary>
         /// <param name="request">RegisterUserAccountRequest</param>
         /// <response code="200">Registered user model</response>
-        [HttpPost("")]
+        [HttpPost]
         public async Task<UserAccountResponse> Register([FromBody] RegisterUserRequest request)
         {
             _registerUserRequestValidator.Check(request);
@@ -47,7 +47,7 @@ namespace Rewriting.API.Controllers.Accounts
         /// </summary>
         /// <param name="request">ChangePasswordRequest</param>
         /// <response code="200">Success report</response>
-        [HttpPatch("")]
+        [HttpPatch]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
@@ -55,6 +55,32 @@ namespace Rewriting.API.Controllers.Accounts
             var model = _mapper.Map<ChangePasswordModel>(request);
             model.Issuer = User;
             await _userAccountService.ChangePasswordAsync(model);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Send password reset token to user email, if it is registered
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> InitialPasswordReset([FromBody] InitialResetPasswordRequest request)
+        {
+            var model = _mapper.Map<InitialResetPasswordModel>(request);
+            await _userAccountService.InitializePasswordReset(model);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Reset password with recieved token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var model = _mapper.Map<ResetPasswordModel>(request);
+            await _userAccountService.ResetPassword(model);
             return Ok();
         }
     }

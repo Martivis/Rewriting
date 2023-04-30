@@ -171,10 +171,7 @@ internal class OrderService : IOrderService, IOrderObservable
 
     private static bool IsCancelable(Order order)
     {
-        return
-            order.Status != OrderStatus.Canceled &&
-            order.Status != OrderStatus.Done &&
-            order.Status != OrderStatus.Evaluation;
+        return order.Status == OrderStatus.New;
     }
 
     /// <summary>

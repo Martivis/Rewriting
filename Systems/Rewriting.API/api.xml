@@ -59,6 +59,20 @@
             <param name="request">ChangePasswordRequest</param>
             <response code="200">Success report</response>
         </member>
+        <member name="M:Rewriting.API.Controllers.Accounts.UserAccountController.InitialPasswordReset(Rewriting.API.Controllers.Accounts.InitialResetPasswordRequest)">
+            <summary>
+            Send password reset token to user email, if it is registered
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rewriting.API.Controllers.Accounts.UserAccountController.ResetPassword(Rewriting.API.Controllers.Accounts.ResetPasswordRequest)">
+            <summary>
+            Reset password with recieved token
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:Rewriting.API.Controllers.Contracts.ContractsController.GetContractsByUser(System.Int32,System.Int32)">
             <summary>
             Get contracts relating to calling user
@@ -155,7 +169,7 @@
         </member>
         <member name="M:Rewriting.API.Controllers.Orders.OrdersController.GetOrderDetails(System.Guid)">
             <summary>
-            Get delailed information about an order with specified Uid including offers and results
+            Get delailed information about an order with specified Uid
             </summary>
             <param name="orderUid">Uid of the target offer</param>
             <returns>OrderDetailsResponse</returns>
