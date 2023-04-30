@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 
 namespace Rewriting.Services.Orders.Tests;
 
@@ -18,7 +13,6 @@ public class GetOrdersByUserTests
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
     private IMapper _mapper;
-    private Mock<IAuthorizationService> _authorizationServiceStub;
 
     private IOrderService _orderService;
 
@@ -36,6 +30,7 @@ public class GetOrdersByUserTests
 
         _orderService = new OrderService(
             _contextFactoryStub.Object,
+            CacheHelper.GetCacheStub(),
             _mapper
             );
     }
