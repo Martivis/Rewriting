@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Rewriting.Common.Exceptions;
 using Rewriting.Context;
 using Rewriting.Context.Entities;
 using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
@@ -9,7 +8,7 @@ using Rewriting.Services.Orders.Tests.RepositoryTests.Helpers;
 namespace Rewriting.Services.Orders.Tests.RepositoryTests;
 
 [TestClass]
-public class GetOrderTests
+public class DeleteOrderTests
 {
     private DbContextHelper _contextHelper;
     private Mock<IDbContextFactory<AppDbContext>> _contextFactoryStub;
@@ -29,7 +28,6 @@ public class GetOrderTests
 
         _mapper = new Mapper(new MapperConfiguration(_ => { }));
 
-
         _orderRepository = new OrderRepository(
             _contextFactoryStub.Object,
             CacheHelper.GetCacheStub(),
@@ -44,30 +42,15 @@ public class GetOrderTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ProcessException), "Exceprion was not thrown")]
-    public async Task GetOrder_NoExisting_ThrowsException()
+    public async Task DeleteOrder_OneOrder()
     {
-        // Act
-        await _orderRepository.GetOrderAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
-    }
+        var context = _contextHelper.Context;
 
-    [TestMethod]
-    public async Task GetOrder_Normal_Returns1elem()
-    {
         // Arrange
-        var orderUid = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        var data = new List<Order>()
+
+        var orderUid = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        var orders = new List<Order>()
         {
-            new Order
-            {
-                Uid = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                ClientUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
-                Title = "TITLE",
-                Comment = "COMMENT",
-                Text = "TEXT",
-                Status = OrderStatus.New,
-                PublishDate = DateTime.Parse("01.01.2020")
-            },
             new Order
             {
                 Uid = orderUid,
@@ -78,18 +61,38 @@ public class GetOrderTests
                 Status = OrderStatus.New,
                 PublishDate = DateTime.Parse("01.01.2020")
             },
+            new Order
+            {
+                Uid = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                ClientUid = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
+                Title = "TITLE",
+                Comment = "COMMENT",
+                Text = "TEXT",
+                Status = OrderStatus.New,
+                PublishDate = DateTime.Parse("01.01.2020")
+            }
         };
 
-        _contextHelper.Context.AddRange(data);
-        _contextHelper.Context.SaveChanges();
+        context.AddRange(orders);
+        context.SaveChanges();
+        foreach (var order in orders)
+        {
+            context.Entry(order).State = EntityState.Detached;
+        }
 
-        var expected = new Guid("22222222-2222-2222-2222-222222222222");
+        var expected = new List<Guid>()
+        {
+            Guid.Parse("22222222-2222-2222-2222-222222222222")
+        };
 
         // Act
-        var result = await _orderRepository.GetOrderAsync(orderUid);
-        var actual = result.Uid;
+
+        await _orderRepository.DeleteOrderAsync(orderUid);
 
         // Assert
-        Assert.AreEqual(expected, actual);
+
+        var actual = context.Orders.Select(o => o.Uid).ToList();
+
+        CollectionAssert.AreEqual(expected, actual);
     }
 }
