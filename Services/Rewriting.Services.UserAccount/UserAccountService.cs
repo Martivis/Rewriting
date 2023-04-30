@@ -18,11 +18,13 @@ namespace Rewriting.Services.UserAccount
 
         public UserAccountService(
             UserManager<ApplicationUser> userManager,
+            IEmailService emailService,
             IMapper mapper,
             IModelValidator<RegisterUserModel> validator,
             IModelValidator<ChangePasswordModel> changePasswordModelValidator)
         {
             _userManager = userManager;
+            _emailService = emailService;
             _mapper = mapper;
             _registerUserAccountModelValidator = validator;
             _changePasswordModelValidator = changePasswordModelValidator;
