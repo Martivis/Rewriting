@@ -95,7 +95,7 @@ else
                 </ItemsList>
             </MudPaper>
 
-            @if (!UserIsClient())
+            @if (!UserIsClient() && StatusIsNew())
             {
                 <MudButton Color="Color.Primary" Href="@($"/add_offer/{_orderModel.Uid}")">Add offer</MudButton>
             }
@@ -126,9 +126,9 @@ else
         await RefreshModel();
     }
 
-    private bool IsCancelable() => UserIsClient() && StatusIsCancelable();
+    private bool IsCancelable() => UserIsClient() && StatusIsNew();
 
-    private bool StatusIsCancelable() => _orderModel.Status == OrderStatus.New;
+    private bool StatusIsNew() => _orderModel.Status == OrderStatus.New;
 
     private bool UserIsClient() => User.GetUid() == _orderModel.ClientUid;
 
