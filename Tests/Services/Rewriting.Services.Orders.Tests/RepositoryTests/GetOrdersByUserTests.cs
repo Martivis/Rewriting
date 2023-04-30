@@ -41,6 +41,12 @@ public class GetOrdersByUserTests
             );
     }
 
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        (_orderRepository as IDisposable)!.Dispose();
+    }
+
     [TestMethod]
     public async Task GetOrdersByUser_page0_pageSize2_Returns2elems()
     {

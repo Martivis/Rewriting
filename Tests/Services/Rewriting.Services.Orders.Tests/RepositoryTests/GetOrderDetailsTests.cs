@@ -43,6 +43,12 @@ public class GetOrderDetailsTests
             );
     }
 
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        (_orderRepository as IDisposable)!.Dispose();
+    }
+
     [TestMethod]
     [ExpectedException(typeof(ProcessException), "Exceprion was not thrown")]
     public async Task GetOrderDetails_NoExisting_ThrowsException()

@@ -38,6 +38,12 @@ public class GetNewOrdersTests
             );
     }
 
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        (_orderRepository as IDisposable)!.Dispose();
+    }
+
     [TestMethod]
     public async Task GetNewOrders_page0_pageSize2_Returns2elems()
     {
