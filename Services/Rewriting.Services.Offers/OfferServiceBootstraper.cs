@@ -7,6 +7,7 @@ public static class OfferServiceBootstraper
     public static IServiceCollection AddOfferService(this IServiceCollection services)
     {
         services.AddScoped<IOfferService, OfferService>();
+        services.AddScoped<IOfferRepository, OfferRepository>();
         services.AddScoped<IOfferObservable>(provider => provider.GetService<IOfferService>() as OfferService);
         return services;
     }

@@ -9,8 +9,8 @@ namespace Rewriting.Services.Contracts;
 
 internal class ContractService : IContractService, IContractObservable
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
-    private readonly ICacheService _cache;
+    private readonly IContractRepository _contractRepository;
+    private readonly IResultRepository _resultRepository;
     private readonly IMapper _mapper;
 
     public event Action<ContractDetailsModel> OnResultAdd;
@@ -18,82 +18,45 @@ internal class ContractService : IContractService, IContractObservable
     public event Action<ContractDetailsModel> OnResultDecline;
     public event Action<ContractDetailsModel> OnContractorDecline;
 
-    public ContractService(
-        IDbContextFactory<AppDbContext> contextFactory,
-        ICacheService cache,
-        IMapper mapper)
+    public ContractService(IContractRepository contractRepository, IResultRepository resultRepository, IMapper mapper)
     {
-        _contextFactory = contextFactory;
-        _cache = cache;
+        _contractRepository = contractRepository;
+        _resultRepository = resultRepository;
         _mapper = mapper;
     }
 
     public async Task<ClientAuthModel> GetClientAuthAsync(Guid contractUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
+        var contract = await _contractRepository.GetContractAsync(contractUid);
 
         return _mapper.Map<ClientAuthModel>(contract);
     }
 
     public async Task<ContractorAuthModel> GetContractorAuthAsync(Guid contractUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
+        var contract = await _contractRepository.GetContractAsync(contractUid);
 
         return _mapper.Map<ContractorAuthModel>(contract);
     }
 
     public async Task<ContractDetailsModel> GetContractDetailsAsync(Guid contractUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
-
-        var order = contract.Order;
-
-        return _mapper.Map<ContractDetailsModel>(order);
+        return await _contractRepository.GetContractDetailsAsync(contractUid);
     }
 
     public async Task<IEnumerable<ContractModel>> GetContractsByUserAsync(Guid userUid, int page = 0, int pageSize = 10)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contracts = context.Set<Order>()
-            .Where(order => order.Contract != null && order.Contract.ContractorUid == userUid)
-            .OrderByDescending(order => order.Contract!.PublishDate)
-            .Skip(pageSize * page)
-            .Take(pageSize)
-            .ToList();
-
-        return _mapper.Map<IEnumerable<ContractModel>>(contracts);
+        return await _contractRepository.GetContractsByUserAsync(userUid, page, pageSize);
     }
 
     public async Task<IEnumerable<ResultModel>> GetResultsAsync(Guid contractUid, int page = 0, int pageSize = 10)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var results = context.Set<Result>()
-            .Where(result => result.ContractUid == contractUid)
-            .OrderByDescending(result => result.PublishDate)
-            .Skip(pageSize * page)
-            .Take(pageSize)
-            .ToList();
-
-        return _mapper.Map<IEnumerable<ResultModel>>(results);
+        return await _resultRepository.GetResultsByOrderAsync(contractUid, page, pageSize);
     }
 
     public async Task AddResultAsync(AddResultModel model)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(model.ContractUid)
-            ?? throw new ProcessException($"Contract {model.ContractUid} not found");
+        var contract = await _contractRepository.GetContractAsync(model.ContractUid);
 
         var status = contract.Order.Status;
         if (status != OrderStatus.Evaluation &&
@@ -105,22 +68,15 @@ internal class ContractService : IContractService, IContractObservable
         var result = _mapper.Map<Result>(model);
         result.PublishDate = DateTime.UtcNow;
 
-        context.Add(result);
-        context.SaveChanges();
+        await _resultRepository.AddResult(result);
 
-        await _cache.Remove($"order_{contract.Uid}");
-        
-        var refreshedOrder = context.Set<Order>().Find(model.ContractUid);
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refreshedOrder);
+        var contractDetailsModel = await _contractRepository.GetContractDetailsAsync(model.ContractUid);
         OnResultAdd.Invoke(contractDetailsModel);
     }
 
     public async Task AcceptResultAsync(Guid contractUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
+        var contract = await _contractRepository.GetContractAsync(contractUid);
 
         if (contract.Result is null)
             throw new ProcessException($"Results for order {contractUid} not found");
@@ -128,19 +84,16 @@ internal class ContractService : IContractService, IContractObservable
             throw new ProcessException($"Unable to accept result for order in status {contract.Order.Status}");
 
         contract.Order.Status = OrderStatus.Done;
-        context.SaveChanges();
+        
+        await _contractRepository.UpdateContractAsync(contract);
 
-        var refresedOrder = context.Set<Order>().Find(contractUid);
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
+        var contractDetailsModel = await _contractRepository.GetContractDetailsAsync(contractUid);
         OnResultAccept.Invoke(contractDetailsModel);
     }
 
     public async Task DeclineResultAsync(Guid contractUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
+        var contract = await _contractRepository.GetContractAsync(contractUid);
         var order = contract.Order;
        
         if (order.Status != OrderStatus.Evaluation)
@@ -148,19 +101,15 @@ internal class ContractService : IContractService, IContractObservable
 
         order.Status = OrderStatus.InProgress;
         
-        context.SaveChanges();
+        await _contractRepository.UpdateContractAsync(contract);
 
-        var refresedOrder = context.Set<Order>().Find(contractUid);
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
+        var contractDetailsModel = await _contractRepository.GetContractDetailsAsync(contractUid);
         OnResultDecline.Invoke(contractDetailsModel);
     }
 
     public async Task DeclineContractorAsync(Guid contractUid)
     {
-        using var context = await _contextFactory.CreateDbContextAsync();
-
-        var contract = context.Set<Contract>().Find(contractUid)
-            ?? throw new ProcessException($"Contract {contractUid} not found");
+        var contract = await _contractRepository.GetContractAsync(contractUid);
 
         var order = contract.Order;
 
@@ -169,11 +118,9 @@ internal class ContractService : IContractService, IContractObservable
 
         order.Status = OrderStatus.New;
 
-        var refresedOrder = context.Set<Order>().Find(contractUid);
-        var contractDetailsModel = _mapper.Map<ContractDetailsModel>(refresedOrder);
+        var contractDetailsModel = await _contractRepository.GetContractDetailsAsync(contractUid);
 
-        context.Remove(contract);
-        context.SaveChanges();
+        await _contractRepository.DeleteContractAsync(contractUid);
 
         OnContractorDecline.Invoke(contractDetailsModel);
     }
