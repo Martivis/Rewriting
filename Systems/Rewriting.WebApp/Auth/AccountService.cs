@@ -13,7 +13,7 @@ public class AccountService : IAccountService
 
     public async Task RegisterAsync(RegisterModel registerModel)
     {
-        await _apiService.PostDataAsync("UserAccount", registerModel);
+        await _apiService.PostDataAsync("UserAccount/Register", registerModel);
 
         var loginModel = new LoginModel()
         {
@@ -26,6 +26,16 @@ public class AccountService : IAccountService
 
     public async Task ChangePasswordAsync(ChangePasswordModel changePasswordModel)
     {
-        await _apiService.PatchDataAsync("UserAccount", changePasswordModel);
+        await _apiService.PatchDataAsync("UserAccount/ChangePassword", changePasswordModel);
+    }
+
+    public async Task InitialPasswordResetAsync(InitialResetPasswordModel initialResetPasswordModel)
+    {
+        await _apiService.PostDataAsync("UserAccount/InitialPasswordReset", initialResetPasswordModel);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
+    {
+        await _apiService.PostDataAsync("UserAccount/ResetPassword", resetPasswordModel);
     }
 }
