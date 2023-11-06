@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rewriting.Common.StringExtensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,7 +63,7 @@ internal class ShingleParser : IShingleParser
         var result = new List<byte>();
         foreach (var word in _shingle!)
         {
-            result.AddRange(word.ToCharArray().Select(c => (byte)c));
+            result.AddRange(word.ToByteArray());
         }
         return result.ToArray();
     }
