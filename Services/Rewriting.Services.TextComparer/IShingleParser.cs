@@ -8,6 +8,6 @@ namespace Rewriting.Services.TextComparer
 {
     internal interface IShingleParser
     {
-        List<byte[]> ParseToShingles(IList<string> words, int shingleLength);
+        List<Hash> ParseToShingles(IList<string> words, int shingleLength);
     }
 }

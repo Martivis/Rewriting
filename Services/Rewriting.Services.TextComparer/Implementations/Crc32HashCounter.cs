@@ -5,12 +5,12 @@ namespace Rewriting.Services.TextComparer;
 
 internal class Crc32HashCounter : IHashCounter
 {
-    public byte[] Hash(byte[] data)
+    public Hash Hash(byte[] data)
     {
-        return Crc32.Hash(data);
+        return new Hash(Crc32.Hash(data));
     }
 
-    public byte[] Hash(string data)
+    public Hash Hash(string data)
     {
         return Hash(data.ToByteArray());
     }

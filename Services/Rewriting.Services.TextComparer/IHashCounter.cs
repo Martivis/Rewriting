@@ -8,7 +8,7 @@ namespace Rewriting.Services.TextComparer
 {
     internal interface IHashCounter
     {
-        byte[] Hash(byte[] data);
-        byte[] Hash(string data);
+        Hash Hash(byte[] data);
+        Hash Hash(string data);
     }
 }

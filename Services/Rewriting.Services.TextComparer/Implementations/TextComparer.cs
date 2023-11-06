@@ -1,6 +1,6 @@
 ﻿
-
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Rewriting.Services.TextComparer
 {
@@ -17,19 +17,33 @@ namespace Rewriting.Services.TextComparer
 
         public int Compare(string textA, string textB)
         {
-            var canonizedTextA = _textCanonazer.Canonize(textA);
-            var canonizedTextB = _textCanonazer.Canonize(textB);
+            var canonizedA = _textCanonazer.Canonize(textA);
+            var canonizedB = _textCanonazer.Canonize(textB);
 
-            throw new NotImplementedException();
+            var shingleLentgh = GetShingleLength(canonizedA, canonizedB);
+
+            var hashesA = GetHashedShingles(textA, shingleLentgh);
+            var hashesB = GetHashedShingles(textB, shingleLentgh);
+
+            var intersect = hashesA.Intersect(hashesB).ToList();
+            var union = hashesA.Union(hashesB).ToList();
+
+            return (int)((double)intersect.Count / union.Count * 100);
         }
 
-        private List<byte[]> GetHashedShingles(string text)
+        private List<Hash> GetHashedShingles(string text, int shingleLength)
         {
-            var canonized = _textCanonazer.Canonize(text);
-
-            throw new NotImplementedException();
+            var canonizedWords = _textCanonazer.Canonize(text);
+            var hashes = _parser.ParseToShingles(canonizedWords, shingleLength);
+            return hashes;
         }
 
-        
+        private int GetShingleLength(IList<string> canonizedA, IList<string> canonizedB)
+        {
+            var minWordsCount = Math.Min(canonizedA.Count, canonizedB.Count);
+            if (minWordsCount < 50)
+                return minWordsCount / 5 + 1;
+            return 10;
+        }
     }
 }

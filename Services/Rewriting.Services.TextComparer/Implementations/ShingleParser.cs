@@ -11,7 +11,7 @@ internal class ShingleParser : IShingleParser
 {
     private readonly IHashCounter _hashCounter;
 
-    private List<byte[]>? _result;
+    private List<Hash>? _result;
     private LinkedList<string>? _shingle;
     private int _shingleLength;
 
@@ -20,12 +20,12 @@ internal class ShingleParser : IShingleParser
         _hashCounter = hashCounter;
     }
 
-    public List<byte[]> ParseToShingles(IList<string> words, int shingleLength)
+    public List<Hash> ParseToShingles(IList<string> words, int shingleLength)
     {
         ValidateParameters(words, shingleLength);
 
         _shingleLength = shingleLength;
-        _result = new List<byte[]>(words.Count - shingleLength + 1);
+        _result = new List<Hash>(words.Count - shingleLength + 1);
         _shingle = new LinkedList<string>();
 
         FillFirstShingleFrom(words);
