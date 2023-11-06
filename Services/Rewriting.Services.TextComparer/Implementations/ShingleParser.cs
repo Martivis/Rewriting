@@ -22,6 +22,8 @@ internal class ShingleParser : IShingleParser
 
     public List<byte[]> ParseToShingles(IList<string> words, int shingleLength)
     {
+        ValidateParameters(words, shingleLength);
+
         _shingleLength = shingleLength;
         _result = new List<byte[]>(words.Count - shingleLength + 1);
         _shingle = new LinkedList<string>();
@@ -36,6 +38,14 @@ internal class ShingleParser : IShingleParser
         }
 
         return _result;
+    }
+
+    private static void ValidateParameters(IList<string> words, int shingleLength)
+    {
+        if (shingleLength <= 0)
+            throw new ArgumentException("Shingle length should be greater then 0", nameof(shingleLength));
+        if (shingleLength > words.Count)
+            throw new ArgumentException("Shingle length should be smaller that words count", nameof(shingleLength));
     }
 
     private void FillFirstShingleFrom(IList<string> words)

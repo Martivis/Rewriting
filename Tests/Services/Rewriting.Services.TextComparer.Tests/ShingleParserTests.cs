@@ -1,4 +1,5 @@
 using Rewriting.Common.StringExtensions;
+using System;
 
 namespace Rewriting.Services.TextComparer.Tests
 {
@@ -29,6 +30,14 @@ namespace Rewriting.Services.TextComparer.Tests
 
             // Arrange
             CollectionAssert.AreEquivalent(expected, actual);
+        }
+
+        [TestCase(new[] { "word1", "word2", "word3", "word4", "word5" }, 6 )]
+        [TestCase(new[] { "word1", "word2", "word3", "word4", "word5" }, 0 )]
+        [TestCase(new[] { "word1", "word2", "word3", "word4", "word5" }, -1 )]
+        public void ParseToShingles_shingleLength_more_then_wordsCount_Throws_ArgumentException(string[] words, int shingleLength)
+        {
+            Assert.Throws<ArgumentException>(() => _parser.ParseToShingles(words, shingleLength));
         }
     }
 }
