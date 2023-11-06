@@ -12,8 +12,9 @@ internal class TextCanonizer : ITextCanonizer
     {
         var minWordLength = 3;
         var words = text.ToLower().Split();
-        var cleanedWords = words.Select(s => new string(s.Where(char.IsLetter).ToArray()));
-        var bigWords = cleanedWords.Where(c => c.Count() > minWordLength);
+
+        var cleanedWords = words.AsParallel().Select(s => new string(s.Where(char.IsLetter).ToArray()));
+        var bigWords = cleanedWords.Where(c => c.Length > minWordLength);
 
         return bigWords.ToList();
     }
