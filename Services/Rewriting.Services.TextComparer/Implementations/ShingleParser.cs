@@ -10,6 +10,10 @@ internal class ShingleParser : IShingleParser
 {
     private readonly IHashCounter _hashCounter;
 
+    private List<byte[]>? _result;
+    private LinkedList<string>? _shingle;
+    private int _shingleLength;
+
     public ShingleParser(IHashCounter hashCounter)
     {
         _hashCounter = hashCounter;
@@ -17,33 +21,46 @@ internal class ShingleParser : IShingleParser
 
     public List<byte[]> ParseToShingles(IList<string> words, int shingleLength)
     {
-        var result = new List<byte[]>(words.Count - shingleLength + 1);
+        _shingleLength = shingleLength;
+        _result = new List<byte[]>(words.Count - shingleLength + 1);
+        _shingle = new LinkedList<string>();
 
-        var shingle = new LinkedList<string>();
-        for (int i = 0; i < shingleLength; i++)
-        {
-            shingle.AddLast(words[i]);
-        }
-
-        var hash = _hashCounter.Hash(ToByte(shingle));
-        result.Add(hash);
+        FillFirstShingleFrom(words);
+        AppendShingleToResult();
 
         for (int i = shingleLength; i < words.Count; i++)
         {
-            shingle.RemoveFirst();
-            shingle.AddLast(words[i]);
-
-            hash = _hashCounter.Hash(ToByte(shingle));
-            result.Add(hash);
+            MoveShingleOnto(words, i);
+            AppendShingleToResult();
         }
 
-        return result;
+        return _result;
     }
 
-    private byte[] ToByte(LinkedList<string> list)
+    private void FillFirstShingleFrom(IList<string> words)
+    {
+        for (int i = 0; i < _shingleLength; i++)
+        {
+            _shingle!.AddLast(words[i]);
+        }
+    }
+
+    private void AppendShingleToResult()
+    {
+        var hash = _hashCounter.Hash(ShingleBytes());
+        _result!.Add(hash);
+    }
+
+    private void MoveShingleOnto(IList<string> words, int nextIndex)
+    {
+        _shingle!.RemoveFirst();
+        _shingle!.AddLast(words[nextIndex]);
+    }
+
+    private byte[] ShingleBytes()
     {
         var result = new List<byte>();
-        foreach (var word in list)
+        foreach (var word in _shingle!)
         {
             result.AddRange(word.ToCharArray().Select(c => (byte)c));
         }
