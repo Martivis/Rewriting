@@ -57,7 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.WebApp", "Systems
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Services.Cache", "Services\Rewriting.Services.Cache\Rewriting.Services.Cache.csproj", "{FDE65881-4F05-4305-AE8A-CFCA225BEE38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Services.TextComparer", "Services\Rewriting.Services.TextComparer\Rewriting.Services.TextComparer.csproj", "{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Services.TextComparer", "Services\Rewriting.Services.TextComparer\Rewriting.Services.TextComparer.csproj", "{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Services.TextComparer.Tests", "Tests\Services\Rewriting.Services.TextComparer.Tests\Rewriting.Services.TextComparer.Tests.csproj", "{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,10 @@ Global
 		{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +182,7 @@ Global
 		{FEFCF8B1-ED00-46A8-92A7-156E6DC7C81D} = {F86712B0-1132-45E6-A324-61C1AE5D56D4}
 		{FDE65881-4F05-4305-AE8A-CFCA225BEE38} = {75A81E56-F044-4768-B27F-399F60D73487}
 		{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4} = {75A81E56-F044-4768-B27F-399F60D73487}
+		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D} = {CD37103D-787D-458C-BC43-B2F453044FFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC02EB2-F850-4CA7-AD74-6A7572B0A70C}
