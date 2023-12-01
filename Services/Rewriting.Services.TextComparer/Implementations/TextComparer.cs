@@ -6,24 +6,24 @@ namespace Rewriting.Services.TextComparer
 {
     internal class TextComparer : ITextComparer
     {
-        ITextCanonizer _textCanonazer;
-        IShingleParser _parser;
+        private readonly ITextCanonizer _textCanonizer;
+        private readonly IShingleParser _parser;
 
-        public TextComparer(ITextCanonizer textCanonazer, IShingleParser parser)
+        public TextComparer(ITextCanonizer textCanonizer, IShingleParser parser)
         {
-            _textCanonazer = textCanonazer;
+            _textCanonizer = textCanonizer;
             _parser = parser;
         }
 
         public int Compare(string textA, string textB)
         {
-            var canonizedA = _textCanonazer.Canonize(textA);
-            var canonizedB = _textCanonazer.Canonize(textB);
+            var canonizedA = _textCanonizer.Canonize(textA);
+            var canonizedB = _textCanonizer.Canonize(textB);
 
-            var shingleLentgh = GetShingleLength(canonizedA, canonizedB);
+            var shingleLength = GetShingleLength(canonizedA, canonizedB);
 
-            var hashesA = GetHashedShingles(textA, shingleLentgh);
-            var hashesB = GetHashedShingles(textB, shingleLentgh);
+            var hashesA = GetHashedShingles(textA, shingleLength);
+            var hashesB = GetHashedShingles(textB, shingleLength);
 
             var intersect = hashesA.Intersect(hashesB).ToList();
             var union = hashesA.Union(hashesB).ToList();
@@ -33,16 +33,16 @@ namespace Rewriting.Services.TextComparer
 
         private List<Hash> GetHashedShingles(string text, int shingleLength)
         {
-            var canonizedWords = _textCanonazer.Canonize(text);
+            var canonizedWords = _textCanonizer.Canonize(text);
             var hashes = _parser.ParseToShingles(canonizedWords, shingleLength);
             return hashes;
         }
 
-        private int GetShingleLength(IList<string> canonizedA, IList<string> canonizedB)
+        private static int GetShingleLength(ICollection<string> canonizedA, ICollection<string> canonizedB)
         {
             var minWordsCount = Math.Min(canonizedA.Count, canonizedB.Count);
             if (minWordsCount < 50)
-                return minWordsCount / 5 + 1;
+                return minWordsCount / 10 + 1;
             return 10;
         }
     }

@@ -16,9 +16,11 @@ namespace Rewriting.Services.TextComparer.Tests
         }
 
         [TestCase("abcd abcd", "abcd abcd")]
-        [TestCase("abcd abcd abab ababa ababa ababa", "abcd abcd abab ababa ababa ababa")]
+        [TestCase("ababa ababa ababa ababa ababa ababa ababa", "ababa ababa ababa ababa ababa ababe ababa")]
         [TestCase("abcd abcd abab ababa ababa ababa", "abcd abcd abab ababa ababa ababb")]
         [TestCase("abcd abcd abab ababa ababa ababa", "abcd abcd abab adada")]
+        [TestCase("ababa ababa ababa ababa ababa", "adada adada adada adada adada")]
+        [TestCase("ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa", "ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababa ababe")]
         public void Compare_Test(string text1, string text2)
         {
             var res = _textComparer.Compare(text1, text2);
