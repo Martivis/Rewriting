@@ -6,9 +6,9 @@ public static class Bootstraper
 {
     public static IServiceCollection AddTextComparer(IServiceCollection services)
     {
-        services.AddSingleton<ITextCanonizer, TextCanonizer>();
-        services.AddSingleton<IShingleParser, ShingleParser>();
-        services.AddSingleton<ITextComparer, TextComparer>();
+        services.AddTransient<ITextCanonizer, TextCanonizer>();
+        services.AddTransient<IShingleParser, ShingleParser>();
+        services.AddTransient<ITextComparer, TextComparer>();
 
         return services;
     }

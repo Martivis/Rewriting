@@ -31,6 +31,11 @@ namespace Rewriting.Services.TextComparer
             return (int)((double)intersect.Count / union.Count * 100);
         }
 
+        public Task<int> CompareAsync(string textA, string textB)
+        {
+            return Task.Run(() => Compare(textA, textB));
+        }
+
         private List<Hash> GetHashedShingles(string text, int shingleLength)
         {
             var canonizedWords = _textCanonizer.Canonize(text);
