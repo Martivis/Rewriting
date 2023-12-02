@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-Rewriting.TextComparerWorker-F48A82DF-2227-44EB-80B9-EE7C3661369E</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Data\Rewriting.Context.Migrations\Rewriting.Context.Migrations.csproj" />
+      <ProjectReference Include="..\..\Services\Rewriting.Services.Contracts\Rewriting.Services.Contracts.csproj" />
+      <ProjectReference Include="..\..\Services\Rewriting.Services.TextComparer\Rewriting.Services.TextComparer.csproj" />
+    </ItemGroup>
+</Project>
