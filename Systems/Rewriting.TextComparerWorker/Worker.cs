@@ -12,10 +12,12 @@ public class Worker : BackgroundService
     private readonly ITextComparer _comparer;
 
     public Worker(ILogger<Worker> logger, 
-        IUncheckedResultsService results)
+        IUncheckedResultsService results,
+        ITextComparer comparer)
     {
         _logger = logger;
         _resultsService = results;
+        _comparer = comparer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
