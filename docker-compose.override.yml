@@ -74,6 +74,14 @@ services:
       - env.webapp
     extra_hosts:
       - host.docker.internal:host-gateway
+  
+  rewriting.textcomparerworker:
+    networks:
+      - shared_rewriting
+    env_file:
+      - env.textcomparerworker
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 networks:
   shared_rewriting:

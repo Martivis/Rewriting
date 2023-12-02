@@ -10,4 +10,10 @@ public static class ContractServiceBootstraper
         services.AddScoped<IContractObservable>(provider => provider.GetService<IContractService>() as ContractService);
         return services;
     }
+
+    public static IServiceCollection AddUncheckedResultsService(this IServiceCollection services)
+    {
+        services.AddSingleton<IUncheckedResultsService, ResultsService>();
+        return services;
+    }
 }
