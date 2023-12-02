@@ -1,8 +1,27 @@
 ﻿
 <MudCard>
     <MudCardContent>
-        <MudText Typo="Typo.h5">@Model.Text</MudText>
-        <MudText Typo="Typo.subtitle1">@Model.PublishDate</MudText>
+        <MudGrid>
+            <MudItem><MudText Typo="Typo.h5">@Model.Text</MudText></MudItem>
+            <MudItem xs="12">
+            <MudGrid Justify="Justify.SpaceBetween">
+                <MudItem sm="1">
+                    <MudText Typo="Typo.subtitle1">@Model.PublishDate</MudText>
+                </MudItem>
+                <MudItem>
+                    @if (Model.Uniqueness is null)
+                    {
+                        <MudProgressCircular Color="Color.Default" Indeterminate="true"/>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Primary" Value="@((int) Model.Uniqueness)"/>
+                        <MudText Typo="Typo.subtitle1">@Model.Uniqueness% uniqueness</MudText>
+                    }
+                </MudItem>
+            </MudGrid>
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>
 

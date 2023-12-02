@@ -42,3 +42,10 @@ services:
       context: .
       dockerfile: Systems/Rewriting.WebApp/Dockerfile
 
+  rewriting.textcomparerworker:
+    image: ${DOCKER_REGISTRY-}rewritingtextcomparerworker
+    build:
+      context: .
+      dockerfile: Systems\Rewriting.TextComparerWorker\Dockerfile
+    depends_on:
+      - rewriting.postgres

@@ -10,7 +10,7 @@ internal class TextCanonizer : ITextCanonizer
 {
     public List<string> Canonize(string text)
     {
-        var minWordLength = 3;
+        const int minWordLength = 3;
         var words = text.ToLower().Split();
 
         var cleanedWords = words.AsParallel().Select(s => new string(s.Where(char.IsLetter).ToArray()));

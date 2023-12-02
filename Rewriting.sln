@@ -61,6 +61,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rewriting.Services.TextComp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.Services.TextComparer.Tests", "Tests\Services\Rewriting.Services.TextComparer.Tests\Rewriting.Services.TextComparer.Tests.csproj", "{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewriting.TextComparerWorker", "Systems\Rewriting.TextComparerWorker\Rewriting.TextComparerWorker.csproj", "{4226A773-B34D-402E-A445-5424898495EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +157,10 @@ Global
 		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4226A773-B34D-402E-A445-5424898495EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4226A773-B34D-402E-A445-5424898495EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4226A773-B34D-402E-A445-5424898495EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4226A773-B34D-402E-A445-5424898495EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +189,7 @@ Global
 		{FDE65881-4F05-4305-AE8A-CFCA225BEE38} = {75A81E56-F044-4768-B27F-399F60D73487}
 		{C11D2C34-E55B-4AD9-B323-6EC75E21AEB4} = {75A81E56-F044-4768-B27F-399F60D73487}
 		{6AD14F70-2356-439F-8EDE-DEC64B93CC6D} = {CD37103D-787D-458C-BC43-B2F453044FFD}
+		{4226A773-B34D-402E-A445-5424898495EF} = {F86712B0-1132-45E6-A324-61C1AE5D56D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC02EB2-F850-4CA7-AD74-6A7572B0A70C}
