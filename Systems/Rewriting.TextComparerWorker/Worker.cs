@@ -27,7 +27,8 @@ public class Worker : BackgroundService
             var results = await _resultsService.GetResultsWithNullUniqueness();
             foreach (var result in results)
             {
-                var uniqueness = _comparer.Compare(result.SourceText, result.ResultText);
+                var similarity = _comparer.Compare(result.SourceText, result.ResultText);
+                var uniqueness = 100 - similarity;
                 await _resultsService.UpdateResultUniqueness(result.ResultUid, uniqueness);
             }
             await Task.Delay(20000, stoppingToken);
