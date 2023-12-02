@@ -24,12 +24,12 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var results = await _resultsService.GetResultsWithNullUniqueness();
+            var results = await _resultsService.GetResultsWithNullUniquenessAsync();
             foreach (var result in results)
             {
                 var similarity = _comparer.Compare(result.SourceText, result.ResultText);
                 var uniqueness = 100 - similarity;
-                await _resultsService.UpdateResultUniqueness(result.ResultUid, uniqueness);
+                await _resultsService.UpdateResultUniquenessAsync(result.ResultUid, uniqueness);
             }
             await Task.Delay(20000, stoppingToken);
         }

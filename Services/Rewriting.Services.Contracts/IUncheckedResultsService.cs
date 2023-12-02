@@ -2,6 +2,6 @@
 
 public interface IUncheckedResultsService
 {
-    Task<IEnumerable<ResultCompareModel>> GetResultsWithNullUniqueness();
-    Task UpdateResultUniqueness(Guid resultUid, int uniqueness);
+    Task<IEnumerable<ResultCompareModel>> GetResultsWithNullUniquenessAsync();
+    Task UpdateResultUniquenessAsync(Guid resultUid, int uniqueness);
 }
