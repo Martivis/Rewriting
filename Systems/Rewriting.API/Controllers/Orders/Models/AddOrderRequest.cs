@@ -22,7 +22,7 @@ public class AddOrderRequestValidator : AbstractValidator<AddOrderRequest>
     {
         RuleFor(p => p.Title).NotEmpty().WithMessage("Title is required")
             .MaximumLength(50).WithMessage("Title is too long");
-        RuleFor(p => p.Text).NotEmpty().WithMessage("Text is required");
+        RuleFor(p => p.Text).MinimumLength(20).WithMessage("Text is required");
         RuleFor(p => p.Comment).NotEmpty().WithMessage("Comment is required");
     }
 }

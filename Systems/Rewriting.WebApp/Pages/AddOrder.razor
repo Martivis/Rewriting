@@ -4,6 +4,7 @@
 
 @inject OrderService OrderService
 @inject NavigationManager NavigationManager
+@inject ISnackbar SnackbarService
 
 <MudCard>
     <MudCardHeader>
@@ -35,8 +36,15 @@
         await _form!.Validate();
         if (_form!.IsValid)
         {
-            await OrderService.AddOrderAsync(_model);
-            NavigationManager.NavigateTo("/my_orders");
+            try
+            {
+                await OrderService.AddOrderAsync(_model);
+                NavigationManager.NavigateTo("/my_orders");
+            }
+            catch (Exception e)
+            {  
+                SnackbarService.Add(e.Message);
+            }
         }
     }
 }
