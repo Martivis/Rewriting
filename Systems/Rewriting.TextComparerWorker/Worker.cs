@@ -32,7 +32,7 @@ public class Worker : BackgroundService
             else
             {
                 var uidList = AggregateUids(results);
-                _logger.LogInformation("Processing results:\n{uidList}", uidList);
+                _logger.LogInformation("Processing results:\n\t{uidList}", uidList);
             
                 results.AsParallel().ForAll(UpdateUniqueness);
             }
@@ -44,12 +44,11 @@ public class Worker : BackgroundService
     {
         return results
             .Select(r => r.ResultUid.ToString())
-            .Aggregate((a, b) => a + "\n" + b);
+            .Aggregate((a, b) => a + "\n\t" + b);
     }
 
     private async void UpdateUniqueness(ResultCompareModel model)
     {
-        _logger.LogInformation("Processing result {uid}", model.ResultUid);
         try
         {
             var similarity = _comparer.Compare(model.SourceText, model.ResultText);
