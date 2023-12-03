@@ -17,13 +17,14 @@ public class ResultsService : IUncheckedResultsService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ResultCompareModel>> GetResultsWithNullUniquenessAsync()
+    public async Task<IEnumerable<ResultCompareModel>> GetResultsWithNullUniquenessAsync(int limit = 10)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
         var results = context.Set<Result>()
             .Where(result => result.Uniqueness == null)
             .OrderBy(result => result.PublishDate)
+            .Take(limit)
             .ForUpdate(skipLocked: true)
             .ToList();
 

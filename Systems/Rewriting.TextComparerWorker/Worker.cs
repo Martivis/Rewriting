@@ -24,14 +24,16 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var results = await _resultsService.GetResultsWithNullUniquenessAsync();
-            foreach (var result in results)
-            {
-                var similarity = _comparer.Compare(result.SourceText, result.ResultText);
-                var uniqueness = 100 - similarity;
-                await _resultsService.UpdateResultUniquenessAsync(result.ResultUid, uniqueness);
-            }
-            await Task.Delay(20000, stoppingToken);
+            var results = await _resultsService.GetResultsWithNullUniquenessAsync(3);
+            results.AsParallel().ForAll(UpdateUniqueness);
+            await Task.Delay(2000, stoppingToken);
         }
+    }
+
+    private async void UpdateUniqueness(ResultCompareModel model)
+    {
+        var similarity = _comparer.Compare(model.SourceText, model.ResultText);
+        var uniqueness = 100 - similarity;
+        await _resultsService.UpdateResultUniquenessAsync(model.ResultUid, 10);
     }
 }
