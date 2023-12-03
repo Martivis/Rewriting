@@ -18,4 +18,13 @@ public static class AppDbBootstraper
         services.AddDbContextFactory<AppDbContext>(AppDbOptionsFactory.Configure(settings.ConnectionString));
         return services;
     }
+    
+    public static IServiceCollection AddAppDbContextFactoryWithTagsSupport(this IServiceCollection services)
+    {
+        var settings = SettingsLoader.Load<AppDbSettings>("Database");
+        services.AddSingleton(settings);
+
+        services.AddDbContextFactory<AppDbContext>(AppDbOptionsFactory.ConfigureTagsSupport(settings.ConnectionString));
+        return services;
+    }
 }

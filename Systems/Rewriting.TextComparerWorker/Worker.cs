@@ -24,14 +24,42 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var results = await _resultsService.GetResultsWithNullUniqueness();
-            foreach (var result in results)
+            var results = await _resultsService.GetResultsWithNullUniquenessAsync(10);
+            if (!results.Any())
             {
-                var similarity = _comparer.Compare(result.SourceText, result.ResultText);
-                var uniqueness = 100 - similarity;
-                await _resultsService.UpdateResultUniqueness(result.ResultUid, uniqueness);
+                _logger.LogInformation("No unchecked results found");
+            }
+            else
+            {
+                var uidList = AggregateUids(results);
+                _logger.LogInformation("Processing results:\n\t{uidList}", uidList);
+            
+                results.AsParallel().ForAll(UpdateUniqueness);
             }
             await Task.Delay(20000, stoppingToken);
         }
     }
+
+    private static string AggregateUids(IEnumerable<ResultCompareModel> results)
+    {
+        return results
+            .Select(r => r.ResultUid.ToString())
+            .Aggregate((a, b) => a + "\n\t" + b);
+    }
+
+    private async void UpdateUniqueness(ResultCompareModel model)
+    {
+        try
+        {
+            var similarity = _comparer.Compare(model.SourceText, model.ResultText);
+            var uniqueness = 100 - similarity;
+            await _resultsService.UpdateResultUniquenessAsync(model.ResultUid, 10);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
+    }
+    
+    
 }

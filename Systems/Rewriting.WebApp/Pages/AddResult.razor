@@ -4,6 +4,7 @@
 
 @inject ContractService ContractService
 @inject NavigationManager NavigationManager
+@inject ISnackbar SnackbarService
 
 <MudCard>
     <MudCardHeader>
@@ -38,8 +39,15 @@
         await _form!.Validate();
         if (_form!.IsValid)
         {
-            await ContractService.AddResultAsync(_model);
-            NavigationManager.NavigateTo($"/contract/{_model.ContractUid}");
+            try
+            {
+                await ContractService.AddResultAsync(_model);
+                NavigationManager.NavigateTo($"/contract/{_model.ContractUid}");
+            }
+            catch (Exception e)
+            {
+                SnackbarService.Add(e.Message);
+            }
         }
     }
 }

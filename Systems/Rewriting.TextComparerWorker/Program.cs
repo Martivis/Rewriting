@@ -9,7 +9,7 @@ var host = Host.CreateDefaultBuilder(args)
     {
         services.AddAppAutomapper();
         services.AddTextComparer();
-        services.AddAppDbContextFactory();
+        services.AddAppDbContextFactoryWithTagsSupport();
         services.AddUncheckedResultsService();
         services.AddHostedService<Worker>();
     })

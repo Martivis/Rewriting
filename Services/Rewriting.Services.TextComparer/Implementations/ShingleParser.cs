@@ -11,10 +11,6 @@ internal class ShingleParser : IShingleParser
 {
     private readonly IHashCounter _hashCounter;
 
-    private List<Hash>? _result;
-    private LinkedList<string>? _shingle;
-    private int _shingleLength;
-
     public ShingleParser(IHashCounter hashCounter)
     {
         _hashCounter = hashCounter;
@@ -23,21 +19,20 @@ internal class ShingleParser : IShingleParser
     public List<Hash> ParseToShingles(IList<string> words, int shingleLength)
     {
         ValidateParameters(words, shingleLength);
+        
+        var result = new List<Hash>(words.Count - shingleLength + 1);
+        var shingle = new LinkedList<string>();
 
-        _shingleLength = shingleLength;
-        _result = new List<Hash>(words.Count - shingleLength + 1);
-        _shingle = new LinkedList<string>();
-
-        FillFirstShingleFrom(words);
-        AppendShingleToResult();
+        FillFirstShingleFrom(words, shingle, shingleLength);
+        AppendShingleToResult(shingle, result);
 
         for (int i = shingleLength; i < words.Count; i++)
         {
-            MoveShingleOnto(words, i);
-            AppendShingleToResult();
+            MoveShingleOnto(words, i, shingle);
+            AppendShingleToResult(shingle, result);
         }
 
-        return _result;
+        return result;
     }
 
     private static void ValidateParameters(IList<string> words, int shingleLength)
@@ -48,30 +43,30 @@ internal class ShingleParser : IShingleParser
             throw new ArgumentException("Shingle length should be smaller that words count", nameof(shingleLength));
     }
 
-    private void FillFirstShingleFrom(IList<string> words)
+    private void FillFirstShingleFrom(IList<string> words, LinkedList<string> shingle, int shingleLength)
     {
-        for (int i = 0; i < _shingleLength; i++)
+        for (int i = 0; i < shingleLength; i++)
         {
-            _shingle!.AddLast(words[i]);
+            shingle.AddLast(words[i]);
         }
     }
 
-    private void AppendShingleToResult()
+    private void AppendShingleToResult(LinkedList<string>shingle, List<Hash> result)
     {
-        var hash = _hashCounter.Hash(ShingleBytes());
-        _result!.Add(hash);
+        var hash = _hashCounter.Hash(ShingleBytes(shingle));
+        result.Add(hash);
     }
 
-    private void MoveShingleOnto(IList<string> words, int nextIndex)
+    private void MoveShingleOnto(IList<string> words, int nextIndex, LinkedList<string> shingle)
     {
-        _shingle!.RemoveFirst();
-        _shingle!.AddLast(words[nextIndex]);
+        shingle.RemoveFirst();
+        shingle.AddLast(words[nextIndex]);
     }
 
-    private byte[] ShingleBytes()
+    private byte[] ShingleBytes(LinkedList<string> shingle)
     {
         var result = new List<byte>();
-        foreach (var word in _shingle!)
+        foreach (var word in shingle)
         {
             result.AddRange(word.ToByteArray());
         }
